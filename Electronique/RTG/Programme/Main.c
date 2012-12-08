@@ -1,10 +1,10 @@
 #include <htc.h>
 #include <pic16f882.h>
+
 #include "CustomTypes.h";
 #include "SPI.h";
-
 #include "MCP23S17.h";
-
+#include "missionsMngt.h"
 #include "player.h";
 
 __CONFIG(DEBUG_OFF & LVP_OFF & FCMEN_OFF & IESO_OFF & BOREN_OFF & CP_OFF & MCLRE_ON & PWRTE_OFF & WDTE_OFF & FOSC_INTRC_NOCLKOUT);
@@ -23,20 +23,12 @@ enum PlayerSelectionState
 	SELECTED = 0xFF,
 };
 
-enum MissionState
-{
-	NOT_YET_STARTED = 1,
-	STARTED = 2,
-	WON_BY_SPIES = 3,
-	WON_BY_RESISTANCE = 4
-};	
-
 
 //==============================================================================
 
 char _MCPPorts[MAX_NUMBER_OF_PLAYERS] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
-BOOL _shouldToggleAEffacer = FALSE;
+volatile BOOL _shouldToggleAEffacer = FALSE;
 
 char _currentMissionIndex = 0;
 char _CPT_A_EFFACER = 0;
@@ -46,99 +38,7 @@ enum PlayerSelectionState _arePlayersSelectedAEffacer = NOT_SELECTED;
 //==============================================================================
 
 
-void setMissionState(char missionNumber, enum MissionState eMissionState)
-{
-	if(missionNumber == 1)
-	{
-		switch(eMissionState)
-		{
-			case NOT_YET_STARTED:
-				PORTA = PORTA & B8(11111000);
-				break;
-			case STARTED:
-				PORTA = (PORTA | B8(00000001)) & B8(11111001);
-				break;
-			case WON_BY_SPIES:
-				PORTA = (PORTA | B8(00000010)) & B8(11111010);
-				break;
-			case WON_BY_RESISTANCE:
-				PORTA = (PORTA | B8(00000100)) & B8(11111100);
-				break;
-		}	
-	}
-	else if(missionNumber == 2)	
-	{
-		switch(eMissionState)
-		{
-			case NOT_YET_STARTED:
-				PORTA = PORTA & B8(11000111);
-				break;
-			case STARTED:
-				PORTA = (PORTA | B8(00001000)) & B8(11001111);
-				break;
-			case WON_BY_SPIES:
-				PORTA = (PORTA | B8(00010000)) & B8(11010111);
-				break;
-			case WON_BY_RESISTANCE:
-				PORTA = (PORTA | B8(00100000)) & B8(11100111);
-				break;
-		}
-	}	
-	else if(missionNumber == 3)		
-	{
-		switch(eMissionState)
-		{
-			case NOT_YET_STARTED:
-				PORTC = PORTC & B8(11111000);
-				break;
-			case STARTED:
-				PORTC = (PORTC | B8(00000001)) & B8(11111001);
-				break;
-			case WON_BY_SPIES:
-				PORTC = (PORTC | B8(00000010)) & B8(11111010);
-				break;
-			case WON_BY_RESISTANCE:
-				PORTC = (PORTC | B8(00000100)) & B8(11111100);
-				break;
-		}
-	}	
-	else if(missionNumber == 4)		
-	{
-		switch(eMissionState)
-		{
-			case NOT_YET_STARTED:
-				PORTB = PORTB & B8(11111000);
-				break;
-			case STARTED:
-				PORTB = (PORTB | B8(00000001)) & B8(11111001);
-				break;
-			case WON_BY_SPIES:
-				PORTB = (PORTB | B8(00000010)) & B8(11111010);
-				break;
-			case WON_BY_RESISTANCE:
-				PORTB = (PORTB | B8(00000100)) & B8(11111100);
-				break;
-		}
-	}
-	else if(missionNumber == 5)		
-	{
-		switch(eMissionState)
-		{
-			case NOT_YET_STARTED:
-				PORTB = PORTB & B8(11000111);
-				break;
-			case STARTED:
-				PORTB = (PORTB | B8(00001000)) & B8(11001111);
-				break;
-			case WON_BY_SPIES:
-				PORTB = (PORTB | B8(00010000)) & B8(11010111);
-				break;
-			case WON_BY_RESISTANCE:
-				PORTB = (PORTB | B8(00100000)) & B8(11100111);
-				break;
-		}
-	}
-}	 
+	 
 
 char getMCPAddressFromPlayerIndex(char playerIndex)
 {
@@ -157,7 +57,7 @@ char getPortLetterForPlayerIndex(char playerIndex)
 	}	
 }
 
-BOOL isPlayerSelectionButtonPressed(playerIndex)	
+BOOL isPlayerSelectionButtonPressed(char playerIndex)	
 {
 	char addressMCP = getMCPAddressFromPlayerIndex(playerIndex);
 	
@@ -400,11 +300,21 @@ void initializePortsDirections()
 	PORTA = B8(00000000);
 }	
 
+void initializeMissionLeds()
+{
+	for(char i = 1; i <= 5; i++)
+	{
+		setMissionState(i, NOT_YET_STARTED);
+	}	
+}	
+
 main(void)
 {
 	
 	//Initialisation de la direction des ports
 	initializePortsDirections();
+	
+	initializeMissionLeds();
 	
 	//Reset le Port Expandeur (Cette action n'emet rien sur la liaison SPI)
 	MCP23S17_Reset();
