@@ -232,7 +232,7 @@ void interrupt tc_int(void)
 		if(_CPT_A_EFFACER == 10)
 		{
 			_CPT_A_EFFACER = 0;
-			//_shouldToggleAEffacer = TRUE;
+			_shouldToggleAEffacer = TRUE;
 		}
 		
 		T0IF=0;

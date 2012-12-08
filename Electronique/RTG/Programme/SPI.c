@@ -1,5 +1,7 @@
 #include <htc.h>
 
+#include "missionsMngt.h"
+
 //TODO : supprimer le CS
 #define CS 		RC6 //Définition de la pin correspondant au Chip Select (CS)
 
@@ -8,10 +10,12 @@ void SPI_ERROR(char errNum)
 {
 	if(errNum == 0)		 //SSPOV
 	{
+		setMissionState(1, WON_BY_SPIES );
 		//TODO : gérer les erreurs
 	}	
 	else if(errNum == 1) //WCOL
 	{
+		setMissionState(2, WON_BY_SPIES );
 		//TODO : gérer les erreurs
 	}	
 	
@@ -21,11 +25,15 @@ void SPI_ERROR(char errNum)
 
 char SPI_SendReceive(char byteToSend)
 {
-	
+	//Rempli le buffer avec l'octet à envoyer
 	SSPBUF = byteToSend;
-	byteToSend = SSPBUF;
+	
+	//Attent la fin de la transmission
 	while(!BF);	
 	
+	//Lit le buffer pour récupérer l'octet reçu
+	char byteReceived = SSPBUF;
+
 	if(WCOL != 0)
 	{
 		SPI_ERROR(0);
@@ -35,7 +43,7 @@ char SPI_SendReceive(char byteToSend)
 		SPI_ERROR(1);
 	}	
 	
-	return SSPBUF;
+	return byteReceived;
 }	
 
 	
