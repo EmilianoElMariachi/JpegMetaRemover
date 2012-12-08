@@ -1,5 +1,6 @@
 #include <htc.h>
 #include <pic16f882.h>
+#include "CustomTypes.h";
 #include "SPI.h";
 
 #include "MCP23S17.h";
@@ -13,10 +14,6 @@ __CONFIG(DEBUG_OFF & LVP_OFF & FCMEN_OFF & IESO_OFF & BOREN_OFF & CP_OFF & MCLRE
 //==============================================================================
 
 #define BUTTON_APPUYE	RB0	//bit 1 of PORTC
-#define TRUE 0xFF
-#define FALSE 0x00
-
-typedef char BOOL;
 
 
 //==============================================================================
@@ -56,16 +53,16 @@ void setMissionState(char missionNumber, enum MissionState eMissionState)
 		switch(eMissionState)
 		{
 			case NOT_YET_STARTED:
-				PORTA = PORTA & 0b11111000;
+				PORTA = PORTA & B8(11111000);
 				break;
 			case STARTED:
-				PORTA = (PORTA | 0b00000001) & 0b11111001;
+				PORTA = (PORTA | B8(00000001)) & B8(11111001);
 				break;
 			case WON_BY_SPIES:
-				PORTA = (PORTA | 0b00000010) & 0b11111010;
+				PORTA = (PORTA | B8(00000010)) & B8(11111010);
 				break;
 			case WON_BY_RESISTANCE:
-				PORTA = (PORTA | 0b00000100) & 0b11111100;
+				PORTA = (PORTA | B8(00000100)) & B8(11111100);
 				break;
 		}	
 	}
@@ -74,16 +71,16 @@ void setMissionState(char missionNumber, enum MissionState eMissionState)
 		switch(eMissionState)
 		{
 			case NOT_YET_STARTED:
-				PORTA = PORTA & 0b11000111;
+				PORTA = PORTA & B8(11000111);
 				break;
 			case STARTED:
-				PORTA = (PORTA | 0b00001000) & 0b11001111;
+				PORTA = (PORTA | B8(00001000)) & B8(11001111);
 				break;
 			case WON_BY_SPIES:
-				PORTA = (PORTA | 0b00010000) & 0b11010111;
+				PORTA = (PORTA | B8(00010000)) & B8(11010111);
 				break;
 			case WON_BY_RESISTANCE:
-				PORTA = (PORTA | 0b00100000) & 0b11100111;
+				PORTA = (PORTA | B8(00100000)) & B8(11100111);
 				break;
 		}
 	}	
@@ -92,16 +89,16 @@ void setMissionState(char missionNumber, enum MissionState eMissionState)
 		switch(eMissionState)
 		{
 			case NOT_YET_STARTED:
-				PORTC = PORTC & 0b11111000;
+				PORTC = PORTC & B8(11111000);
 				break;
 			case STARTED:
-				PORTC = (PORTC | 0b00000001) & 0b11111001;
+				PORTC = (PORTC | B8(00000001)) & B8(11111001);
 				break;
 			case WON_BY_SPIES:
-				PORTC = (PORTC | 0b00000010) & 0b11111010;
+				PORTC = (PORTC | B8(00000010)) & B8(11111010);
 				break;
 			case WON_BY_RESISTANCE:
-				PORTC = (PORTC | 0b00000100) & 0b11111100;
+				PORTC = (PORTC | B8(00000100)) & B8(11111100);
 				break;
 		}
 	}	
@@ -110,16 +107,16 @@ void setMissionState(char missionNumber, enum MissionState eMissionState)
 		switch(eMissionState)
 		{
 			case NOT_YET_STARTED:
-				PORTB = PORTB & 0b11111000;
+				PORTB = PORTB & B8(11111000);
 				break;
 			case STARTED:
-				PORTB = (PORTB | 0b00000001) & 0b11111001;
+				PORTB = (PORTB | B8(00000001)) & B8(11111001);
 				break;
 			case WON_BY_SPIES:
-				PORTB = (PORTB | 0b00000010) & 0b11111010;
+				PORTB = (PORTB | B8(00000010)) & B8(11111010);
 				break;
 			case WON_BY_RESISTANCE:
-				PORTB = (PORTB | 0b00000100) & 0b11111100;
+				PORTB = (PORTB | B8(00000100)) & B8(11111100);
 				break;
 		}
 	}
@@ -128,16 +125,16 @@ void setMissionState(char missionNumber, enum MissionState eMissionState)
 		switch(eMissionState)
 		{
 			case NOT_YET_STARTED:
-				PORTB = PORTB & 0b11000111;
+				PORTB = PORTB & B8(11000111);
 				break;
 			case STARTED:
-				PORTB = (PORTB | 0b00001000) & 0b11001111;
+				PORTB = (PORTB | B8(00001000)) & B8(11001111);
 				break;
 			case WON_BY_SPIES:
-				PORTB = (PORTB | 0b00010000) & 0b11010111;
+				PORTB = (PORTB | B8(00010000)) & B8(11010111);
 				break;
 			case WON_BY_RESISTANCE:
-				PORTB = (PORTB | 0b00100000) & 0b11100111;
+				PORTB = (PORTB | B8(00100000)) & B8(11100111);
 				break;
 		}
 	}
@@ -167,7 +164,7 @@ BOOL isPlayerSelectionButtonPressed(playerIndex)
 	if(getPortLetterForPlayerIndex(playerIndex)	== 'A')
 	{
 		char portState = MCP23S17_GetPortA(addressMCP);
-		if((portState & 0b10000000) == 0b10000000)
+		if((portState & B8(10000000)) == B8(10000000))
 		{ return FALSE; }
 		else
 		{ return TRUE; }
@@ -175,7 +172,7 @@ BOOL isPlayerSelectionButtonPressed(playerIndex)
 	else
 	{
 		char portState = MCP23S17_GetPortB(addressMCP);
-		if((portState & 0b00000001) == 0b00000001)
+		if((portState & B8(00000001)) == B8(00000001))
 		{ return FALSE; }
 		else
 		{ return TRUE; }
@@ -190,13 +187,13 @@ void setPlayerVoteState(char playerIndex, enum EnumPlayerVoteState ePlayerVoteSt
 		switch(ePlayerVoteState)
 		{
 			case NOT_YET_VOTED:
-				maskOR  = 0b00000000; maskAND = 0b11001111;
+				maskOR  = B8(00000000); maskAND = B8(11001111);
 				break;
 			case VOTED_NO:
-				maskOR  = 0b00010000; maskAND = 0b11011111;
+				maskOR  = B8(00010000); maskAND = B8(11011111);
 				break;
 			case VOTED_YES:
-				maskOR  = 0b00100000; maskAND = 0b11101111;			
+				maskOR  = B8(00100000); maskAND = B8(11101111);			
 				break;
 		}
 		_MCPPorts[playerIndex] = (_MCPPorts[playerIndex] | maskOR) & maskAND;
@@ -208,13 +205,13 @@ void setPlayerVoteState(char playerIndex, enum EnumPlayerVoteState ePlayerVoteSt
 		switch(ePlayerVoteState)
 		{
 			case NOT_YET_VOTED:
-				maskOR  = 0b00000000; maskAND = 0b11110011;
+				maskOR  = B8(00000000); maskAND = B8(11110011);
 				break;
 			case VOTED_NO:
-				maskOR  = 0b00001000; maskAND = 0b11111011;			
+				maskOR  = B8(00001000); maskAND = B8(11111011);			
 				break;
 			case VOTED_YES:
-				maskOR  = 0b00000100; maskAND = 0b11110111;			
+				maskOR  = B8(00000100); maskAND = B8(11110111);			
 				break;
 		}	
 		_MCPPorts[playerIndex] = (_MCPPorts[playerIndex] | maskOR) & maskAND;
@@ -229,10 +226,10 @@ void setPlayerSelectionState(char playerIndex, enum PlayerSelectionState playerS
 		switch(playerSelectionState)
 		{
 			case NOT_SELECTED:
-				_MCPPorts[playerIndex] = _MCPPorts[playerIndex] & 0b10111111;
+				_MCPPorts[playerIndex] = _MCPPorts[playerIndex] & B8(10111111);
 				break;
 			case SELECTED:
-				_MCPPorts[playerIndex] = _MCPPorts[playerIndex] | 0b01000000;
+				_MCPPorts[playerIndex] = _MCPPorts[playerIndex] | B8(01000000);
 				break;
 		}
 		MCP23S17_SetPortA(getMCPAddressFromPlayerIndex(playerIndex), _MCPPorts[playerIndex]);
@@ -242,10 +239,10 @@ void setPlayerSelectionState(char playerIndex, enum PlayerSelectionState playerS
 		switch(playerSelectionState)
 		{
 			case NOT_SELECTED:
-				_MCPPorts[playerIndex] = _MCPPorts[playerIndex] & 0b11111101;
+				_MCPPorts[playerIndex] = _MCPPorts[playerIndex] & B8(11111101);
 				break;
 			case SELECTED:
-				_MCPPorts[playerIndex] = _MCPPorts[playerIndex] | 0b00000010;
+				_MCPPorts[playerIndex] = _MCPPorts[playerIndex] | B8(00000010);
 				break;
 		}
 		MCP23S17_SetPortB(getMCPAddressFromPlayerIndex(playerIndex), _MCPPorts[playerIndex]);	
@@ -392,15 +389,15 @@ void initializePortsDirections()
 	//0 	= PORTC pin configured as an output
 	//Note 1: TRISC<1:0> always reads ‘1’ in LP Oscillator mode.
 
-	ANSEL  = 0b00000000; 	//Port a en mode digital
-	ANSELH = 0b00000000;	//Port b en mode digital (non analogique)
+	ANSEL  = B8(00000000); 	//Port a en mode digital
+	ANSELH = B8(00000000);	//Port b en mode digital (non analogique)
 	
-	TRISA  = 0b00000000;
-	TRISB  = 0b11000000;
-	TRISC  = 0b00010000;
+	TRISA  = B8(00000000);
+	TRISB  = B8(11000000);
+	TRISC  = B8(00010000);
 	
 	//TODO : a effacer
-	PORTA = 0b00000000;
+	PORTA = B8(00000000);
 }	
 
 main(void)

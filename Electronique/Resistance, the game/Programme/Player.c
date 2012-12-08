@@ -1,23 +1,20 @@
 #include "CustomTypes.h";
 #include "Player.h"
 
-	
-
-
 struct Player
 {
-	bool isSpy;
-	bool isActive;
+	BOOL isSpy;
+	BOOL isActive;
 	enum EnumPlayerVoteState voteStatus;
 	
 };	
 
-bool isPlayerPressingYes(char playerIndex)
+BOOL isPlayerPressingYes(char playerIndex)
 {
 	
 }
 
-bool isPlayerPressingNo(char playerIndex)
+BOOL isPlayerPressingNo(char playerIndex)
 {
 	
 }	
