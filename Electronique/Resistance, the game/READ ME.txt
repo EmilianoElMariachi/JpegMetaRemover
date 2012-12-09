@@ -1,0 +1,7 @@
+Le programme a été écrit et compilé avec les logiciels suivants:
+
+_ MPLAB v8.88 (l'environnement de développement)
+_ Hi Tech C Compiler for PIC10/12/16 MCUs v9.83  (l'add-on d'MPLAB permettant d'écrire et compiler des programmes en C au lieu de l'assembleur)
+
+Emiliano le 08/12/2012
+
