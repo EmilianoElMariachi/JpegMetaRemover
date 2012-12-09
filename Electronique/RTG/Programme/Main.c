@@ -7,6 +7,7 @@
 #include "missionsMngt.h"
 #include "player.h";
 #include "EEPROM.h"
+#include "Random.h"
 
 __CONFIG(DEBUG_OFF & LVP_OFF & FCMEN_OFF & IESO_OFF & BOREN_OFF & CP_OFF & MCLRE_ON & PWRTE_OFF & WDTE_OFF & FOSC_INTRC_NOCLKOUT);
 
@@ -172,7 +173,16 @@ void toggleVoteLedsAEffacer()
 	
 	for(char playerIndex = 0; playerIndex <= 9 ; playerIndex++)
 	{
-		 setPlayerVoteState(playerIndex, _statePlayerVoteAEffacer);
+		int rnd = getRandomNumber();
+		if(rnd % 2)
+		{
+		 	setPlayerVoteState(playerIndex, VOTED_YES);
+		}
+		else
+		{
+		 	setPlayerVoteState(playerIndex, VOTED_NO);
+		}		
+		
 	}	
 }	
 
