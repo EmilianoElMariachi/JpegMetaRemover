@@ -1,5 +1,7 @@
 #include <htc.h>
 
+#include "SPI.h";
+
 #include "missionsMngt.h"
 
 //TODO : supprimer le CS
@@ -23,7 +25,7 @@ void SPI_ERROR(char errNum)
 }
 
 
-char SPI_SendReceive(char byteToSend)
+BYTE SPI_SendReceive(BYTE byteToSend)
 {
 	//Rempli le buffer avec l'octet à envoyer
 	SSPBUF = byteToSend;
@@ -32,7 +34,7 @@ char SPI_SendReceive(char byteToSend)
 	while(!BF);	
 	
 	//Lit le buffer pour récupérer l'octet reçu
-	char byteReceived = SSPBUF;
+	BYTE byteReceived = SSPBUF;
 
 	if(WCOL != 0)
 	{

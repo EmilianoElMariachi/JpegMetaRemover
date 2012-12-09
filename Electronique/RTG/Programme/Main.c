@@ -6,6 +6,7 @@
 #include "MCP23S17.h";
 #include "missionsMngt.h"
 #include "player.h";
+#include "EEPROM.h"
 
 __CONFIG(DEBUG_OFF & LVP_OFF & FCMEN_OFF & IESO_OFF & BOREN_OFF & CP_OFF & MCLRE_ON & PWRTE_OFF & WDTE_OFF & FOSC_INTRC_NOCLKOUT);
 
@@ -314,8 +315,6 @@ main(void)
 	//Initialisation de la direction des ports
 	initializePortsDirections();
 	
-	initializeMissionLeds();
-	
 	//Reset le Port Expandeur (Cette action n'emet rien sur la liaison SPI)
 	MCP23S17_Reset();
 	
@@ -324,9 +323,14 @@ main(void)
 	
 	//Initialie le Port Expandeur
 	MCP23S17_Setup();
-	
-	//===================
 
+	//Initialise l'accès à l'EEPROM
+	setupEEPROM();
+	
+	//Eteint les leds mission
+	initializeMissionLeds();
+
+	//===================
 
 	initializeTimer0();
 	

@@ -1,3 +1,5 @@
+#include "CustomTypes.h";
+
 void SPI_Init();
 
-char SPI_SendReceive(char byteToSend);
+BYTE SPI_SendReceive(BYTE byteToSend);

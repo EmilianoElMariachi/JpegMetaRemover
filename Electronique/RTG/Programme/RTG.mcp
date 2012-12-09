@@ -35,6 +35,8 @@ file_007=.
 file_008=.
 file_009=.
 file_010=.
+file_011=.
+file_012=.
 [GENERATED_FILES]
 file_000=no
 file_001=no
@@ -47,6 +49,8 @@ file_007=no
 file_008=no
 file_009=no
 file_010=no
+file_011=no
+file_012=no
 [OTHER_FILES]
 file_000=no
 file_001=no
@@ -59,6 +63,8 @@ file_007=no
 file_008=no
 file_009=no
 file_010=no
+file_011=no
+file_012=no
 [FILE_INFO]
 file_000=Main.c
 file_001=MCP23S17.c
@@ -66,11 +72,13 @@ file_002=SPI.c
 file_003=Player.c
 file_004=IOMapping.c
 file_005=missionsMngt.c
-file_006=SPI.h
-file_007=MCP23S17.h
-file_008=Player.h
-file_009=IOMapping.h
-file_010=CustomTypes.h
+file_006=EEPROM.c
+file_007=SPI.h
+file_008=MCP23S17.h
+file_009=Player.h
+file_010=IOMapping.h
+file_011=CustomTypes.h
+file_012=EEPROM.h
 [SUITE_INFO]
 suite_guid={507D93FD-16F1-4270-980F-0C7C0207E6D3}
 suite_state=
