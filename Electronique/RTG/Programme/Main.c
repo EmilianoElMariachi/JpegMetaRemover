@@ -34,13 +34,9 @@ volatile BOOL _shouldToggleAEffacer = FALSE;
 
 char _currentMissionIndex = 0;
 char _CPT_A_EFFACER = 0;
-char _statePlayerVoteAEffacer = NOT_YET_VOTED;
 enum PlayerSelectionState _arePlayersSelectedAEffacer = NOT_SELECTED;
 
 //==============================================================================
-
-
-	 
 
 char getMCPAddressFromPlayerIndex(char playerIndex)
 {
@@ -81,20 +77,25 @@ BOOL isPlayerSelectionButtonPressed(char playerIndex)
 	}	
 }	
 
-void setPlayerVoteState(char playerIndex, enum EnumPlayerVoteState ePlayerVoteState)
+BOOL isEnterButtonPressed()
+{
+	//TODO : à finir
+}	
+
+void setPlayerVoteState(char playerIndex, enum PlayerVoteStates playerVoteState)
 {
 	if(getPortLetterForPlayerIndex(playerIndex) == 'A')
 	{
 		char maskOR, maskAND;
-		switch(ePlayerVoteState)
+		switch(playerVoteState)
 		{
-			case NOT_YET_VOTED:
+			case NO_VOTE:
 				maskOR  = B8(00000000); maskAND = B8(11001111);
 				break;
-			case VOTED_NO:
+			case VOTE_NO:
 				maskOR  = B8(00010000); maskAND = B8(11011111);
 				break;
-			case VOTED_YES:
+			case VOTE_YES:
 				maskOR  = B8(00100000); maskAND = B8(11101111);			
 				break;
 		}
@@ -104,15 +105,15 @@ void setPlayerVoteState(char playerIndex, enum EnumPlayerVoteState ePlayerVoteSt
 	else
 	{
 		char maskOR, maskAND;
-		switch(ePlayerVoteState)
+		switch(playerVoteState)
 		{
-			case NOT_YET_VOTED:
+			case NO_VOTE:
 				maskOR  = B8(00000000); maskAND = B8(11110011);
 				break;
-			case VOTED_NO:
+			case VOTE_NO:
 				maskOR  = B8(00001000); maskAND = B8(11111011);			
 				break;
-			case VOTED_YES:
+			case VOTE_YES:
 				maskOR  = B8(00000100); maskAND = B8(11110111);			
 				break;
 		}	
@@ -153,38 +154,6 @@ void setPlayerSelectionState(char playerIndex, enum PlayerSelectionState playerS
 
 
 
-
-
-void toggleVoteLedsAEffacer()
-{
-	
-	if(_statePlayerVoteAEffacer == NOT_YET_VOTED)
-	{
-		_statePlayerVoteAEffacer =  VOTED_NO;
-	}
-	else if(_statePlayerVoteAEffacer == VOTED_NO)
-	{
-		_statePlayerVoteAEffacer =  VOTED_YES;
-	}
-	else
-	{
-		_statePlayerVoteAEffacer = NOT_YET_VOTED;
-	}	
-	
-	for(char playerIndex = 0; playerIndex <= 9 ; playerIndex++)
-	{
-		int rnd = getRandomNumber();
-		if(rnd % 2)
-		{
-		 	setPlayerVoteState(playerIndex, VOTED_YES);
-		}
-		else
-		{
-		 	setPlayerVoteState(playerIndex, VOTED_NO);
-		}		
-		
-	}	
-}	
 
 
 void toggleMissionLedsAEffacer()
@@ -229,6 +198,29 @@ void toggleMissionLedsAEffacer()
 	
 }
 
+enum GameStates
+{
+	WAITING_FOR_PLAYERS,
+	
+};	
+
+//#########################################################################//
+//
+//#########################################################################//
+
+void checkPlayersWhoWantToPlay()
+{
+	for(char playerIndex = 0; playerIndex < MAX_NUMBER_OF_PLAYERS ; playerIndex++)
+	{
+		enum PlayerVoteStates playerVoteState = getPlayerVoteState(playerIndex);
+		if(playerVoteState == VOTE_NO)
+		{
+		}
+		else if(playerVoteState == VOTE_YES)
+		{
+		}		
+	}	
+}	
 
 
 //#########################################################################//
@@ -367,7 +359,6 @@ main(void)
 			if(_shouldToggleAEffacer == TRUE)
 			{
 				toggleMissionLedsAEffacer();
-				toggleVoteLedsAEffacer();
 				_shouldToggleAEffacer = FALSE;
 			}	
 		}	 

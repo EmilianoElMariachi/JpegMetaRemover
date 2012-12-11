@@ -3,11 +3,11 @@
 
 //struct Player;
 
-enum EnumPlayerVoteState
+enum PlayerVoteStates
 {
-	NOT_YET_VOTED = 0,
-	VOTED_NO = 1,
-	VOTED_YES = 2
+	NO_VOTE = 0,
+	VOTE_NO = 1,
+	VOTE_YES = 2
 };
 
 struct Player _ArrayOfPlayers[MAX_NUMBER_OF_PLAYERS];
@@ -16,3 +16,4 @@ char _numberOfPlayers;
 
 char _arrayOfPlayersIndex[MAX_NUMBER_OF_PLAYERS];
 
+enum PlayerVoteStates getPlayerVoteState(char playerIndex);

@@ -5,23 +5,14 @@ struct Player
 {
 	BOOL isSpy;
 	BOOL isActive;
-	enum EnumPlayerVoteState voteStatus;
+	enum PlayerVoteStates voteStatus;
 	
 };	
 
-BOOL isPlayerPressingYes(char playerIndex)
+enum PlayerVoteStates getPlayerVoteState(char playerIndex)
 {
 	
 }
 
-BOOL isPlayerPressingNo(char playerIndex)
-{
-	
-}	
-
-void waitForAllPlayersVote()
-{
-	//for(unsigned char playerIndex = 0; playerIndex < 
-}	
 
 
