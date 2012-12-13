@@ -26,13 +26,8 @@ volatile BOOL _shouldToggleAEffacer = FALSE;
 
 char _currentMissionIndex = 0;
 char _CPT_A_EFFACER = 0;
-enum PlayerSelectionState _arePlayersSelectedAEffacer = NOT_SELECTED;
 
 //==============================================================================
-
-
-
-
 
 
 BOOL isEnterButtonPressed()
@@ -98,11 +93,13 @@ void checkPlayersWhoWantToPlay()
 {
 	for(char playerIndex = 0; playerIndex < MAX_NUMBER_OF_PLAYERS ; playerIndex++)
 	{
-		enum PlayerVoteStates playerVoteState = getPlayerVoteState(playerIndex);
-		if(playerVoteState == VOTE_NO)
+		BOOL yesIsPressed, noIsPressed, selectIsPressed;
+		getPlayerInputState(playerIndex, &yesIsPressed, &noIsPressed, &selectIsPressed);
+		
+		if(yesIsPressed == TRUE)
 		{
 		}
-		else if(playerVoteState == VOTE_YES)
+		else if(noIsPressed == TRUE)
 		{
 		}		
 	}	
@@ -226,8 +223,6 @@ main(void)
 	//enable global interrupts
 	GIE = 1;
 	
-	BOOL buttonPushed = FALSE;
-
 //
 	while(TRUE)
 	{
@@ -246,6 +241,23 @@ main(void)
 			{
 				setPlayerSelectionState(playerIndex, NOT_SELECTED);
 			}	
+			
+			if(yesIsPressed == TRUE && noIsPressed == FALSE)
+			{
+				setPlayerVoteState(playerIndex, VOTE_YES);
+				setPlayerSide(playerIndex, RESISTANT);
+			}	
+			else if(yesIsPressed == FALSE && noIsPressed == TRUE)
+			{
+				setPlayerVoteState(playerIndex, VOTE_NO);
+				setPlayerSide(playerIndex, SPY);
+			}	
+			else
+			{
+				setPlayerVoteState(playerIndex, NO_VOTE);
+				setPlayerSide(playerIndex, RESISTANT);
+			}
+
 			
 			if(_shouldToggleAEffacer == TRUE)
 			{

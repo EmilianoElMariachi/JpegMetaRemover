@@ -73,3 +73,37 @@ void setPlayerVoteState(char playerIndex, enum PlayerVoteStates playerVoteState)
 		MCP23S17_SetPortB(getMCPAddressFromPlayerIndex(playerIndex), _MCPPorts[playerIndex]);		
 	}			
 }
+
+void setPlayerSide(char playerIndex, enum PlayerSides playerSide)
+{
+	if(getPortLetterForPlayerIndex(playerIndex) == 'A')
+	{
+		char maskOR, maskAND;
+		switch(playerSide)
+		{
+			case SPY:
+				maskOR  = B8(00000010); maskAND = B8(11111111);
+				break;
+			case RESISTANT:
+				maskOR  = B8(00000000); maskAND = B8(11111101);
+				break;
+		}
+		_MCPPorts[playerIndex] = (_MCPPorts[playerIndex] | maskOR) & maskAND;
+		MCP23S17_SetPortA(getMCPAddressFromPlayerIndex(playerIndex), _MCPPorts[playerIndex]);
+	}
+	else
+	{
+		char maskOR, maskAND;
+		switch(playerSide)
+		{
+			case SPY:
+				maskOR  = B8(01000000); maskAND = B8(11111111);
+				break;
+			case RESISTANT:
+				maskOR  = B8(00000000); maskAND = B8(10111111);			
+				break;
+		}	
+		_MCPPorts[playerIndex] = (_MCPPorts[playerIndex] | maskOR) & maskAND;
+		MCP23S17_SetPortB(getMCPAddressFromPlayerIndex(playerIndex), _MCPPorts[playerIndex]);		
+	}			
+}

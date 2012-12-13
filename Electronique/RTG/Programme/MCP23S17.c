@@ -47,12 +47,12 @@ void MCP23S17_Reset()
 void MCP23S17_Setup()
 {
 	//Ecriture de l'Opcode (1ere trame à l'adresse 0)
-	MCP23S17_Write(0, IOCON, 0b00101000); //SEQOP=1; HAEN=1 pour activer l'adressage hardware
+	MCP23S17_Write(0, IOCON, B8(00101000)); //SEQOP=1; HAEN=1 pour activer l'adressage hardware
 	
 	for(char addressMCP23S17 = 0; addressMCP23S17 <= 4; addressMCP23S17++)
 	{
-		MCP23S17_Write(addressMCP23S17, IODIRA, 0b10000000); 
-		MCP23S17_Write(addressMCP23S17, IODIRB, 0b00000001);		
+		MCP23S17_Write(addressMCP23S17, IODIRA, B8(10001100)); 
+		MCP23S17_Write(addressMCP23S17, IODIRB, B8(00110001));		
 	}	
 }	
 

@@ -9,8 +9,8 @@
 //=======================================================//
 //===                    VARIABLES                    ===//
 //=======================================================//
-long _LastRandomNumber = 0;
-BOOL _IsRandomInitialized = FALSE;
+long _lastRandomNumber = 0;
+BOOL _isRandomInitialized = FALSE;
 
 
 //=======================================================//
@@ -18,7 +18,7 @@ BOOL _IsRandomInitialized = FALSE;
 //=======================================================//
 void initializeRandomSeedFromFlash()
 {
-	BYTE* addrOfRandomNumber = (BYTE*)&_LastRandomNumber;
+	BYTE* addrOfRandomNumber = (BYTE*)&_lastRandomNumber;
 
 	*(addrOfRandomNumber + 0) = readByteFromEEPROM(RAND_SEED_EEPROM_ADR + 0); 		//Poid faible
 	*(addrOfRandomNumber + 1) = readByteFromEEPROM(RAND_SEED_EEPROM_ADR + 1); 		
@@ -28,7 +28,7 @@ void initializeRandomSeedFromFlash()
 
 void saveRandomNumberToFlash()
 {
-	BYTE* addrOfRandomNumber = (BYTE*)&_LastRandomNumber;
+	BYTE* addrOfRandomNumber = (BYTE*)&_lastRandomNumber;
 	
 	writeByteToEEPROM(RAND_SEED_EEPROM_ADR + 0, *(addrOfRandomNumber + 0));
 	writeByteToEEPROM(RAND_SEED_EEPROM_ADR + 1, *(addrOfRandomNumber + 1));
@@ -38,16 +38,16 @@ void saveRandomNumberToFlash()
 
 int getRandomNumber()
 {
-	if(!_IsRandomInitialized)
+	if(!_isRandomInitialized)
 	{
 		initializeRandomSeedFromFlash();
-		_IsRandomInitialized = TRUE;	
+		_isRandomInitialized = TRUE;	
 	}
 	
-	_LastRandomNumber = _LastRandomNumber*1103515245L + 12345;
+	_lastRandomNumber = _lastRandomNumber*1103515245L + 12345;
 		
 	saveRandomNumberToFlash();
 		
-	return((int)(_LastRandomNumber >> 16) & 077777);
+	return((int)(_lastRandomNumber >> 16) & 077777);
 }
 
