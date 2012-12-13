@@ -5,7 +5,9 @@
 #include "SPI.h";
 #include "MCP23S17.h";
 #include "missionsMngt.h"
-#include "player.h";
+#include "playerInput.h";
+#include "playerOutput.h";
+#include "playerIO.h";
 #include "EEPROM.h"
 #include "Random.h"
 
@@ -19,16 +21,6 @@ __CONFIG(DEBUG_OFF & LVP_OFF & FCMEN_OFF & IESO_OFF & BOREN_OFF & CP_OFF & MCLRE
 
 
 //==============================================================================
-enum PlayerSelectionState
-{
-	NOT_SELECTED = 0x00,
-	SELECTED = 0xFF,
-};
-
-
-//==============================================================================
-
-char _MCPPorts[MAX_NUMBER_OF_PLAYERS] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
 volatile BOOL _shouldToggleAEffacer = FALSE;
 
@@ -38,123 +30,17 @@ enum PlayerSelectionState _arePlayersSelectedAEffacer = NOT_SELECTED;
 
 //==============================================================================
 
-char getMCPAddressFromPlayerIndex(char playerIndex)
-{
-	return playerIndex / 2;
-}	
 
-char getPortLetterForPlayerIndex(char playerIndex)
-{
-	if((playerIndex % 2) == 0)
-	{
-		return 'B';
-	}	
-	else
-	{
-		return 'A';
-	}	
-}
 
-BOOL isPlayerSelectionButtonPressed(char playerIndex)	
-{
-	char addressMCP = getMCPAddressFromPlayerIndex(playerIndex);
-	
-	if(getPortLetterForPlayerIndex(playerIndex)	== 'A')
-	{
-		char portState = MCP23S17_GetPortA(addressMCP);
-		if((portState & B8(10000000)) == B8(10000000))
-		{ return FALSE; }
-		else
-		{ return TRUE; }
-	}	
-	else
-	{
-		char portState = MCP23S17_GetPortB(addressMCP);
-		if((portState & B8(00000001)) == B8(00000001))
-		{ return FALSE; }
-		else
-		{ return TRUE; }
-	}	
-}	
+
+
 
 BOOL isEnterButtonPressed()
 {
 	//TODO : à finir
 }	
 
-void setPlayerVoteState(char playerIndex, enum PlayerVoteStates playerVoteState)
-{
-	if(getPortLetterForPlayerIndex(playerIndex) == 'A')
-	{
-		char maskOR, maskAND;
-		switch(playerVoteState)
-		{
-			case NO_VOTE:
-				maskOR  = B8(00000000); maskAND = B8(11001111);
-				break;
-			case VOTE_NO:
-				maskOR  = B8(00010000); maskAND = B8(11011111);
-				break;
-			case VOTE_YES:
-				maskOR  = B8(00100000); maskAND = B8(11101111);			
-				break;
-		}
-		_MCPPorts[playerIndex] = (_MCPPorts[playerIndex] | maskOR) & maskAND;
-		MCP23S17_SetPortA(getMCPAddressFromPlayerIndex(playerIndex), _MCPPorts[playerIndex]);
-	}
-	else
-	{
-		char maskOR, maskAND;
-		switch(playerVoteState)
-		{
-			case NO_VOTE:
-				maskOR  = B8(00000000); maskAND = B8(11110011);
-				break;
-			case VOTE_NO:
-				maskOR  = B8(00001000); maskAND = B8(11111011);			
-				break;
-			case VOTE_YES:
-				maskOR  = B8(00000100); maskAND = B8(11110111);			
-				break;
-		}	
-		_MCPPorts[playerIndex] = (_MCPPorts[playerIndex] | maskOR) & maskAND;
-		MCP23S17_SetPortB(getMCPAddressFromPlayerIndex(playerIndex), _MCPPorts[playerIndex]);		
-	}			
-}	
-
-void setPlayerSelectionState(char playerIndex, enum PlayerSelectionState playerSelectionState)
-{
-	if(getPortLetterForPlayerIndex(playerIndex) == 'A')
-	{
-		switch(playerSelectionState)
-		{
-			case NOT_SELECTED:
-				_MCPPorts[playerIndex] = _MCPPorts[playerIndex] & B8(10111111);
-				break;
-			case SELECTED:
-				_MCPPorts[playerIndex] = _MCPPorts[playerIndex] | B8(01000000);
-				break;
-		}
-		MCP23S17_SetPortA(getMCPAddressFromPlayerIndex(playerIndex), _MCPPorts[playerIndex]);
-	}
-	else
-	{
-		switch(playerSelectionState)
-		{
-			case NOT_SELECTED:
-				_MCPPorts[playerIndex] = _MCPPorts[playerIndex] & B8(11111101);
-				break;
-			case SELECTED:
-				_MCPPorts[playerIndex] = _MCPPorts[playerIndex] | B8(00000010);
-				break;
-		}
-		MCP23S17_SetPortB(getMCPAddressFromPlayerIndex(playerIndex), _MCPPorts[playerIndex]);	
-	}	
-}	
-
-
-
-
+	
 
 void toggleMissionLedsAEffacer()
 {
@@ -347,7 +233,12 @@ main(void)
 	{
 		for(char playerIndex = 0; playerIndex < MAX_NUMBER_OF_PLAYERS; playerIndex++)
 		{
-			if(isPlayerSelectionButtonPressed(playerIndex) == TRUE)
+			
+			BOOL yesIsPressed, noIsPressed, selectIsPressed;
+			getPlayerInputState(playerIndex, &yesIsPressed, &noIsPressed, &selectIsPressed);
+			
+			
+			if(selectIsPressed == TRUE)
 			{
 				setPlayerSelectionState(playerIndex, SELECTED);
 			}	

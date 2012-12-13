@@ -1,5 +1,3 @@
-#include <time.h>
-
 #include "CustomTypes.h"
 #include "EEPROM.h";
 
