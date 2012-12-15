@@ -19,7 +19,6 @@ __CONFIG(DEBUG_OFF & LVP_OFF & FCMEN_OFF & IESO_OFF & BOREN_OFF & CP_OFF & MCLRE
 
 #define BUTTON_APPUYE	RB0	//bit 1 of PORTC
 
-
 //==============================================================================
 
 volatile BOOL _shouldToggleAEffacer = FALSE;
@@ -28,14 +27,6 @@ char _currentMissionIndex = 0;
 char _CPT_A_EFFACER = 0;
 
 //==============================================================================
-
-
-BOOL isEnterButtonPressed()
-{
-	//TODO : à finir
-}	
-
-	
 
 void toggleMissionLedsAEffacer()
 {
@@ -171,6 +162,10 @@ void initializeTimer0()
 
 void initializePortsDirections()
 {
+	
+	//_________________________________________________
+	//> Configuration du mode des PORTS
+		
 	//1 = PORT pin configured as an input (tri-stated)
 	//0 	= PORTC pin configured as an output
 	//Note 1: TRISC<1:0> always reads ‘1’ in LP Oscillator mode.
@@ -178,21 +173,33 @@ void initializePortsDirections()
 	ANSEL  = B8(00000000); 	//Port a en mode digital
 	ANSELH = B8(00000000);	//Port b en mode digital (non analogique)
 	
-	TRISA  = B8(00000000);
-	TRISB  = B8(11000000);
-	TRISC  = B8(00010000);
+	//_________________________________________________
+	//> Configuration de la direction des PORTS
 	
-	//TODO : a effacer
-	PORTA = B8(00000000);
+	//RA0 -> RA2 : Sortie leds Mission 1
+	//RA3 -> RA5 : Sortie leds Mission 2
+	TRISA  = B8(00000000);
+	
+	//RA0 -> RA2 : Sortie leds Mission 4
+	//RA3 -> RA5 : Sortie leds Mission 5
+	//RA6 : Entrée bouton "Enter"
+	TRISB  = B8(11000000);
+	
+	//RC0 -> RC2 : Sortie leds Mission 3
+	//RC3 : Sortie SDI (SCK)
+	//RC4 : Entree SDI (SI)
+	//RC5 : Sortie SDI (SO)
+	//RC6 : Sortie SDI (/CS)
+	//RC7 : Sortie SDI (/RESET)
+	TRISC  = B8(00010000);
+
+	//_________________________________________________
+	//> Initialisation de la valeur de sortie des PORTS
+	PORTA  = B8(00000000);
+	PORTB  = B8(00000000);
+	PORTB  = B8(00000000);
 }	
 
-void initializeMissionLeds()
-{
-	for(char i = 1; i <= 5; i++)
-	{
-		setMissionState(i, NOT_YET_STARTED);
-	}	
-}	
 
 main(void)
 {
@@ -211,14 +218,10 @@ main(void)
 
 	//Initialise l'accès à l'EEPROM
 	setupEEPROM();
-	
-	//Eteint les leds mission
-	initializeMissionLeds();
 
 	//===================
 
 	initializeTimer0();
-	
 	
 	//enable global interrupts
 	GIE = 1;
@@ -245,25 +248,32 @@ main(void)
 			if(yesIsPressed == TRUE && noIsPressed == FALSE)
 			{
 				setPlayerVoteState(playerIndex, VOTE_YES);
-				setPlayerSide(playerIndex, RESISTANT);
 			}	
 			else if(yesIsPressed == FALSE && noIsPressed == TRUE)
 			{
 				setPlayerVoteState(playerIndex, VOTE_NO);
-				setPlayerSide(playerIndex, SPY);
 			}	
 			else
 			{
 				setPlayerVoteState(playerIndex, NO_VOTE);
-				setPlayerSide(playerIndex, RESISTANT);
 			}
 
+			if(isEnterButtonPressed() == TRUE)
+			{
+				setPlayerSide(playerIndex, SPY);
+			}
+			else
+			{
+				setPlayerSide(playerIndex, RESISTANT);
+			}	
 			
 			if(_shouldToggleAEffacer == TRUE)
 			{
 				toggleMissionLedsAEffacer();
 				_shouldToggleAEffacer = FALSE;
 			}	
+			
+	
 		}	 
 
 		//__delay_ms(1000);

@@ -1,9 +1,22 @@
+#include <htc.h>
+
 #include "CustomTypes.h";
 #include "PlayerInput.h"
 
 #include "PlayerIO.h"
 #include "MCP23S17.h";
 
+BOOL isEnterButtonPressed()
+{
+	if((PORTB & B8(BIT6)) == B8(BIT6))
+	{
+		return TRUE;
+	}	
+	else
+	{
+		return FALSE;
+	}	
+}	
 
 void getPlayerInputState(char playerIndex, BOOL* yesIsPressed, BOOL* noIsPressed, BOOL* selectIsPressed)
 {
