@@ -27,7 +27,7 @@ __CONFIG(DEBUG_OFF & LVP_OFF & FCMEN_OFF & IESO_OFF & BOREN_OFF & CP_OFF & MCLRE
 //======================================================================================
 //>
 //======================================================================================
-void checkPlayersWhoWantToPlay()
+void updatePlayersWhoWantToPlay()
 {
 	for(char playerIndex = 0; playerIndex < MAX_NUMBER_OF_PLAYERS ; playerIndex++)
 	{
@@ -36,11 +36,39 @@ void checkPlayersWhoWantToPlay()
 		
 		if(yesIsPressed == TRUE)
 		{
+			_players[playerIndex].slotHasPlayer = TRUE;
 		}
 		else if(noIsPressed == TRUE)
 		{
+			_players[playerIndex].slotHasPlayer = FALSE;
 		}		
+	}
+}	
+
+//======================================================================================
+//>
+//======================================================================================
+BOOL canGameStart()
+{
+	BOOL gameCanStart = FALSE;
+	if(isEnterButtonPressed() == TRUE)
+	{
+		char numberOfRegisteredPlayers = 0;
+		for(char playerIndex = 0; playerIndex < MAX_NUMBER_OF_PLAYERS ; playerIndex++)
+		{
+			if(_players[playerIndex].slotHasPlayer == TRUE)
+			{
+				numberOfRegisteredPlayers ++;
+			}	
+		}
+		
+		if(numberOfRegisteredPlayers >= MIN_NUMBER_OF_PLAYERS)
+		{
+			gameCanStart = TRUE;
+		}	
 	}	
+	
+	return gameCanStart;
 }	
 
 //#########################################################################//
@@ -55,10 +83,15 @@ void interrupt tc_int(void)
 		T0IF=0;
 	}
 }
-
+	
 //#########################################################################//
 //### 							INTITIALISATIONS 						###//
 //#########################################################################//
+
+void initGlobalVariables()
+{
+	_gameState = WAITING_FOR_PLAYERS;
+}
 
 void initializeTimer0()
 {
@@ -143,6 +176,8 @@ void initializePortsDirections()
 
 main(void)
 {
+	//Initialisation des variables globales
+	initGlobalVariables();
 	
 	//Initialisation de la direction des ports
 	initializePortsDirections();
@@ -165,52 +200,69 @@ main(void)
 	
 	//enable global interrupts
 	GIE = 1;
-	
 
 	while(TRUE)
 	{
-		for(char playerIndex = 0; playerIndex < MAX_NUMBER_OF_PLAYERS; playerIndex++)
-		{
-			
-			BOOL yesIsPressed, noIsPressed, selectIsPressed;
-			getPlayerInputState(playerIndex, &yesIsPressed, &noIsPressed, &selectIsPressed);
-			
-			
-			if(selectIsPressed == TRUE)
-			{
-				setPlayerSelectionState(playerIndex, SELECTED);
-			}	
-			else
-			{
-				setPlayerSelectionState(playerIndex, NOT_SELECTED);
-			}	
-			
-			if(yesIsPressed == TRUE && noIsPressed == FALSE)
-			{
-				setPlayerVoteState(playerIndex, VOTE_YES);
-			}	
-			else if(yesIsPressed == FALSE && noIsPressed == TRUE)
-			{
-				setPlayerVoteState(playerIndex, VOTE_NO);
-			}	
-			else
-			{
-				setPlayerVoteState(playerIndex, NO_VOTE);
-			}
 
-			if(isEnterButtonPressed() == TRUE)
-			{
-				setPlayerSide(playerIndex, SPY);
-			}
-			else
-			{
-				setPlayerSide(playerIndex, RESISTANT);
-			}	
-			
-	
-			
-	
-		}	 
+		switch(_gameState)
+		{
+			case WAITING_FOR_PLAYERS:
+
+				updatePlayersWhoWantToPlay();
+				
+				if(canGameStart() == TRUE)
+				{
+					_gameState = NOTIFYING_PLAYER_SIDES;
+				}	
+				
+			break;
+		}	
+		
+
+		
+		
+//		for(char playerIndex = 0; playerIndex < MAX_NUMBER_OF_PLAYERS; playerIndex++)
+//		{
+//			
+//			BOOL yesIsPressed, noIsPressed, selectIsPressed;
+//			getPlayerInputState(playerIndex, &yesIsPressed, &noIsPressed, &selectIsPressed);
+//			
+//			
+//			if(selectIsPressed == TRUE)
+//			{
+//				setPlayerSelectionState(playerIndex, SELECTED);
+//			}	
+//			else
+//			{
+//				setPlayerSelectionState(playerIndex, NOT_SELECTED);
+//			}	
+//			
+//			if(yesIsPressed == TRUE && noIsPressed == FALSE)
+//			{
+//				setPlayerVoteState(playerIndex, VOTE_YES);
+//			}	
+//			else if(yesIsPressed == FALSE && noIsPressed == TRUE)
+//			{
+//				setPlayerVoteState(playerIndex, VOTE_NO);
+//			}	
+//			else
+//			{
+//				setPlayerVoteState(playerIndex, NO_VOTE);
+//			}
+//
+//			if(isEnterButtonPressed() == TRUE)
+//			{
+//				setPlayerSide(playerIndex, SPY);
+//			}
+//			else
+//			{
+//				setPlayerSide(playerIndex, RESISTANT);
+//			}	
+//			
+//	
+//			
+//	
+//		}	 
 
 		//__delay_ms(1000);
 

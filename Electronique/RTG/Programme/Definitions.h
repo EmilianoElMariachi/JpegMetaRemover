@@ -18,9 +18,11 @@
 #define RESET 	RC7 //Définition de la pi de reset
 #define CS 		RC6 //Définition de la pin correspondant au Chip Select (CS)
 
-//==========================================================================//
-//	Déclaration des types et des énumérations partagées dans le programme   //
-//==========================================================================//
+#define PBOOL BOOL*
+
+//======================================================================================
+//>	Déclaration des types et des énumérations partagées dans le programme
+//======================================================================================
 #ifndef COMMON_DATA_TYPES
 #define  COMMON_DATA_TYPES   
 
@@ -47,28 +49,23 @@
 		RESISTANT = 1,
 	};
 
+	enum GameStates
+	{
+		WAITING_FOR_PLAYERS = 1,
+		NOTIFYING_PLAYER_SIDES = 2,
+	};
+	
+	struct Player
+	{
+		BOOL isSpy;
+		BOOL slotHasPlayer;
+		enum PlayerVoteStates voteStatus;
+	};	
+
 #endif
 
-	
-
-/*
-
-enum GameStates
-{
-	WAITING_FOR_PLAYERS,
-	
-};	
-
-struct Player
-{
-	BOOL isSpy;
-	BOOL isActive;
-	enum PlayerVoteStates voteStatus;
-	
-};	
-
-struct Player _ArrayOfPlayers[MAX_NUMBER_OF_PLAYERS];
-
-char _arrayOfPlayersIndex[MAX_NUMBER_OF_PLAYERS];
-
-*/
+//======================================================================================
+// Déclaration des variables globales
+//======================================================================================
+enum GameStates _gameState;
+struct Player _players[MAX_NUMBER_OF_PLAYERS];
