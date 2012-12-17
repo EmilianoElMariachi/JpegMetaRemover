@@ -1,30 +1,32 @@
+//¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤//
+//¤¤¤              INCLUDES              ¤¤¤//
 #include <htc.h>
 
-#include "SPI.h";
-
+#include "SPI.h"
 #include "missionsMngt.h"
+//¤¤¤              INCLUDES              ¤¤¤//
+//¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤//
 
-//TODO : supprimer le CS
-#define CS 		RC6 //Définition de la pin correspondant au Chip Select (CS)
-
-//=====================================================================================================================================
+//======================================================================================
+//> TODO: a déplacer dans un fichier .C de gestion des erreurs
+//======================================================================================
 void SPI_ERROR(char errNum)
 {
 	if(errNum == 0)		 //SSPOV
 	{
-		setMissionState(1, WON_BY_SPIES );
 		//TODO : gérer les erreurs
 	}	
 	else if(errNum == 1) //WCOL
 	{
-		setMissionState(2, WON_BY_SPIES );
 		//TODO : gérer les erreurs
 	}	
 	
 	RA1 = 1;
 }
 
-
+//======================================================================================
+//> Fonction d'envoi et réception d'un octet sur le bus SPI
+//======================================================================================
 BYTE SPI_SendReceive(BYTE byteToSend)
 {
 	//Rempli le buffer avec l'octet à envoyer
@@ -49,7 +51,9 @@ BYTE SPI_SendReceive(BYTE byteToSend)
 }	
 
 	
-
+//======================================================================================
+//> Configuration des registres permettant d'activer la liaison SPI
+//======================================================================================
 void SPI_Init()
 {
 	
@@ -65,4 +69,3 @@ void SPI_Init()
 	CS = 1;
 }
 
-//=====================================================================================================================================

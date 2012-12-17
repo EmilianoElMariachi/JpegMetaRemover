@@ -1,7 +1,7 @@
 #include <htc.h>
 #include <pic16f882.h>
 
-#include "EEPROM.h";
+#include "EEPROM.h"
 
 void setupEEPROM()
 {

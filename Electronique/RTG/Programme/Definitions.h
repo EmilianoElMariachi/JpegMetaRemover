@@ -1,3 +1,4 @@
+#define MIN_NUMBER_OF_PLAYERS 5
 #define MAX_NUMBER_OF_PLAYERS 10
 
 #define B8(Num) 0bNum
@@ -14,7 +15,8 @@
 #define TRUE 0xFF
 #define FALSE 0x00
 
-
+#define RESET 	RC7 //Définition de la pi de reset
+#define CS 		RC6 //Définition de la pin correspondant au Chip Select (CS)
 
 //==========================================================================//
 //	Déclaration des types et des énumérations partagées dans le programme   //
@@ -48,3 +50,25 @@
 #endif
 
 	
+
+/*
+
+enum GameStates
+{
+	WAITING_FOR_PLAYERS,
+	
+};	
+
+struct Player
+{
+	BOOL isSpy;
+	BOOL isActive;
+	enum PlayerVoteStates voteStatus;
+	
+};	
+
+struct Player _ArrayOfPlayers[MAX_NUMBER_OF_PLAYERS];
+
+char _arrayOfPlayersIndex[MAX_NUMBER_OF_PLAYERS];
+
+*/

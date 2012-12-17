@@ -1,4 +1,4 @@
-#include "CustomTypes.h"
+#include "Definitions.h"
 #include "EEPROM.h";
 
 //=======================================================//
@@ -10,8 +10,6 @@
 //===                    VARIABLES                    ===//
 //=======================================================//
 long _lastRandomNumber = 0;
-BOOL _isRandomInitialized = FALSE;
-
 
 //=======================================================//
 //===                    FONCTIONS                    ===//
@@ -38,6 +36,8 @@ void saveRandomNumberToFlash()
 
 int getRandomNumber()
 {
+	static BOOL _isRandomInitialized = FALSE;
+	
 	if(!_isRandomInitialized)
 	{
 		initializeRandomSeedFromFlash();

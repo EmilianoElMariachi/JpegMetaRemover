@@ -1,11 +1,14 @@
 #include <htc.h>
 
-#include "CustomTypes.h";
+#include "Definitions.h";
 #include "PlayerInput.h"
 
 #include "PlayerIO.h"
 #include "MCP23S17.h";
 
+//======================================================================================
+//> Fonction permettant de savoir si le bouton "Enter" est pressé
+//======================================================================================
 BOOL isEnterButtonPressed()
 {
 	if((PORTB & B8(BIT6)) == B8(BIT6))
@@ -18,6 +21,9 @@ BOOL isEnterButtonPressed()
 	}	
 }	
 
+//======================================================================================
+//> Fonction permettant de connaitre l'état de tous les boutons qui concernent un joueur
+//======================================================================================
 void getPlayerInputState(char playerIndex, BOOL* yesIsPressed, BOOL* noIsPressed, BOOL* selectIsPressed)
 {
 	char addressMCP = getMCPAddressFromPlayerIndex(playerIndex);
@@ -59,6 +65,3 @@ void getPlayerInputState(char playerIndex, BOOL* yesIsPressed, BOOL* noIsPressed
 		{ *yesIsPressed = TRUE; }
 	}	
 }
-
-
-

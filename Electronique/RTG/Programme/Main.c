@@ -1,7 +1,9 @@
+//¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤//
+//¤¤¤              INCLUDES              ¤¤¤//
 #include <htc.h>
 #include <pic16f882.h>
 
-#include "CustomTypes.h";
+#include "Definitions.h";
 #include "SPI.h";
 #include "MCP23S17.h";
 #include "missionsMngt.h"
@@ -10,76 +12,21 @@
 #include "playerIO.h";
 #include "EEPROM.h"
 #include "Random.h"
+//¤¤¤              INCLUDES              ¤¤¤//
+//¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤//
+
+
+
 
 __CONFIG(DEBUG_OFF & LVP_OFF & FCMEN_OFF & IESO_OFF & BOREN_OFF & CP_OFF & MCLRE_ON & PWRTE_OFF & WDTE_OFF & FOSC_INTRC_NOCLKOUT);
-
 #define _XTAL_FREQ 8000000	//Oscillateur interne cadencé à 8 Mhz
 
-//==============================================================================
 
-#define BUTTON_APPUYE	RB0	//bit 1 of PORTC
 
-//==============================================================================
 
-volatile BOOL _shouldToggleAEffacer = FALSE;
-
-char _currentMissionIndex = 0;
-char _CPT_A_EFFACER = 0;
-
-//==============================================================================
-
-void toggleMissionLedsAEffacer()
-{
-
-	if(_currentMissionIndex == 0)
-	{
-		setMissionState(1, NOT_YET_STARTED);
-		setMissionState(2, NOT_YET_STARTED);
-		setMissionState(3, NOT_YET_STARTED);
-		setMissionState(4, NOT_YET_STARTED);
-		setMissionState(5, NOT_YET_STARTED);
-		_currentMissionIndex ++;	
-	}
-	else if(_currentMissionIndex == 1)
-	{
-		setMissionState(1, STARTED);
-		setMissionState(2, STARTED);
-		setMissionState(3, STARTED);
-		setMissionState(4, STARTED);
-		setMissionState(5, STARTED);		
-		_currentMissionIndex ++;	
-	}
-	else if(_currentMissionIndex == 2)
-	{
-		setMissionState(1, WON_BY_RESISTANCE);
-		setMissionState(2, WON_BY_RESISTANCE);
-		setMissionState(3, WON_BY_RESISTANCE);
-		setMissionState(4, WON_BY_RESISTANCE);
-		setMissionState(5, WON_BY_RESISTANCE);
-		_currentMissionIndex ++;	
-	}
-	else if(_currentMissionIndex == 3)
-	{
-		setMissionState(1, WON_BY_SPIES);
-		setMissionState(2, WON_BY_SPIES);
-		setMissionState(3, WON_BY_SPIES);
-		setMissionState(4, WON_BY_SPIES);
-		setMissionState(5, WON_BY_SPIES);
-		_currentMissionIndex = 0;	
-	}
-	
-}
-
-enum GameStates
-{
-	WAITING_FOR_PLAYERS,
-	
-};	
-
-//#########################################################################//
-//
-//#########################################################################//
-
+//======================================================================================
+//>
+//======================================================================================
 void checkPlayersWhoWantToPlay()
 {
 	for(char playerIndex = 0; playerIndex < MAX_NUMBER_OF_PLAYERS ; playerIndex++)
@@ -96,7 +43,6 @@ void checkPlayersWhoWantToPlay()
 	}	
 }	
 
-
 //#########################################################################//
 //### 							INTERRUPTION 							###//
 //#########################################################################//
@@ -104,13 +50,7 @@ void interrupt tc_int(void)
 {
 	if (T0IE && T0IF)
 	{
-		_CPT_A_EFFACER++;
-		
-		if(_CPT_A_EFFACER == 10)
-		{
-			_CPT_A_EFFACER = 0;
-			_shouldToggleAEffacer = TRUE;
-		}
+		//Changer le variables globales ICI
 		
 		T0IF=0;
 	}
@@ -226,7 +166,7 @@ main(void)
 	//enable global interrupts
 	GIE = 1;
 	
-//
+
 	while(TRUE)
 	{
 		for(char playerIndex = 0; playerIndex < MAX_NUMBER_OF_PLAYERS; playerIndex++)
@@ -267,11 +207,7 @@ main(void)
 				setPlayerSide(playerIndex, RESISTANT);
 			}	
 			
-			if(_shouldToggleAEffacer == TRUE)
-			{
-				toggleMissionLedsAEffacer();
-				_shouldToggleAEffacer = FALSE;
-			}	
+	
 			
 	
 		}	 

@@ -1,9 +1,16 @@
+//¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤//
+//¤¤¤              INCLUDES              ¤¤¤//
 #include <htc.h>
 #include <pic16f882.h>
 
-#include "customTypes.h"
+#include "Definitions.h"
 #include "missionsMngt.h"
+//¤¤¤              INCLUDES              ¤¤¤//
+//¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤//
 
+//======================================================================================
+//> Fonction permettant de définir l'état de la mission à l'index spécifié
+//======================================================================================
 void setMissionState(char missionNumber, enum MissionState eMissionState)
 {
 	if(missionNumber == 1)
