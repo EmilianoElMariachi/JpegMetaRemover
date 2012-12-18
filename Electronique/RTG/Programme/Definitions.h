@@ -65,7 +65,7 @@
 #endif
 
 //======================================================================================
-// Déclaration des variables globales
+//> Déclaration des variables globales
 //======================================================================================
 enum GameStates _gameState;
 struct Player _players[MAX_NUMBER_OF_PLAYERS];

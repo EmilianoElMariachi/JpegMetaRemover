@@ -3,7 +3,9 @@
 #include "PlayerIO.h"
 #include "MCP23S17.h";
 
-
+//======================================================================================
+//>
+//======================================================================================
 void setPlayerSelectionState(char playerIndex, enum PlayerSelectionState playerSelectionState)
 {
 	if(getPortLetterForPlayerIndex(playerIndex) == 'A')
@@ -34,6 +36,9 @@ void setPlayerSelectionState(char playerIndex, enum PlayerSelectionState playerS
 	}	
 }
 
+//======================================================================================
+//>
+//======================================================================================
 void setPlayerVoteState(char playerIndex, enum PlayerVoteStates playerVoteState)
 {
 	if(getPortLetterForPlayerIndex(playerIndex) == 'A')
@@ -74,6 +79,9 @@ void setPlayerVoteState(char playerIndex, enum PlayerVoteStates playerVoteState)
 	}			
 }
 
+//======================================================================================
+//>
+//======================================================================================
 void setPlayerSide(char playerIndex, enum PlayerSides playerSide)
 {
 	if(getPortLetterForPlayerIndex(playerIndex) == 'A')

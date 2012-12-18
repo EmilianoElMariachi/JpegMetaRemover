@@ -36,10 +36,12 @@ void updatePlayersWhoWantToPlay()
 		
 		if(yesIsPressed == TRUE)
 		{
+			setPlayerSelectionState(playerIndex, SELECTED);
 			_players[playerIndex].slotHasPlayer = TRUE;
 		}
 		else if(noIsPressed == TRUE)
 		{
+			setPlayerSelectionState(playerIndex, NOT_SELECTED);
 			_players[playerIndex].slotHasPlayer = FALSE;
 		}		
 	}
@@ -93,6 +95,9 @@ void initGlobalVariables()
 	_gameState = WAITING_FOR_PLAYERS;
 }
 
+//======================================================================================
+//>
+//======================================================================================
 void initializeTimer0()
 {
 	//_______________________________________________________
@@ -133,6 +138,9 @@ void initializeTimer0()
 	T0IF=0;
 }	
 
+//======================================================================================
+//>
+//======================================================================================
 void initializePortsDirections()
 {
 	
@@ -173,7 +181,53 @@ void initializePortsDirections()
 	PORTB  = B8(00000000);
 }	
 
+//======================================================================================
+//>
+//======================================================================================
+void displayButtonPressedAEffacer()
+{
+	for(char playerIndex = 0; playerIndex < MAX_NUMBER_OF_PLAYERS; playerIndex++)
+	{
+		BOOL yesIsPressed, noIsPressed, selectIsPressed;
+		getPlayerInputState(playerIndex, &yesIsPressed, &noIsPressed, &selectIsPressed);
+		
+		
+		if(selectIsPressed == TRUE)
+		{
+			setPlayerSelectionState(playerIndex, SELECTED);
+		}	
+		else
+		{
+			setPlayerSelectionState(playerIndex, NOT_SELECTED);
+		}	
+		
+		if(yesIsPressed == TRUE && noIsPressed == FALSE)
+		{
+			setPlayerVoteState(playerIndex, VOTE_YES);
+		}	
+		else if(yesIsPressed == FALSE && noIsPressed == TRUE)
+		{
+			setPlayerVoteState(playerIndex, VOTE_NO);
+		}	
+		else
+		{
+			setPlayerVoteState(playerIndex, NO_VOTE);
+		}
 
+		if(isEnterButtonPressed() == TRUE)
+		{
+			setPlayerSide(playerIndex, SPY);
+		}
+		else
+		{
+			setPlayerSide(playerIndex, RESISTANT);
+		}	
+	}
+}
+
+//======================================================================================
+//>
+//======================================================================================
 main(void)
 {
 	//Initialisation des variables globales
@@ -218,52 +272,7 @@ main(void)
 			break;
 		}	
 		
-
-		
-		
-//		for(char playerIndex = 0; playerIndex < MAX_NUMBER_OF_PLAYERS; playerIndex++)
-//		{
-//			
-//			BOOL yesIsPressed, noIsPressed, selectIsPressed;
-//			getPlayerInputState(playerIndex, &yesIsPressed, &noIsPressed, &selectIsPressed);
-//			
-//			
-//			if(selectIsPressed == TRUE)
-//			{
-//				setPlayerSelectionState(playerIndex, SELECTED);
-//			}	
-//			else
-//			{
-//				setPlayerSelectionState(playerIndex, NOT_SELECTED);
-//			}	
-//			
-//			if(yesIsPressed == TRUE && noIsPressed == FALSE)
-//			{
-//				setPlayerVoteState(playerIndex, VOTE_YES);
-//			}	
-//			else if(yesIsPressed == FALSE && noIsPressed == TRUE)
-//			{
-//				setPlayerVoteState(playerIndex, VOTE_NO);
-//			}	
-//			else
-//			{
-//				setPlayerVoteState(playerIndex, NO_VOTE);
-//			}
-//
-//			if(isEnterButtonPressed() == TRUE)
-//			{
-//				setPlayerSide(playerIndex, SPY);
-//			}
-//			else
-//			{
-//				setPlayerSide(playerIndex, RESISTANT);
-//			}	
-//			
-//	
-//			
-//	
-//		}	 
-
+		//displayButtonPressedAEffacer();
 		//__delay_ms(1000);
 
 	

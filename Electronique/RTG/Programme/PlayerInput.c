@@ -32,9 +32,9 @@ void getPlayerInputState(char playerIndex, BOOL* yesIsPressed, BOOL* noIsPressed
 	{
 		char portState = MCP23S17_GetPortA(addressMCP);
 		if((portState & B8(BIT7)) == B8(BIT7))
-		{ *selectIsPressed = FALSE; }
-		else
 		{ *selectIsPressed = TRUE; }
+		else
+		{ *selectIsPressed = FALSE; }
 		
 		if((portState & B8(BIT3)) == B8(BIT3))
 		{ *noIsPressed = FALSE; }
@@ -50,9 +50,9 @@ void getPlayerInputState(char playerIndex, BOOL* yesIsPressed, BOOL* noIsPressed
 	{
 		char portState = MCP23S17_GetPortB(addressMCP);
 		if((portState & B8(BIT0)) == B8(BIT0))
-		{ *selectIsPressed = FALSE; }
-		else
 		{ *selectIsPressed = TRUE; }
+		else
+		{ *selectIsPressed = FALSE; }
 
 		if((portState & B8(BIT4)) == B8(BIT4))
 		{ *noIsPressed = FALSE; }
