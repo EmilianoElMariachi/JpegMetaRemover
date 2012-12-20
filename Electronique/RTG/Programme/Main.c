@@ -34,15 +34,23 @@ void updatePlayersWhoWantToPlay()
 		BOOL yesIsPressed, noIsPressed, selectIsPressed;
 		getPlayerInputState(playerIndex, &yesIsPressed, &noIsPressed, &selectIsPressed);
 		
-		if(yesIsPressed == TRUE)
+		if(yesIsPressed || selectIsPressed)
 		{
-			setPlayerSelectionState(playerIndex, SELECTED);
-			_players[playerIndex].slotHasPlayer = TRUE;
+			if(_playersSlotsStatus[playerIndex] == FALSE)
+			{
+				_numberOfRegisteredPlayers++;
+				_playersSlotsStatus[playerIndex] = TRUE;
+				setPlayerSelectionState(playerIndex, SELECTED);
+			}
 		}
-		else if(noIsPressed == TRUE)
+		else if(noIsPressed)
 		{
-			setPlayerSelectionState(playerIndex, NOT_SELECTED);
-			_players[playerIndex].slotHasPlayer = FALSE;
+			if(_playersSlotsStatus[playerIndex] == TRUE)
+			{
+				_numberOfRegisteredPlayers--;
+				_playersSlotsStatus[playerIndex] = FALSE;
+				setPlayerSelectionState(playerIndex, NOT_SELECTED);
+			}	
 		}		
 	}
 }	
@@ -52,25 +60,23 @@ void updatePlayersWhoWantToPlay()
 //======================================================================================
 BOOL canGameStart()
 {
-	BOOL gameCanStart = FALSE;
-	if(isEnterButtonPressed() == TRUE)
+	if(isEnterButtonPressed() && _numberOfRegisteredPlayers >= MIN_NUMBER_OF_PLAYERS)
 	{
-		char numberOfRegisteredPlayers = 0;
-		for(char playerIndex = 0; playerIndex < MAX_NUMBER_OF_PLAYERS ; playerIndex++)
+		char playerIndex = 0;
+		for(char slotIndex = 0; slotIndex < MAX_NUMBER_OF_PLAYERS ; slotIndex++)
 		{
-			if(_players[playerIndex].slotHasPlayer == TRUE)
+			if(_playersSlotsStatus[slotIndex])
 			{
-				numberOfRegisteredPlayers ++;
+				_players[playerIndex++].playerSlotIndex = slotIndex;
 			}	
 		}
 		
-		if(numberOfRegisteredPlayers >= MIN_NUMBER_OF_PLAYERS)
-		{
-			gameCanStart = TRUE;
-		}	
+		return TRUE;
 	}	
-	
-	return gameCanStart;
+	else
+	{
+		return FALSE;
+	}	
 }	
 
 //#########################################################################//
@@ -93,6 +99,14 @@ void interrupt tc_int(void)
 void initGlobalVariables()
 {
 	_gameState = WAITING_FOR_PLAYERS;
+	_numberOfRegisteredPlayers = 0;
+	for(char playerIndex = 0; playerIndex < MAX_NUMBER_OF_PLAYERS ; playerIndex++)
+	{
+		_players[playerIndex].playerSlotIndex = -1;
+		_players[playerIndex].voteStatus = NO_VOTE;
+		_players[playerIndex].isSpy = FALSE;
+	}	
+	
 }
 
 //======================================================================================

@@ -58,14 +58,17 @@
 	struct Player
 	{
 		BOOL isSpy;
-		BOOL slotHasPlayer;
+		char playerSlotIndex;
 		enum PlayerVoteStates voteStatus;
 	};	
 
+	//======================================================================================
+	//> Déclaration des variables globales
+	//======================================================================================
+	enum GameStates _gameState;
+	struct Player _players[MAX_NUMBER_OF_PLAYERS];
+	BOOL _playersSlotsStatus[MAX_NUMBER_OF_PLAYERS];
+	char _numberOfRegisteredPlayers;
+
 #endif
 
-//======================================================================================
-//> Déclaration des variables globales
-//======================================================================================
-enum GameStates _gameState;
-struct Player _players[MAX_NUMBER_OF_PLAYERS];
