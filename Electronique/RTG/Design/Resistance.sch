@@ -5621,29 +5621,29 @@ Source: www.kingbright.com</description>
 <part name="P+14" library="supply1" deviceset="+5V" device=""/>
 <part name="IC6" library="microchip" deviceset="MCP23S17" device="SP" value="MCP23S17SP_Adr4"/>
 <part name="GND14" library="supply1" deviceset="0V" device=""/>
-<part name="LED41" library="led" deviceset="LED" device="3MM" value="Blue"/>
-<part name="LED42" library="led" deviceset="LED" device="3MM" value="Red"/>
-<part name="LED43" library="led" deviceset="LED" device="3MM" value="Green"/>
+<part name="LED41" library="led" deviceset="LED" device="3MM" value="Blue_M4"/>
+<part name="LED42" library="led" deviceset="LED" device="3MM" value="Red_M4"/>
+<part name="LED43" library="led" deviceset="LED" device="3MM" value="Green_M4"/>
 <part name="R72" library="resistor" deviceset="R-US_" device="0204/7" value="10k"/>
 <part name="GND17" library="supply1" deviceset="0V" device=""/>
-<part name="LED44" library="led" deviceset="LED" device="3MM" value="Blue"/>
-<part name="LED45" library="led" deviceset="LED" device="3MM" value="Red"/>
-<part name="LED46" library="led" deviceset="LED" device="3MM" value="Green"/>
+<part name="LED44" library="led" deviceset="LED" device="3MM" value="Blue_M3"/>
+<part name="LED45" library="led" deviceset="LED" device="3MM" value="Red_M3"/>
+<part name="LED46" library="led" deviceset="LED" device="3MM" value="Green_M3"/>
 <part name="R73" library="resistor" deviceset="R-US_" device="0204/7" value="10k"/>
 <part name="GND18" library="supply1" deviceset="0V" device=""/>
-<part name="LED47" library="led" deviceset="LED" device="3MM" value="Blue"/>
-<part name="LED48" library="led" deviceset="LED" device="3MM" value="Red"/>
-<part name="LED49" library="led" deviceset="LED" device="3MM" value="Green"/>
+<part name="LED47" library="led" deviceset="LED" device="3MM" value="Blue_M5"/>
+<part name="LED48" library="led" deviceset="LED" device="3MM" value="Red_M5"/>
+<part name="LED49" library="led" deviceset="LED" device="3MM" value="Green_M5"/>
 <part name="R74" library="resistor" deviceset="R-US_" device="0204/7" value="10k"/>
 <part name="GND19" library="supply1" deviceset="0V" device=""/>
-<part name="LED50" library="led" deviceset="LED" device="3MM" value="Blue"/>
-<part name="LED51" library="led" deviceset="LED" device="3MM" value="Red"/>
-<part name="LED52" library="led" deviceset="LED" device="3MM" value="Green"/>
+<part name="LED50" library="led" deviceset="LED" device="3MM" value="Blue_M2"/>
+<part name="LED51" library="led" deviceset="LED" device="3MM" value="Red_M2"/>
+<part name="LED52" library="led" deviceset="LED" device="3MM" value="Green_M2"/>
 <part name="R75" library="resistor" deviceset="R-US_" device="0204/7" value="10k"/>
 <part name="GND20" library="supply1" deviceset="0V" device=""/>
-<part name="LED53" library="led" deviceset="LED" device="3MM" value="Blue"/>
-<part name="LED54" library="led" deviceset="LED" device="3MM" value="Red"/>
-<part name="LED55" library="led" deviceset="LED" device="3MM" value="Green"/>
+<part name="LED53" library="led" deviceset="LED" device="3MM" value="Blue_M1"/>
+<part name="LED54" library="led" deviceset="LED" device="3MM" value="Red_M1"/>
+<part name="LED55" library="led" deviceset="LED" device="3MM" value="Green_M1"/>
 <part name="R76" library="resistor" deviceset="R-US_" device="0204/7" value="10k"/>
 <part name="GND21" library="supply1" deviceset="0V" device=""/>
 <part name="LED56" library="led" deviceset="LED" device="3MM" value="No"/>
