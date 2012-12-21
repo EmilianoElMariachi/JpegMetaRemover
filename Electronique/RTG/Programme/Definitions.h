@@ -57,9 +57,9 @@
 	
 	struct Player
 	{
-		BOOL isSpy;
-		char playerSlotIndex;
-		enum PlayerVoteStates voteStatus;
+		BOOL IsSpy;
+		char PlayerSlotIndex;
+		enum PlayerVoteStates VoteStatus;
 	};	
 
 	//======================================================================================

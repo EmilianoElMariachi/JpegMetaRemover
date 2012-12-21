@@ -67,7 +67,7 @@ BOOL canGameStart()
 		{
 			if(_playersSlotsStatus[slotIndex])
 			{
-				_players[playerIndex++].playerSlotIndex = slotIndex;
+				_players[playerIndex++].PlayerSlotIndex = slotIndex;
 			}	
 		}
 		
@@ -102,9 +102,9 @@ void initGlobalVariables()
 	_numberOfRegisteredPlayers = 0;
 	for(char playerIndex = 0; playerIndex < MAX_NUMBER_OF_PLAYERS ; playerIndex++)
 	{
-		_players[playerIndex].playerSlotIndex = -1;
-		_players[playerIndex].voteStatus = NO_VOTE;
-		_players[playerIndex].isSpy = FALSE;
+		_players[playerIndex].PlayerSlotIndex = -1;
+		_players[playerIndex].VoteStatus = NO_VOTE;
+		_players[playerIndex].IsSpy = FALSE;
 	}	
 	
 }
