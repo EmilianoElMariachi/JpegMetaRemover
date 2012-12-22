@@ -1,19 +1,22 @@
+//¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤//
+//¤¤¤              INCLUDES              ¤¤¤//
 #include "Definitions.h"
-#include "EEPROM.h";
+#include "EEPROM.h"
+//¤¤¤              INCLUDES              ¤¤¤//
+//¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤//
 
-//=======================================================//
-//===                   DEFINITIONS                   ===//
-//=======================================================//
-#define RAND_SEED_EEPROM_ADR 0
 
-//=======================================================//
-//===                    VARIABLES                    ===//
-//=======================================================//
-long _lastRandomNumber = 0;
+//##########################################//
+//###          VARIABLES LOCALES         ###//
+static long _lastRandomNumber = 0;
+//###          VARIABLES LOCALES         ###//
+//##########################################//
 
-//=======================================================//
-//===                    FONCTIONS                    ===//
-//=======================================================//
+
+//======================================================================================
+//> Fonction permettant d'initialiser la graine du random à partir de la valeur 
+//> sauvegardée dans la flash
+//======================================================================================
 void initializeRandomSeedFromFlash()
 {
 	BYTE* addrOfRandomNumber = (BYTE*)&_lastRandomNumber;
@@ -24,6 +27,9 @@ void initializeRandomSeedFromFlash()
 	*(addrOfRandomNumber + 3) = readByteFromEEPROM(RAND_SEED_EEPROM_ADR + 3); 		//Poid fort
 }
 
+//======================================================================================
+//>	Fonction permettant de sauvegarder la dernière valeur aléatoire générée
+//======================================================================================
 void saveRandomNumberToFlash()
 {
 	BYTE* addrOfRandomNumber = (BYTE*)&_lastRandomNumber;
@@ -34,7 +40,10 @@ void saveRandomNumberToFlash()
 	writeByteToEEPROM(RAND_SEED_EEPROM_ADR + 3, *(addrOfRandomNumber + 3));
 }	
 
-int getRandomNumber()
+//======================================================================================
+//> Retourne un nombre aléatoire entre 0 to 255
+//======================================================================================
+unsigned char getRandomNumber() 
 {
 	static BOOL _isRandomInitialized = FALSE;
 	
@@ -44,10 +53,27 @@ int getRandomNumber()
 		_isRandomInitialized = TRUE;	
 	}
 	
-	_lastRandomNumber = _lastRandomNumber*1103515245L + 12345;
+	_lastRandomNumber = _lastRandomNumber * 1103515245L + 12345;
 		
-	saveRandomNumberToFlash();
+	PUCHAR adrRnd = (PUCHAR)&_lastRandomNumber;
 		
-	return((int)(_lastRandomNumber >> 16) & 077777);
+	return adrRnd[0] + adrRnd[1] + adrRnd[2] + adrRnd[3];
 }
 
+//======================================================================================
+//> Retourne un nombre aléatoire entre 0 to 255
+//======================================================================================
+unsigned char getRandomNumberBetweenZeroAnd(unsigned char maxValueExcluded)
+{
+	//[0->255]
+	unsigned char randChar = getRandomNumber();
+	
+	unsigned char result = (unsigned char)((randChar * maxValueExcluded) / UCHAR_MAX);
+
+	//Cas particulier uniquement pour randChar == 255
+	if(result >= maxValueExcluded)
+	{ result = maxValueExcluded -1; }	
+	
+	//[0->maxValue - 1]
+	return result;
+}	

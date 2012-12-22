@@ -55,12 +55,45 @@ void updatePlayersWhoWantToPlay()
 	}
 }	
 
+void notifyPlayersSides()
+{
+	for(char playerIndex = 0; playerIndex < _numberOfRegisteredPlayers ; playerIndex++)
+	{
+		setPlayerSide(_players[playerIndex].PlayerSlotIndex, _players[playerIndex].Side);
+		
+		if(_players[playerIndex].Side == SPY)
+		{ setPlayerVoteState(_players[playerIndex].PlayerSlotIndex, VOTE_NO); }
+		
+	}
+}	
+
 //======================================================================================
 //>
 //======================================================================================
+void assignSpiesRandomly()
+{
+	char numOfSpiesRequired = NUM_SPIES_PER_NUM_PLAYERS[_numberOfRegisteredPlayers - 5];
+	
+	while(numOfSpiesRequired > 0)
+	{
+		char playerIndex = getRandomNumberBetweenZeroAnd(_numberOfRegisteredPlayers);
+		
+		if(_players[playerIndex].Side != SPY)
+		{
+			_players[playerIndex].Side = SPY;
+			numOfSpiesRequired--;
+		}	
+	}	
+	
+}	
+
+//======================================================================================
+//> Si le bouton 'enter' est pressé et qu'un nombre suffisant de joueur est présent,
+//> alors la partie peut commencer
+//======================================================================================
 BOOL canGameStart()
 {
-	if(isEnterButtonPressed() && _numberOfRegisteredPlayers >= MIN_NUMBER_OF_PLAYERS)
+	if(_numberOfRegisteredPlayers >= MIN_NUMBER_OF_PLAYERS && isEnterButtonPressed())
 	{
 		char playerIndex = 0;
 		for(char slotIndex = 0; slotIndex < MAX_NUMBER_OF_PLAYERS ; slotIndex++)
@@ -104,7 +137,7 @@ void initGlobalVariables()
 	{
 		_players[playerIndex].PlayerSlotIndex = -1;
 		_players[playerIndex].VoteStatus = NO_VOTE;
-		_players[playerIndex].IsSpy = FALSE;
+		_players[playerIndex].Side = RESISTANT;
 	}	
 	
 }
@@ -271,7 +304,7 @@ main(void)
 
 	while(TRUE)
 	{
-
+	
 		switch(_gameState)
 		{
 			case WAITING_FOR_PLAYERS:
@@ -281,6 +314,8 @@ main(void)
 				if(canGameStart() == TRUE)
 				{
 					_gameState = NOTIFYING_PLAYER_SIDES;
+					assignSpiesRandomly();
+					notifyPlayersSides();
 				}	
 				
 			break;
@@ -291,7 +326,7 @@ main(void)
 
 	
 	}
-
+	
 	
 }
 
