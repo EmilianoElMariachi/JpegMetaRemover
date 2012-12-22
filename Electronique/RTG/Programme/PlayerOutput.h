@@ -1,7 +1,7 @@
 #include "Definitions.h";
 
-void setPlayerSelectionState(char playerIndex, enum PlayerSelectionState playerSelectionState);
+void setPlayerSelectLedState(char playerIndex, enum PlayerSelectLedState ledState);
 
-void setPlayerVoteState(char playerIndex, enum PlayerVoteStates playerVoteState);
+void setPlayerVoteLedColor(char playerIndex, enum PlayerVoteLedColor ledColor);
 
 void setPlayerSide(char playerIndex, enum PlayerSides playerSide);

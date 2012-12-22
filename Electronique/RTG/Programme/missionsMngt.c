@@ -11,9 +11,9 @@
 //======================================================================================
 //> Fonction permettant de définir l'état de la mission à l'index spécifié
 //======================================================================================
-void setMissionState(char missionNumber, enum MissionState eMissionState)
+void setMissionState(char missionIndex, enum MissionStates eMissionState)
 {
-	if(missionNumber == 1)
+	if(missionIndex == 0)
 	{
 		switch(eMissionState)
 		{
@@ -31,7 +31,7 @@ void setMissionState(char missionNumber, enum MissionState eMissionState)
 				break;
 		}	
 	}
-	else if(missionNumber == 2)	
+	else if(missionIndex == 1)	
 	{
 		switch(eMissionState)
 		{
@@ -49,7 +49,7 @@ void setMissionState(char missionNumber, enum MissionState eMissionState)
 				break;
 		}
 	}	
-	else if(missionNumber == 3)		
+	else if(missionIndex == 2)		
 	{
 		switch(eMissionState)
 		{
@@ -67,7 +67,7 @@ void setMissionState(char missionNumber, enum MissionState eMissionState)
 				break;
 		}
 	}	
-	else if(missionNumber == 4)		
+	else if(missionIndex == 3)		
 	{
 		switch(eMissionState)
 		{
@@ -85,7 +85,7 @@ void setMissionState(char missionNumber, enum MissionState eMissionState)
 				break;
 		}
 	}
-	else if(missionNumber == 5)		
+	else if(missionIndex == 4)		
 	{
 		switch(eMissionState)
 		{

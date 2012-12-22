@@ -36,7 +36,7 @@ void updatePlayersWhoWantToPlay()
 			{
 				_numberOfRegisteredPlayers++;
 				_playersSlotsStatus[playerIndex] = TRUE;
-				setPlayerSelectionState(playerIndex, SELECTED);
+				setPlayerSelectLedState(playerIndex, ON);
 			}
 		}
 		else if(noIsPressed)
@@ -45,7 +45,7 @@ void updatePlayersWhoWantToPlay()
 			{
 				_numberOfRegisteredPlayers--;
 				_playersSlotsStatus[playerIndex] = FALSE;
-				setPlayerSelectionState(playerIndex, NOT_SELECTED);
+				setPlayerSelectLedState(playerIndex, OFF);
 			}	
 		}		
 	}
@@ -62,7 +62,7 @@ void notifyPlayersSides()
 		
 		//TODO : a effacer
 		if(_players[playerIndex].Side == SPY)
-		{ setPlayerVoteState(_players[playerIndex].PlayerSlotIndex, VOTE_NO); }
+		{ setPlayerVoteLedColor(_players[playerIndex].PlayerSlotIndex, RED); }
 	}
 }	
 
@@ -76,7 +76,7 @@ void stopNotifyPlayersSides()
 		setPlayerSide(_players[playerIndex].PlayerSlotIndex, RESISTANT);
 
 		//TODO : a effacer
-		setPlayerVoteState(_players[playerIndex].PlayerSlotIndex, NO_VOTE);
+		setPlayerVoteLedColor(_players[playerIndex].PlayerSlotIndex, NONE);
 	}		
 }	
 
@@ -133,13 +133,25 @@ BOOL canGameStart()
 //#########################################################################//
 void interrupt tc_int(void)
 {
+	static UCHAR _blinkCounter = 0; 
+
+	
 	//Test si c'est le timer 0 qui à déclenché l'interruption
 	if (T0IE && T0IF)
 	{
-		//Changer le variables globales ICI
-		if(_enterButtonFilterCounter > 0)
+		//Changer les variables globales ICI
+		if(_enterButtonFilterCounter != 0)
 		{ _enterButtonFilterCounter--; }
 		
+		if(_blinkCounter > BLINK_FREQ)
+		{
+			_toggleBlink = !_toggleBlink; 
+			_blinkCounter = 0; 
+		}
+		else
+		{ _blinkCounter++; }
+		
+		//Reinitialise le flag d'interruption
 		T0IF=0;
 	}
 }
@@ -150,15 +162,13 @@ void interrupt tc_int(void)
 
 void initGlobalVariables()
 {
-	_gameState = WAITING_FOR_PLAYERS;
 	_numberOfRegisteredPlayers = 0;
 	for(char playerIndex = 0; playerIndex < MAX_NUMBER_OF_PLAYERS ; playerIndex++)
 	{
-		_players[playerIndex].PlayerSlotIndex = -1;
+		_players[playerIndex].PlayerSlotIndex = MAX_NUMBER_OF_PLAYERS;
 		_players[playerIndex].VoteStatus = NO_VOTE;
 		_players[playerIndex].Side = RESISTANT;
 	}	
-	
 }
 
 //======================================================================================
@@ -248,48 +258,60 @@ void initializePortsDirections()
 }	
 
 //======================================================================================
+//> Initialise le début de la mission
+//======================================================================================
+void initCurrentMission()
+{
+	//Allume la mission courante à l'état en cours
+	setMissionState(_currentMissionIndex,STARTED);
+	
+	//Détermine le nombre d'espions attendus pour la mission courante
+	_numSpiesExpectedForCurMiss = SPIES_PER_MISSION[_currentMissionIndex][_numberOfRegisteredPlayers - MIN_NUMBER_OF_PLAYERS];
+}	
+
+
+//======================================================================================
 //>
 //======================================================================================
-void displayButtonPressedAEffacer()
+void waitMissionPlayersSelection()
 {
-	for(char playerIndex = 0; playerIndex < MAX_NUMBER_OF_PLAYERS; playerIndex++)
+	
+	//___________________________________________
+	//> Gestion clignottement du joueur actif
+	static BOOL _ledToggled = FALSE;
+	
+	if(_toggleBlink != _ledToggled)
 	{
+		if(_toggleBlink == TRUE)
+		{ setPlayerVoteLedColor(_players[_currentPlayerIndex].PlayerSlotIndex, GREEN); }	
+		else
+		{ setPlayerVoteLedColor(_players[_currentPlayerIndex].PlayerSlotIndex, NONE); }
+		_ledToggled = _toggleBlink;
+	}	
+	
+	//___________________________________________
+	//> Detection des joueurs selectionnés
+	for(char playerIndex = 0; playerIndex < _numberOfRegisteredPlayers; playerIndex++)
+	{
+		char slotIndex = _players[playerIndex].PlayerSlotIndex;
+		
 		BOOL yesIsPressed, noIsPressed, selectIsPressed;
-		getPlayerInputState(playerIndex, &yesIsPressed, &noIsPressed, &selectIsPressed);
-		
-		
-		if(selectIsPressed == TRUE)
-		{
-			setPlayerSelectionState(playerIndex, SELECTED);
-		}	
-		else
-		{
-			setPlayerSelectionState(playerIndex, NOT_SELECTED);
-		}	
-		
-		if(yesIsPressed == TRUE && noIsPressed == FALSE)
-		{
-			setPlayerVoteState(playerIndex, VOTE_YES);
-		}	
-		else if(yesIsPressed == FALSE && noIsPressed == TRUE)
-		{
-			setPlayerVoteState(playerIndex, VOTE_NO);
-		}	
-		else
-		{
-			setPlayerVoteState(playerIndex, NO_VOTE);
-		}
+		getPlayerInputState(slotIndex, &yesIsPressed, &noIsPressed, &selectIsPressed);
 
-		if(isEnterButtonPressed() == TRUE)
-		{
-			setPlayerSide(playerIndex, SPY);
-		}
-		else
-		{
-			setPlayerSide(playerIndex, RESISTANT);
+		if(selectIsPressed)
+		{	
+			enum PlayerSelectionState playerSelectState = !_players[_currentPlayerIndex].PlayerSelectedForMission;
+			_players[_currentPlayerIndex].PlayerSelectedForMission = playerSelectState ;
+			setPlayerSelectLedState(slotIndex, playerSelectState);
 		}	
-	}
-}
+
+		//if((
+		
+	}	
+	
+	
+}	
+
 
 //======================================================================================
 //>
@@ -326,7 +348,7 @@ main(void)
 	
 		switch(_gameState)
 		{
-			case WAITING_FOR_PLAYERS:
+			case WAIT_FOR_PLAYERS:
 
 				updatePlayersWhoWantToPlay();
 				
@@ -334,24 +356,29 @@ main(void)
 				{
 					assignSpiesAndFirstPlayerRand();
 					notifyPlayersSides();
-					_gameState = NOTIFYING_PLAYER_SIDES;
+					_gameState = NOTIFY_PLAYER_SIDES;
 				}
 				
 				break;
-			case NOTIFYING_PLAYER_SIDES: 
+			case NOTIFY_PLAYER_SIDES: 
 				if(isEnterButtonPressed())
 				{
 					stopNotifyPlayersSides();
+					
+					initCurrentMission();
+					
+					_gameState = WAIT_CUR_PLAYER_SELECT_PLAYERS;
 				}	
 				
+				break;
+			case WAIT_CUR_PLAYER_SELECT_PLAYERS:
+			
+				waitMissionPlayersSelection();
 				break;
 
 		}	
 		
-		//displayButtonPressedAEffacer();
-		//__delay_ms(1000);
 
-	
 	}
 	
 	

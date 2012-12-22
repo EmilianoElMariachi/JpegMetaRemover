@@ -8,23 +8,6 @@
 //中中中中中中中中中中中中中中中中中中中中中//
 
 //======================================================================================
-//> TODO: a d廧lacer dans un fichier .C de gestion des erreurs
-//======================================================================================
-void SPI_ERROR(char errNum)
-{
-	if(errNum == 0)		 //SSPOV
-	{
-		//TODO : g廨er les erreurs
-	}	
-	else if(errNum == 1) //WCOL
-	{
-		//TODO : g廨er les erreurs
-	}	
-	
-	RA1 = 1;
-}
-
-//======================================================================================
 //> Fonction d'envoi et r嶰eption d'un octet sur le bus SPI
 //======================================================================================
 BYTE SPI_SendReceive(BYTE byteToSend)
@@ -38,15 +21,6 @@ BYTE SPI_SendReceive(BYTE byteToSend)
 	//Lit le buffer pour r嶰up廨er l'octet re蓰
 	BYTE byteReceived = SSPBUF;
 
-	if(WCOL != 0)
-	{
-		SPI_ERROR(0);
-	}	
-	else if(SSPOV != 0)
-	{
-		SPI_ERROR(1);
-	}	
-	
 	return byteReceived;
 }	
 

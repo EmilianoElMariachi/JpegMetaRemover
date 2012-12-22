@@ -4,18 +4,18 @@
 #include "MCP23S17.h";
 
 //======================================================================================
-//>
+//> Permet d'allumer ou éteindre la led de selection d'un joueur
 //======================================================================================
-void setPlayerSelectionState(char playerIndex, enum PlayerSelectionState playerSelectionState)
+void setPlayerSelectLedState(char playerIndex, enum PlayerSelectLedState ledState)
 {
 	if(getPortLetterForPlayerIndex(playerIndex) == 'A')
 	{
-		switch(playerSelectionState)
+		switch(ledState)
 		{
-			case NOT_SELECTED:
+			case OFF:
 				_MCPPorts[playerIndex] = _MCPPorts[playerIndex] & B8(10111111);
 				break;
-			case SELECTED:
+			case ON:
 				_MCPPorts[playerIndex] = _MCPPorts[playerIndex] | B8(01000000);
 				break;
 		}
@@ -23,12 +23,12 @@ void setPlayerSelectionState(char playerIndex, enum PlayerSelectionState playerS
 	}
 	else
 	{
-		switch(playerSelectionState)
+		switch(ledState)
 		{
-			case NOT_SELECTED:
+			case OFF:
 				_MCPPorts[playerIndex] = _MCPPorts[playerIndex] & B8(11111101);
 				break;
-			case SELECTED:
+			case ON:
 				_MCPPorts[playerIndex] = _MCPPorts[playerIndex] | B8(00000010);
 				break;
 		}
@@ -39,20 +39,20 @@ void setPlayerSelectionState(char playerIndex, enum PlayerSelectionState playerS
 //======================================================================================
 //>
 //======================================================================================
-void setPlayerVoteState(char playerIndex, enum PlayerVoteStates playerVoteState)
+void setPlayerVoteLedColor(char playerIndex, enum PlayerVoteLedColor ledColor)
 {
 	if(getPortLetterForPlayerIndex(playerIndex) == 'A')
 	{
 		char maskOR, maskAND;
-		switch(playerVoteState)
+		switch(ledColor)
 		{
-			case NO_VOTE:
+			case NONE:
 				maskOR  = B8(00000000); maskAND = B8(11001111);
 				break;
-			case VOTE_NO:
+			case RED:
 				maskOR  = B8(00010000); maskAND = B8(11011111);
 				break;
-			case VOTE_YES:
+			case GREEN:
 				maskOR  = B8(00100000); maskAND = B8(11101111);			
 				break;
 		}
@@ -62,15 +62,15 @@ void setPlayerVoteState(char playerIndex, enum PlayerVoteStates playerVoteState)
 	else
 	{
 		char maskOR, maskAND;
-		switch(playerVoteState)
+		switch(ledColor)
 		{
-			case NO_VOTE:
+			case NONE:
 				maskOR  = B8(00000000); maskAND = B8(11110011);
 				break;
-			case VOTE_NO:
+			case RED:
 				maskOR  = B8(00001000); maskAND = B8(11111011);			
 				break;
-			case VOTE_YES:
+			case GREEN:
 				maskOR  = B8(00000100); maskAND = B8(11110111);			
 				break;
 		}	
