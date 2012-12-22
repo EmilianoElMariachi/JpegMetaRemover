@@ -52,7 +52,7 @@ void updatePlayersWhoWantToPlay()
 }	
 
 //======================================================================================
-//> Permet d'allumer la led indiquant les espions
+//> Permet d'allumer les leds indiquant les joueurs les espions
 //======================================================================================
 void notifyPlayersSides()
 {
@@ -60,9 +60,24 @@ void notifyPlayersSides()
 	{
 		setPlayerSide(_players[playerIndex].PlayerSlotIndex, _players[playerIndex].Side);
 		
+		//TODO : a effacer
 		if(_players[playerIndex].Side == SPY)
 		{ setPlayerVoteState(_players[playerIndex].PlayerSlotIndex, VOTE_NO); }
 	}
+}	
+
+//======================================================================================
+//> Permet d'eteindre toutes les leds indiquant les espions
+//======================================================================================
+void stopNotifyPlayersSides()
+{
+	for(char playerIndex = 0; playerIndex < _numberOfRegisteredPlayers ; playerIndex++)
+	{
+		setPlayerSide(_players[playerIndex].PlayerSlotIndex, RESISTANT);
+
+		//TODO : a effacer
+		setPlayerVoteState(_players[playerIndex].PlayerSlotIndex, NO_VOTE);
+	}		
 }	
 
 //======================================================================================
@@ -118,9 +133,12 @@ BOOL canGameStart()
 //#########################################################################//
 void interrupt tc_int(void)
 {
+	//Test si c'est le timer 0 qui à déclenché l'interruption
 	if (T0IE && T0IF)
 	{
 		//Changer le variables globales ICI
+		if(_enterButtonFilterCounter > 0)
+		{ _enterButtonFilterCounter--; }
 		
 		T0IF=0;
 	}
@@ -312,14 +330,22 @@ main(void)
 
 				updatePlayersWhoWantToPlay();
 				
-				if(canGameStart() == TRUE)
+				if(canGameStart())
 				{
 					assignSpiesAndFirstPlayerRand();
 					notifyPlayersSides();
 					_gameState = NOTIFYING_PLAYER_SIDES;
+				}
+				
+				break;
+			case NOTIFYING_PLAYER_SIDES: 
+				if(isEnterButtonPressed())
+				{
+					stopNotifyPlayersSides();
 				}	
 				
-			break;
+				break;
+
 		}	
 		
 		//displayButtonPressedAEffacer();

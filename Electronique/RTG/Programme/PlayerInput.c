@@ -11,14 +11,28 @@
 //======================================================================================
 BOOL isEnterButtonPressed()
 {
-	if((PORTB & B8(BIT6)) == B8(BIT6))
+	static BOOL _buttonSeenReleasedSinceLastPush = TRUE;
+	
+	BOOL _currentButtonState = (PORTB & B8(BIT6)) == B8(BIT6)?TRUE:FALSE;
+
+	//Si le temps de filtrage est passé et que le bouton est vu relaché,
+	//alors on peut considérer que le bouton a été relâché depuis le dernier appui
+	if(!_enterButtonFilterCounter && !_currentButtonState)
+	{ _buttonSeenReleasedSinceLastPush = TRUE; }	
+	
+	if(!_enterButtonFilterCounter && _buttonSeenReleasedSinceLastPush && _currentButtonState == TRUE)
 	{
+		_buttonSeenReleasedSinceLastPush = FALSE;
+		_enterButtonFilterCounter = 10;
 		return TRUE;
-	}	
+	}
 	else
 	{
 		return FALSE;
 	}	
+	
+	
+	
 }	
 
 //======================================================================================

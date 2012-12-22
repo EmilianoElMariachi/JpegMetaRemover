@@ -25,9 +25,12 @@
 	#define RESET 	RC7 //Définition de la pi de reset
 	#define CS 		RC6 //Définition de la pin correspondant au Chip Select (CS)
 	
+	
+	#define CHAR char
+	#define UCHAR unsigned char
 	#define PBOOL BOOL*
 	#define PCHAR char*
-	#define PUCHAR unsigned char*
+	#define PUCHAR UCHAR*
 
 
 	#define RAND_SEED_EEPROM_ADR 0
@@ -51,8 +54,8 @@
 
 	enum PlayerSides
 	{
-		SPY = 0,
-		RESISTANT = 1,
+		RESISTANT = 0,
+		SPY = 1,
 	};
 
 	enum GameStates
@@ -78,6 +81,7 @@
 	char _currentPlayerIndex;
 	const char NUM_SPIES_PER_NUM_PLAYERS[MIN_NUMBER_OF_PLAYERS+1] = {2, 2, 3, 3, 3, 4};
 
+	volatile UCHAR _enterButtonFilterCounter; 
 
 #endif
 
