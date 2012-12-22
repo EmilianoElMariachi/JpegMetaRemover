@@ -5,3 +5,5 @@ void setPlayerSelectLedState(char playerIndex, enum PlayerSelectLedState ledStat
 void setPlayerVoteLedColor(char playerIndex, enum PlayerVoteLedColor ledColor);
 
 void setPlayerSide(char playerIndex, enum PlayerSides playerSide);
+
+void switchOffAllSelPlayersLeds();

@@ -8,6 +8,14 @@
 //¤¤¤              INCLUDES              ¤¤¤//
 //¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤//
 
+void switchOffAllMissionLeds()
+{
+	for(char iter = 0; iter < MAX_NUMBER_OF_MISSIONS ; iter++)
+	{
+		setMissionState(iter, MISSION_OFF);
+	}	
+}	
+
 //======================================================================================
 //> Fonction permettant de définir l'état de la mission à l'index spécifié
 //======================================================================================
@@ -17,16 +25,16 @@ void setMissionState(char missionIndex, enum MissionStates eMissionState)
 	{
 		switch(eMissionState)
 		{
-			case NOT_YET_STARTED:
+			case MISSION_OFF:
 				PORTA = PORTA & B8(11111000);
 				break;
-			case STARTED:
+			case MISSION_BLUE:
 				PORTA = (PORTA | B8(00000001)) & B8(11111001);
 				break;
-			case WON_BY_SPIES:
+			case MISSION_RED:
 				PORTA = (PORTA | B8(00000010)) & B8(11111010);
 				break;
-			case WON_BY_RESISTANCE:
+			case MISSION_GREEN:
 				PORTA = (PORTA | B8(00000100)) & B8(11111100);
 				break;
 		}	
@@ -35,16 +43,16 @@ void setMissionState(char missionIndex, enum MissionStates eMissionState)
 	{
 		switch(eMissionState)
 		{
-			case NOT_YET_STARTED:
+			case MISSION_OFF:
 				PORTA = PORTA & B8(11000111);
 				break;
-			case STARTED:
+			case MISSION_BLUE:
 				PORTA = (PORTA | B8(00001000)) & B8(11001111);
 				break;
-			case WON_BY_SPIES:
+			case MISSION_RED:
 				PORTA = (PORTA | B8(00010000)) & B8(11010111);
 				break;
-			case WON_BY_RESISTANCE:
+			case MISSION_GREEN:
 				PORTA = (PORTA | B8(00100000)) & B8(11100111);
 				break;
 		}
@@ -53,16 +61,16 @@ void setMissionState(char missionIndex, enum MissionStates eMissionState)
 	{
 		switch(eMissionState)
 		{
-			case NOT_YET_STARTED:
+			case MISSION_OFF:
 				PORTC = PORTC & B8(11111000);
 				break;
-			case STARTED:
+			case MISSION_BLUE:
 				PORTC = (PORTC | B8(00000001)) & B8(11111001);
 				break;
-			case WON_BY_SPIES:
+			case MISSION_RED:
 				PORTC = (PORTC | B8(00000010)) & B8(11111010);
 				break;
-			case WON_BY_RESISTANCE:
+			case MISSION_GREEN:
 				PORTC = (PORTC | B8(00000100)) & B8(11111100);
 				break;
 		}
@@ -71,16 +79,16 @@ void setMissionState(char missionIndex, enum MissionStates eMissionState)
 	{
 		switch(eMissionState)
 		{
-			case NOT_YET_STARTED:
+			case MISSION_OFF:
 				PORTB = PORTB & B8(11111000);
 				break;
-			case STARTED:
+			case MISSION_BLUE:
 				PORTB = (PORTB | B8(00000001)) & B8(11111001);
 				break;
-			case WON_BY_SPIES:
+			case MISSION_RED:
 				PORTB = (PORTB | B8(00000010)) & B8(11111010);
 				break;
-			case WON_BY_RESISTANCE:
+			case MISSION_GREEN:
 				PORTB = (PORTB | B8(00000100)) & B8(11111100);
 				break;
 		}
@@ -89,18 +97,55 @@ void setMissionState(char missionIndex, enum MissionStates eMissionState)
 	{
 		switch(eMissionState)
 		{
-			case NOT_YET_STARTED:
+			case MISSION_OFF:
 				PORTB = PORTB & B8(11000111);
 				break;
-			case STARTED:
+			case MISSION_BLUE:
 				PORTB = (PORTB | B8(00001000)) & B8(11001111);
 				break;
-			case WON_BY_SPIES:
+			case MISSION_RED:
 				PORTB = (PORTB | B8(00010000)) & B8(11010111);
 				break;
-			case WON_BY_RESISTANCE:
+			case MISSION_GREEN:
 				PORTB = (PORTB | B8(00100000)) & B8(11100111);
 				break;
 		}
 	}
+}
+
+//======================================================================================
+//> 
+//======================================================================================
+void displayError(char nbErrors, enum MissionStates blinkColor)
+{
+	char iter;
+	
+	char backUpPortA = PORTA;
+	char backUpPortB = PORTB;
+	char backUpPortC = PORTC;
+
+	
+	//Eteint toutes les missions
+	switchOffAllMissionLeds();		
+	
+	for(char i = 0; i < NUM_BLINKS_ERROR ; i++)
+	{
+		for(iter = 0; iter < nbErrors ; iter++)
+		{
+			setMissionState(iter, blinkColor);
+		}
+		
+		__delay_ms(BLINK_ERROR_DELAY_MS);
+		
+		switchOffAllMissionLeds();	
+	
+		__delay_ms(BLINK_ERROR_DELAY_MS);
+	}
+	
+
+	
+	PORTA = backUpPortA;
+	PORTB = backUpPortB;
+	PORTC = backUpPortC;
+	
 }

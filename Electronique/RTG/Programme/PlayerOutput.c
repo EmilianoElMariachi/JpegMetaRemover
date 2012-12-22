@@ -4,6 +4,17 @@
 #include "MCP23S17.h";
 
 //======================================================================================
+//> Permet d'eteindre toutes les leds de selection des joueurs
+//======================================================================================
+void switchOffAllSelPlayersLeds()
+{
+	for(char slotIndex = 0; slotIndex < MAX_NUMBER_OF_PLAYERS; slotIndex++)
+	{
+		setPlayerSelectLedState(slotIndex, SELECT_OFF);
+	}	
+}	
+
+//======================================================================================
 //> Permet d'allumer ou éteindre la led de selection d'un joueur
 //======================================================================================
 void setPlayerSelectLedState(char playerIndex, enum PlayerSelectLedState ledState)
@@ -12,10 +23,10 @@ void setPlayerSelectLedState(char playerIndex, enum PlayerSelectLedState ledStat
 	{
 		switch(ledState)
 		{
-			case OFF:
+			case SELECT_OFF:
 				_MCPPorts[playerIndex] = _MCPPorts[playerIndex] & B8(10111111);
 				break;
-			case ON:
+			case SELECT_ON:
 				_MCPPorts[playerIndex] = _MCPPorts[playerIndex] | B8(01000000);
 				break;
 		}
@@ -25,10 +36,10 @@ void setPlayerSelectLedState(char playerIndex, enum PlayerSelectLedState ledStat
 	{
 		switch(ledState)
 		{
-			case OFF:
+			case SELECT_OFF:
 				_MCPPorts[playerIndex] = _MCPPorts[playerIndex] & B8(11111101);
 				break;
-			case ON:
+			case SELECT_ON:
 				_MCPPorts[playerIndex] = _MCPPorts[playerIndex] | B8(00000010);
 				break;
 		}
@@ -46,13 +57,13 @@ void setPlayerVoteLedColor(char playerIndex, enum PlayerVoteLedColor ledColor)
 		char maskOR, maskAND;
 		switch(ledColor)
 		{
-			case NONE:
+			case VOTE_OFF:
 				maskOR  = B8(00000000); maskAND = B8(11001111);
 				break;
-			case RED:
+			case VOTE_RED:
 				maskOR  = B8(00010000); maskAND = B8(11011111);
 				break;
-			case GREEN:
+			case VOTE_GREEN:
 				maskOR  = B8(00100000); maskAND = B8(11101111);			
 				break;
 		}
@@ -64,13 +75,13 @@ void setPlayerVoteLedColor(char playerIndex, enum PlayerVoteLedColor ledColor)
 		char maskOR, maskAND;
 		switch(ledColor)
 		{
-			case NONE:
+			case VOTE_OFF:
 				maskOR  = B8(00000000); maskAND = B8(11110011);
 				break;
-			case RED:
+			case VOTE_RED:
 				maskOR  = B8(00001000); maskAND = B8(11111011);			
 				break;
-			case GREEN:
+			case VOTE_GREEN:
 				maskOR  = B8(00000100); maskAND = B8(11110111);			
 				break;
 		}	

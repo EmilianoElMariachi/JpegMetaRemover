@@ -17,7 +17,7 @@
 
 
 __CONFIG(DEBUG_OFF & LVP_OFF & FCMEN_OFF & IESO_OFF & BOREN_OFF & CP_OFF & MCLRE_ON & PWRTE_OFF & WDTE_OFF & FOSC_INTRC_NOCLKOUT);
-#define _XTAL_FREQ 8000000	//Oscillateur interne cadencé à 8 Mhz
+
 
 
 //======================================================================================
@@ -36,7 +36,7 @@ void updatePlayersWhoWantToPlay()
 			{
 				_numberOfRegisteredPlayers++;
 				_playersSlotsStatus[playerIndex] = TRUE;
-				setPlayerSelectLedState(playerIndex, ON);
+				setPlayerSelectLedState(playerIndex, SELECT_ON);
 			}
 		}
 		else if(noIsPressed)
@@ -45,7 +45,7 @@ void updatePlayersWhoWantToPlay()
 			{
 				_numberOfRegisteredPlayers--;
 				_playersSlotsStatus[playerIndex] = FALSE;
-				setPlayerSelectLedState(playerIndex, OFF);
+				setPlayerSelectLedState(playerIndex, SELECT_OFF);
 			}	
 		}		
 	}
@@ -59,10 +59,6 @@ void notifyPlayersSides()
 	for(char playerIndex = 0; playerIndex < _numberOfRegisteredPlayers ; playerIndex++)
 	{
 		setPlayerSide(_players[playerIndex].PlayerSlotIndex, _players[playerIndex].Side);
-		
-		//TODO : a effacer
-		if(_players[playerIndex].Side == SPY)
-		{ setPlayerVoteLedColor(_players[playerIndex].PlayerSlotIndex, RED); }
 	}
 }	
 
@@ -74,9 +70,6 @@ void stopNotifyPlayersSides()
 	for(char playerIndex = 0; playerIndex < _numberOfRegisteredPlayers ; playerIndex++)
 	{
 		setPlayerSide(_players[playerIndex].PlayerSlotIndex, RESISTANT);
-
-		//TODO : a effacer
-		setPlayerVoteLedColor(_players[playerIndex].PlayerSlotIndex, NONE);
 	}		
 }	
 
@@ -162,6 +155,8 @@ void interrupt tc_int(void)
 
 void initGlobalVariables()
 {
+	switchOffAllMissionLeds();
+	
 	_numberOfRegisteredPlayers = 0;
 	for(char playerIndex = 0; playerIndex < MAX_NUMBER_OF_PLAYERS ; playerIndex++)
 	{
@@ -262,8 +257,11 @@ void initializePortsDirections()
 //======================================================================================
 void initCurrentMission()
 {
+	//Initialise les joueurs selectionnés pour la mission
+	_numPlayersSelForCurMiss = 0;
+	
 	//Allume la mission courante à l'état en cours
-	setMissionState(_currentMissionIndex,STARTED);
+	setMissionState(_currentMissionIndex,MISSION_BLUE);
 	
 	//Détermine le nombre d'espions attendus pour la mission courante
 	_numSpiesExpectedForCurMiss = SPIES_PER_MISSION[_currentMissionIndex][_numberOfRegisteredPlayers - MIN_NUMBER_OF_PLAYERS];
@@ -273,7 +271,7 @@ void initCurrentMission()
 //======================================================================================
 //>
 //======================================================================================
-void waitMissionPlayersSelection()
+void updatePlayersSelectedForMiss()
 {
 	
 	//___________________________________________
@@ -283,9 +281,9 @@ void waitMissionPlayersSelection()
 	if(_toggleBlink != _ledToggled)
 	{
 		if(_toggleBlink == TRUE)
-		{ setPlayerVoteLedColor(_players[_currentPlayerIndex].PlayerSlotIndex, GREEN); }	
+		{ setPlayerVoteLedColor(_players[_currentPlayerIndex].PlayerSlotIndex, VOTE_GREEN); }	
 		else
-		{ setPlayerVoteLedColor(_players[_currentPlayerIndex].PlayerSlotIndex, NONE); }
+		{ setPlayerVoteLedColor(_players[_currentPlayerIndex].PlayerSlotIndex, VOTE_OFF); }
 		_ledToggled = _toggleBlink;
 	}	
 	
@@ -300,18 +298,38 @@ void waitMissionPlayersSelection()
 
 		if(selectIsPressed)
 		{	
-			enum PlayerSelectionState playerSelectState = !_players[_currentPlayerIndex].PlayerSelectedForMission;
-			_players[_currentPlayerIndex].PlayerSelectedForMission = playerSelectState ;
-			setPlayerSelectLedState(slotIndex, playerSelectState);
+			
+			if(_players[playerIndex].PlayerSelectedForMission == SELECTED)
+			{
+				_players[playerIndex].PlayerSelectedForMission = NOT_SELECTED;
+				setPlayerSelectLedState(slotIndex, SELECT_OFF);
+				_numPlayersSelForCurMiss--;			
+			}
+			else
+			{
+				_players[playerIndex].PlayerSelectedForMission = SELECTED;
+				setPlayerSelectLedState(slotIndex, SELECT_ON);
+				_numPlayersSelForCurMiss++;
+			}		
 		}	
-
-		//if((
-		
 	}	
-	
-	
 }	
 
+//======================================================================================
+//> Retourne TRUE si le nombre de joueurs requis pour la mission est atteint
+//======================================================================================
+BOOL canVoteForMission()
+{
+	if(isEnterButtonPressed())
+	{
+		if(_numPlayersSelForCurMiss == _numSpiesExpectedForCurMiss)
+		{ return TRUE; }	
+		else
+		{ displayError(_numSpiesExpectedForCurMiss, MISSION_BLUE); }	
+	}
+	
+	return FALSE;
+}
 
 //======================================================================================
 //>
@@ -356,6 +374,7 @@ main(void)
 				{
 					assignSpiesAndFirstPlayerRand();
 					notifyPlayersSides();
+					switchOffAllSelPlayersLeds();
 					_gameState = NOTIFY_PLAYER_SIDES;
 				}
 				
@@ -364,16 +383,20 @@ main(void)
 				if(isEnterButtonPressed())
 				{
 					stopNotifyPlayersSides();
-					
 					initCurrentMission();
-					
 					_gameState = WAIT_CUR_PLAYER_SELECT_PLAYERS;
 				}	
 				
 				break;
 			case WAIT_CUR_PLAYER_SELECT_PLAYERS:
 			
-				waitMissionPlayersSelection();
+				updatePlayersSelectedForMiss();
+				
+				if(canVoteForMission())
+				{
+					_gameState = WAIT_MISSION_VOTE;	
+				}	
+				
 				break;
 
 		}	
