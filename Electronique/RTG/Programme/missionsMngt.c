@@ -19,7 +19,7 @@ void switchOffAllMissionLeds()
 //======================================================================================
 //> Fonction permettant de définir l'état de la mission à l'index spécifié
 //======================================================================================
-void setMissionState(char missionIndex, enum MissionStates eMissionState)
+void setMissionState(char missionIndex, char eMissionState)
 {
 	if(missionIndex == 0)
 	{
@@ -116,7 +116,7 @@ void setMissionState(char missionIndex, enum MissionStates eMissionState)
 //======================================================================================
 //> 
 //======================================================================================
-void displayError(char nbErrors, enum MissionStates blinkColor)
+void displayError(char nbErrors, char blinkColor)
 {
 	char iter;
 	

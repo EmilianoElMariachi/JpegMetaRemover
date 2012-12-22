@@ -332,6 +332,69 @@ BOOL canVoteForMission()
 }
 
 //======================================================================================
+//> Réinitialise les votes des joueurs
+//======================================================================================
+void resetPlayersVotes()
+{
+	_numPlayerVotes = 0;
+	for(char playerIndex = 0; playerIndex <  _numberOfRegisteredPlayers ; playerIndex++)
+	{
+		_players[playerIndex].VoteStatus = NO_VOTE;
+	}		
+}	
+
+//======================================================================================
+//> Met à jour les votes des joueurs
+//======================================================================================
+void updatePlayersMissionVote()
+{
+	for(char playerIndex = 0; playerIndex <  _numberOfRegisteredPlayers ; playerIndex++)
+	{
+		struct Player player = _players[playerIndex];
+		char slotIndex = player.PlayerSlotIndex;
+		
+		BOOL yesIsPressed, noIsPressed, selectIsPressed;
+		getPlayerInputState(slotIndex, &yesIsPressed, &noIsPressed, &selectIsPressed);
+		
+		//Test si soit 'oui' soit 'non' a été pressé
+		if(yesIsPressed != noIsPressed)
+		{
+			if(player.VoteStatus == NO_VOTE)
+			{
+				setPlayerVoteLedColor(slotIndex, VOTE_GREEN_RED);
+				_numPlayerVotes++;
+			}	
+			
+			if(yesIsPressed)
+			{ _players[playerIndex].VoteStatus = VOTE_YES; }
+			else
+			{ _players[playerIndex].VoteStatus = VOTE_NO; }		
+		}	
+	}
+}
+
+//======================================================================================
+//> Permet de savoir si les résultats de vote peuvent être affichés (si tout le monde à
+//> voté)
+//======================================================================================
+BOOL canDisplayVoteResults()
+{
+	return (_numPlayerVotes == _numberOfRegisteredPlayers)?TRUE:FALSE;
+}	
+
+//======================================================================================
+//>
+//======================================================================================
+void displayVoteResults()
+{
+	for(char playerIndex = 0; playerIndex <  _numberOfRegisteredPlayers ; playerIndex++)
+	{
+		struct Player player = _players[playerIndex];
+		setPlayerVoteLedColor(player.PlayerSlotIndex, player.VoteStatus);
+	}	
+}	
+
+//======================================================================================
 //>
 //======================================================================================
 main(void)
@@ -360,10 +423,10 @@ main(void)
 	
 	//enable global interrupts
 	GIE = 1;
-
+	
 	while(TRUE)
 	{
-	
+			
 		switch(_gameState)
 		{
 			case WAIT_FOR_PLAYERS:
@@ -394,7 +457,20 @@ main(void)
 				
 				if(canVoteForMission())
 				{
+					resetPlayersVotes();
 					_gameState = WAIT_MISSION_VOTE;	
+				}	
+				
+				break;
+				
+			case WAIT_MISSION_VOTE:
+			
+				updatePlayersMissionVote();
+				
+				if(canDisplayVoteResults())
+				{
+					displayVoteResults();
+					_gameState = DISP_VOTE_RESULTS;	
 				}	
 				
 				break;

@@ -2,6 +2,6 @@
 
 void switchOffAllMissionLeds();
 
-void setMissionState(char missionIndex, enum MissionStates eMissionState);
+void setMissionState(char missionIndex, char eMissionState);
 
-void displayError(char nbErrors, enum MissionStates blinkColor);
+void displayError(char nbErrors, char blinkColor);

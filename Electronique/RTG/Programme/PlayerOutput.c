@@ -17,7 +17,7 @@ void switchOffAllSelPlayersLeds()
 //======================================================================================
 //> Permet d'allumer ou éteindre la led de selection d'un joueur
 //======================================================================================
-void setPlayerSelectLedState(char playerIndex, enum PlayerSelectLedState ledState)
+void setPlayerSelectLedState(char playerIndex, char ledState)
 {
 	if(getPortLetterForPlayerIndex(playerIndex) == 'A')
 	{
@@ -50,7 +50,7 @@ void setPlayerSelectLedState(char playerIndex, enum PlayerSelectLedState ledStat
 //======================================================================================
 //>
 //======================================================================================
-void setPlayerVoteLedColor(char playerIndex, enum PlayerVoteLedColor ledColor)
+void setPlayerVoteLedColor(char playerIndex, char ledColor)
 {
 	if(getPortLetterForPlayerIndex(playerIndex) == 'A')
 	{
@@ -66,6 +66,10 @@ void setPlayerVoteLedColor(char playerIndex, enum PlayerVoteLedColor ledColor)
 			case VOTE_GREEN:
 				maskOR  = B8(00100000); maskAND = B8(11101111);			
 				break;
+			case VOTE_GREEN_RED:
+				maskOR  = B8(00110000); maskAND = B8(11111111);			
+				break;
+			
 		}
 		_MCPPorts[playerIndex] = (_MCPPorts[playerIndex] | maskOR) & maskAND;
 		MCP23S17_SetPortA(getMCPAddressFromPlayerIndex(playerIndex), _MCPPorts[playerIndex]);
@@ -84,6 +88,9 @@ void setPlayerVoteLedColor(char playerIndex, enum PlayerVoteLedColor ledColor)
 			case VOTE_GREEN:
 				maskOR  = B8(00000100); maskAND = B8(11110111);			
 				break;
+			case VOTE_GREEN_RED:
+				maskOR  = B8(00001100); maskAND = B8(11111111);			
+				break;
 		}	
 		_MCPPorts[playerIndex] = (_MCPPorts[playerIndex] | maskOR) & maskAND;
 		MCP23S17_SetPortB(getMCPAddressFromPlayerIndex(playerIndex), _MCPPorts[playerIndex]);		
@@ -93,7 +100,7 @@ void setPlayerVoteLedColor(char playerIndex, enum PlayerVoteLedColor ledColor)
 //======================================================================================
 //>
 //======================================================================================
-void setPlayerSide(char playerIndex, enum PlayerSides playerSide)
+void setPlayerSide(char playerIndex, char playerSide)
 {
 	if(getPortLetterForPlayerIndex(playerIndex) == 'A')
 	{

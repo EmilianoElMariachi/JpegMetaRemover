@@ -44,60 +44,40 @@
 	#define PCHAR char*
 	#define PUCHAR UCHAR*
 
+	
+	typedef char BOOL;
+	typedef unsigned char BYTE;
 
 	#define RAND_SEED_EEPROM_ADR 0
 
-	typedef char BOOL;
-	
-	typedef unsigned char BYTE;
-
-	enum MissionStates
-	{
-		MISSION_OFF = 0,
-		MISSION_BLUE = 1,
-		MISSION_RED = 2,
-		MISSION_GREEN = 3,
-	};
-
-	enum PlayerVoteLedColor
-	{
-		VOTE_OFF = 0,
-		VOTE_GREEN = 1,
-		VOTE_RED = 2,
-	};
+	#define MISSION_OFF 0
+	#define MISSION_BLUE 1
+	#define MISSION_RED 2
+	#define MISSION_GREEN 3
 		
-	enum PlayerSelectLedState
-	{
-		SELECT_OFF = 0,
-		SELECT_ON = 1,
-	};
+	#define SELECT_OFF 0
+	#define SELECT_ON 1
 	
-	enum PlayerSelectionState
-	{
-		NOT_SELECTED = SELECT_OFF,
-		SELECTED = SELECT_ON,
-	};
+	#define NOT_SELECTED SELECT_OFF
+	#define SELECTED SELECT_ON
 
-	enum PlayerVoteStates
-	{
-		NO_VOTE = 0,
-		VOTE_NO = 1,
-		VOTE_YES = 2,
-	};
+	#define VOTE_OFF 0
+	#define VOTE_GREEN 1
+	#define VOTE_RED 2
+	#define VOTE_GREEN_RED 3
 
-	enum PlayerSides
-	{
-		RESISTANT = 0,
-		SPY = 1,
-	};
+	#define NO_VOTE VOTE_OFF
+	#define VOTE_YES VOTE_GREEN
+	#define VOTE_NO VOTE_RED
 
-	enum GameStates
-	{
-		WAIT_FOR_PLAYERS = 1,
-		NOTIFY_PLAYER_SIDES = 2,
-		WAIT_CUR_PLAYER_SELECT_PLAYERS = 3,
-		WAIT_MISSION_VOTE = 4,
-	};
+	#define RESISTANT 0
+	#define SPY 1
+
+	#define WAIT_FOR_PLAYERS 1
+	#define NOTIFY_PLAYER_SIDES 2
+	#define WAIT_CUR_PLAYER_SELECT_PLAYERS 3
+	#define WAIT_MISSION_VOTE 4
+	#define DISP_VOTE_RESULTS 5
 	
 	struct Player
 	{
@@ -110,7 +90,7 @@
 	//======================================================================================
 	//> Déclaration des variables globales
 	//======================================================================================
-	enum GameStates _gameState = WAIT_FOR_PLAYERS;
+	char _gameState = WAIT_FOR_PLAYERS;
 	BOOL _playersSlotsStatus[MAX_NUMBER_OF_PLAYERS];
 	char _numberOfRegisteredPlayers = 0;
 	char _currentPlayerIndex = 0;
@@ -124,7 +104,8 @@
 																						{3, 3, 4, 5, 5, 5},
 																						{3, 4, 4, 5, 5, 5} };
 	char _numPlayersSelForCurMiss = 0;
-	char _numSpiesExpectedForCurMiss = 0;	
+	char _numSpiesExpectedForCurMiss = 0;
+	char _numPlayerVotes = 0;
 	volatile UCHAR _enterButtonFilterCounter = 0; 
 	volatile BOOL _toggleBlink; 
 	
