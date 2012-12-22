@@ -16,16 +16,12 @@
 //¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤//
 
 
-
-
 __CONFIG(DEBUG_OFF & LVP_OFF & FCMEN_OFF & IESO_OFF & BOREN_OFF & CP_OFF & MCLRE_ON & PWRTE_OFF & WDTE_OFF & FOSC_INTRC_NOCLKOUT);
 #define _XTAL_FREQ 8000000	//Oscillateur interne cadencé à 8 Mhz
 
 
-
-
 //======================================================================================
-//>
+//> Met à jour la liste des joueurs participant
 //======================================================================================
 void updatePlayersWhoWantToPlay()
 {
@@ -55,6 +51,9 @@ void updatePlayersWhoWantToPlay()
 	}
 }	
 
+//======================================================================================
+//> Permet d'allumer la led indiquant les espions
+//======================================================================================
 void notifyPlayersSides()
 {
 	for(char playerIndex = 0; playerIndex < _numberOfRegisteredPlayers ; playerIndex++)
@@ -63,14 +62,13 @@ void notifyPlayersSides()
 		
 		if(_players[playerIndex].Side == SPY)
 		{ setPlayerVoteState(_players[playerIndex].PlayerSlotIndex, VOTE_NO); }
-		
 	}
 }	
 
 //======================================================================================
-//>
+//> Permet d'assigner les espions de façon aléatoire
 //======================================================================================
-void assignSpiesRandomly()
+void assignSpiesAndFirstPlayerRand()
 {
 	char numOfSpiesRequired = NUM_SPIES_PER_NUM_PLAYERS[_numberOfRegisteredPlayers - 5];
 	
@@ -85,6 +83,9 @@ void assignSpiesRandomly()
 		}	
 	}	
 	
+	_currentPlayerIndex = getRandomNumberBetweenZeroAnd(_numberOfRegisteredPlayers);
+	
+	saveRandomNumberToFlash();
 }	
 
 //======================================================================================
@@ -313,9 +314,9 @@ main(void)
 				
 				if(canGameStart() == TRUE)
 				{
-					_gameState = NOTIFYING_PLAYER_SIDES;
-					assignSpiesRandomly();
+					assignSpiesAndFirstPlayerRand();
 					notifyPlayersSides();
+					_gameState = NOTIFYING_PLAYER_SIDES;
 				}	
 				
 			break;

@@ -75,7 +75,7 @@
 	struct Player _players[MAX_NUMBER_OF_PLAYERS];
 	BOOL _playersSlotsStatus[MAX_NUMBER_OF_PLAYERS];
 	char _numberOfRegisteredPlayers;
-
+	char _currentPlayerIndex;
 	const char NUM_SPIES_PER_NUM_PLAYERS[MIN_NUMBER_OF_PLAYERS+1] = {2, 2, 3, 3, 3, 4};
 
 
