@@ -31,8 +31,8 @@
 	#define BIT6 01000000 
 	#define BIT7 10000000 
 	
-	#define TRUE 0x01
-	#define FALSE 0x00
+	#define FALSE 0
+	#define TRUE 1
 	
 	#define RESET 	RC7 //Définition de la pi de reset
 	#define CS 		RC6 //Définition de la pin correspondant au Chip Select (CS)
@@ -45,8 +45,8 @@
 	#define PUCHAR UCHAR*
 
 	
-	typedef char BOOL;
-	typedef unsigned char BYTE;
+	#define BOOL UCHAR
+	#define BYTE UCHAR
 
 	#define RAND_SEED_EEPROM_ADR 0
 
@@ -58,9 +58,6 @@
 	#define SELECT_OFF 0
 	#define SELECT_ON 1
 	
-	#define NOT_SELECTED SELECT_OFF
-	#define SELECTED SELECT_ON
-
 	#define VOTE_OFF 0
 	#define VOTE_GREEN 1
 	#define VOTE_RED 2

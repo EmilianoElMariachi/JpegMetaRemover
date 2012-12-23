@@ -260,7 +260,6 @@ void resetPlayersVotes()
 	_numPlayerVotes = 0;
 	for(char playerIndex = 0; playerIndex <  _numberOfRegisteredPlayers ; playerIndex++)
 	{
-		//Eteint les votes
 		setPlayerVoteLedColor(_players[playerIndex].SlotIndex, VOTE_OFF);
 		_players[playerIndex].VoteStatus = NO_VOTE;
 	}		
@@ -276,10 +275,8 @@ void resetSelectedPlayers()
 
 	for(char playerIndex = 0; playerIndex < _numberOfRegisteredPlayers ; playerIndex++)
 	{
-		struct Player player = _players[playerIndex];
-
-		player.IsSelectedForMission = FALSE;
-		setPlayerSelectLedState(player.SlotIndex, SELECT_OFF);
+		setPlayerSelectLedState(_players[playerIndex].SlotIndex, SELECT_OFF);
+		_players[playerIndex].IsSelectedForMission = FALSE;	
 	}
 }	
 
@@ -323,24 +320,21 @@ void updatePlayersSelectedForMiss()
 	//> Detection des joueurs selectionnés
 	for(char playerIndex = 0; playerIndex < _numberOfRegisteredPlayers; playerIndex++)
 	{
-		char slotIndex = _players[playerIndex].SlotIndex;
-		
 		BOOL yesIsPressed, noIsPressed, selectIsPressed;
-		getPlayerInputState(slotIndex, &yesIsPressed, &noIsPressed, &selectIsPressed);
+		getPlayerInputState(_players[playerIndex].SlotIndex, &yesIsPressed, &noIsPressed, &selectIsPressed);
 
 		if(selectIsPressed)
 		{	
-			
-			if(_players[playerIndex].IsSelectedForMission == SELECTED)
+			if(_players[playerIndex].IsSelectedForMission == TRUE)
 			{
-				_players[playerIndex].IsSelectedForMission = NOT_SELECTED;
-				setPlayerSelectLedState(slotIndex, SELECT_OFF);
+				_players[playerIndex].IsSelectedForMission = FALSE;
+				setPlayerSelectLedState(_players[playerIndex].SlotIndex, SELECT_OFF);
 				_numPlayersSelForCurMiss--;			
 			}
 			else
 			{
-				_players[playerIndex].IsSelectedForMission = SELECTED;
-				setPlayerSelectLedState(slotIndex, SELECT_ON);
+				_players[playerIndex].IsSelectedForMission = TRUE;
+				setPlayerSelectLedState(_players[playerIndex].SlotIndex, SELECT_ON);
 				_numPlayersSelForCurMiss++;
 			}		
 		}	
@@ -357,7 +351,10 @@ BOOL canVoteForMission()
 		if(_numPlayersSelForCurMiss == _numPlayersExpectedForCurMiss)
 		{ return TRUE; }	
 		else
-		{ displayError(_numPlayersExpectedForCurMiss, MISSION_BLUE); }	
+		{
+			 displayError(_numPlayersExpectedForCurMiss, MISSION_BLUE);
+			 displayError(_numPlayersSelForCurMiss, MISSION_RED);
+		}	
 	}
 	
 	return FALSE;
@@ -370,18 +367,15 @@ void updatePlayersMissionVote()
 {
 	for(char playerIndex = 0; playerIndex <  _numberOfRegisteredPlayers ; playerIndex++)
 	{
-		struct Player player = _players[playerIndex];
-		char slotIndex = player.SlotIndex;
-		
 		BOOL yesIsPressed, noIsPressed, selectIsPressed;
-		getPlayerInputState(slotIndex, &yesIsPressed, &noIsPressed, &selectIsPressed);
+		getPlayerInputState(_players[playerIndex].SlotIndex, &yesIsPressed, &noIsPressed, &selectIsPressed);
 		
 		//Test si soit 'oui' soit 'non' a été pressé
 		if(yesIsPressed != noIsPressed)
 		{
-			if(player.VoteStatus == NO_VOTE)
+			if(_players[playerIndex].VoteStatus == NO_VOTE)
 			{
-				setPlayerVoteLedColor(slotIndex, VOTE_GREEN_RED);
+				setPlayerVoteLedColor(_players[playerIndex].SlotIndex, VOTE_GREEN_RED);
 				_numPlayerVotes++;
 			}	
 			
@@ -409,8 +403,7 @@ void displayVoteResults()
 {
 	for(char playerIndex = 0; playerIndex <  _numberOfRegisteredPlayers ; playerIndex++)
 	{
-		struct Player player = _players[playerIndex];
-		setPlayerVoteLedColor(player.SlotIndex, player.VoteStatus);
+		setPlayerVoteLedColor(_players[playerIndex].SlotIndex, _players[playerIndex].VoteStatus);
 	}	
 }	
 
@@ -445,7 +438,6 @@ void moveToNextPlayer()
 		_currentPlayerIndex = 0;
 	}	
 }
-
 
 //======================================================================================
 //>
