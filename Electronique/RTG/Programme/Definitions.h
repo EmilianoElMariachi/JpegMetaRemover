@@ -14,10 +14,11 @@
    
 	#define UCHAR_MAX 255
 	
-	#define MIN_NUMBER_OF_PLAYERS 5
-	#define MAX_NUMBER_OF_PLAYERS 10
+	#define NUM_MISSIONS_TO_WIN 	3
+	#define MIN_NUMBER_OF_PLAYERS 	5
+	#define MAX_NUMBER_OF_PLAYERS 	10
 	#define NUM_PLAYERS_RANGE (MAX_NUMBER_OF_PLAYERS - MIN_NUMBER_OF_PLAYERS)+1
-	#define MAX_NUMBER_OF_MISSIONS 5
+	#define MAX_NUMBER_OF_MISSIONS 	5
 	
 	
 	#define B8(Num) 0bNum
@@ -55,29 +56,36 @@
 	#define MISSION_RED 2
 	#define MISSION_GREEN 3
 		
-	#define SELECT_OFF 0
-	#define SELECT_ON 1
+	#define SELECT_OFF 		0
+	#define SELECT_ON 		1
 	
-	#define VOTE_OFF 0
-	#define VOTE_GREEN 1
-	#define VOTE_RED 2
-	#define VOTE_GREEN_RED 3
+	#define VOTE_OFF 		0
+	#define VOTE_GREEN 		1
+	#define VOTE_RED 		2
+	#define VOTE_GREEN_RED 	3
 
-	#define NO_VOTE VOTE_OFF
-	#define VOTE_YES VOTE_GREEN
-	#define VOTE_NO VOTE_RED
-
-	#define RESISTANT 0
-	#define SPY 1
-
-	#define GAMESTATE_WAIT_FOR_PLAYERS 1
-	#define GAMESTATE_NOTIFY_PLAYER_SIDES 2
-	#define GAMESTATE_WAIT_CUR_PLAYER_SELECT_PLAYERS 3
-	#define GAMESTATE_WAIT_MISSION_VOTE 4
-	#define GAMESTATE_DISP_VOTE_RESULTS 5
-	#define GAMESTATE_PLAY_MISSION 6
+	#define NO_YET_VOTED	VOTE_OFF
+	#define VOTE_YES 		VOTE_GREEN
+	#define VOTE_NO 		VOTE_RED
 	
-	
+	#define VOTE_MISSION_DEFEAT  VOTE_NO
+	#define VOTE_MISSION_SUCCESS VOTE_YES
+
+	#define SIDE_LED_OFF		0
+	#define SIDE_LED_ON			1
+
+	#define SIDE_RESISTANT 		SIDE_LED_OFF
+	#define SIDE_SPY 			SIDE_LED_ON
+
+	#define GAMESTATE_WAIT_FOR_PLAYERS 					1
+	#define GAMESTATE_NOTIFY_PLAYER_SIDES 				2
+	#define GAMESTATE_WAIT_CUR_PLAYER_SELECT_PLAYERS 	3
+	#define GAMESTATE_WAIT_MISSION_VOTE 				4
+	#define GAMESTATE_DISP_VOTE_RESULTS 				5
+	#define GAMESTATE_PLAY_MISSION 						6
+	#define GAMESTATE_DISP_MISSION_RESULT				7	
+	#define GAMESTATE_GAMEOVER							8
+		
 	struct Player
 	{
 		BOOL Side:1;
@@ -110,7 +118,8 @@
 	volatile UCHAR _enterButtonFilterCounter = 0; 
 	volatile BOOL _toggleBlink; 
 	
-
+	char _numMissionsWonBySpies = 0;
+	char _numMissionsWonByResistance = 0;
 
 #endif
 

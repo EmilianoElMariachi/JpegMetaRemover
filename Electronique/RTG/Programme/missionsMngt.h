@@ -2,6 +2,6 @@
 
 void switchOffAllMissionLeds();
 
-void setMissionState(char missionIndex, char eMissionState);
+void setMissionLedColor(char slotIndex, char ledColor);
 
 void displayError(char nbErrors, char blinkColor);

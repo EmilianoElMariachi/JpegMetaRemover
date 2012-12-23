@@ -100,17 +100,17 @@ void setPlayerVoteLedColor(char playerIndex, char ledColor)
 //======================================================================================
 //>
 //======================================================================================
-void setPlayerSide(char playerIndex, char playerSide)
+void setPlayerSideLedState(char playerIndex, char ledState)
 {
 	if(getPortLetterForPlayerIndex(playerIndex) == 'A')
 	{
 		char maskOR, maskAND;
-		switch(playerSide)
+		switch(ledState)
 		{
-			case SPY:
+			case SIDE_LED_ON:
 				maskOR  = B8(00000010); maskAND = B8(11111111);
 				break;
-			case RESISTANT:
+			case SIDE_LED_OFF:
 				maskOR  = B8(00000000); maskAND = B8(11111101);
 				break;
 		}
@@ -120,12 +120,12 @@ void setPlayerSide(char playerIndex, char playerSide)
 	else
 	{
 		char maskOR, maskAND;
-		switch(playerSide)
+		switch(ledState)
 		{
-			case SPY:
+			case SIDE_LED_ON:
 				maskOR  = B8(01000000); maskAND = B8(11111111);
 				break;
-			case RESISTANT:
+			case SIDE_LED_OFF:
 				maskOR  = B8(00000000); maskAND = B8(10111111);			
 				break;
 		}	

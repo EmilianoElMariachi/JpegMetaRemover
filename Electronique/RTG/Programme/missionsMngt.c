@@ -12,18 +12,18 @@ void switchOffAllMissionLeds()
 {
 	for(char iter = 0; iter < MAX_NUMBER_OF_MISSIONS ; iter++)
 	{
-		setMissionState(iter, MISSION_OFF);
+		setMissionLedColor(iter, MISSION_OFF);
 	}	
 }	
 
 //======================================================================================
 //> Fonction permettant de définir l'état de la mission à l'index spécifié
 //======================================================================================
-void setMissionState(char missionIndex, char eMissionState)
+void setMissionLedColor(char missionIndex, char ledColor)
 {
 	if(missionIndex == 0)
 	{
-		switch(eMissionState)
+		switch(ledColor)
 		{
 			case MISSION_OFF:
 				PORTA = PORTA & B8(11111000);
@@ -41,7 +41,7 @@ void setMissionState(char missionIndex, char eMissionState)
 	}
 	else if(missionIndex == 1)	
 	{
-		switch(eMissionState)
+		switch(ledColor)
 		{
 			case MISSION_OFF:
 				PORTA = PORTA & B8(11000111);
@@ -59,7 +59,7 @@ void setMissionState(char missionIndex, char eMissionState)
 	}	
 	else if(missionIndex == 2)		
 	{
-		switch(eMissionState)
+		switch(ledColor)
 		{
 			case MISSION_OFF:
 				PORTC = PORTC & B8(11111000);
@@ -77,7 +77,7 @@ void setMissionState(char missionIndex, char eMissionState)
 	}	
 	else if(missionIndex == 3)		
 	{
-		switch(eMissionState)
+		switch(ledColor)
 		{
 			case MISSION_OFF:
 				PORTB = PORTB & B8(11111000);
@@ -95,7 +95,7 @@ void setMissionState(char missionIndex, char eMissionState)
 	}
 	else if(missionIndex == 4)		
 	{
-		switch(eMissionState)
+		switch(ledColor)
 		{
 			case MISSION_OFF:
 				PORTB = PORTB & B8(11000111);
@@ -132,7 +132,7 @@ void displayError(char nbErrors, char blinkColor)
 	{
 		for(iter = 0; iter < nbErrors ; iter++)
 		{
-			setMissionState(iter, blinkColor);
+			setMissionLedColor(iter, blinkColor);
 		}
 		
 		__delay_ms(BLINK_ERROR_DELAY_MS);
