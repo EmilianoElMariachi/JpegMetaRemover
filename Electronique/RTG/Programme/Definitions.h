@@ -73,24 +73,26 @@
 	#define RESISTANT 0
 	#define SPY 1
 
-	#define WAIT_FOR_PLAYERS 1
-	#define NOTIFY_PLAYER_SIDES 2
-	#define WAIT_CUR_PLAYER_SELECT_PLAYERS 3
-	#define WAIT_MISSION_VOTE 4
-	#define DISP_VOTE_RESULTS 5
+	#define GAMESTATE_WAIT_FOR_PLAYERS 1
+	#define GAMESTATE_NOTIFY_PLAYER_SIDES 2
+	#define GAMESTATE_WAIT_CUR_PLAYER_SELECT_PLAYERS 3
+	#define GAMESTATE_WAIT_MISSION_VOTE 4
+	#define GAMESTATE_DISP_VOTE_RESULTS 5
+	#define GAMESTATE_PLAY_MISSION 6
+	
 	
 	struct Player
 	{
 		BOOL Side:1;
-		char PlayerSlotIndex:4;
-		BOOL PlayerSelectedForMission:1;
+		char SlotIndex:4;
+		BOOL IsSelectedForMission:1;
 		char VoteStatus:2;
 	}  _players[MAX_NUMBER_OF_PLAYERS];;	
 
 	//======================================================================================
 	//> Déclaration des variables globales
 	//======================================================================================
-	char _gameState = WAIT_FOR_PLAYERS;
+	char _gameState = GAMESTATE_WAIT_FOR_PLAYERS;
 	BOOL _playersSlotsStatus[MAX_NUMBER_OF_PLAYERS];
 	char _numberOfRegisteredPlayers = 0;
 	char _currentPlayerIndex = 0;

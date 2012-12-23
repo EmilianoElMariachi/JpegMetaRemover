@@ -58,7 +58,7 @@ void notifyPlayersSides()
 {
 	for(char playerIndex = 0; playerIndex < _numberOfRegisteredPlayers ; playerIndex++)
 	{
-		setPlayerSide(_players[playerIndex].PlayerSlotIndex, _players[playerIndex].Side);
+		setPlayerSide(_players[playerIndex].SlotIndex, _players[playerIndex].Side);
 	}
 }	
 
@@ -69,7 +69,7 @@ void stopNotifyPlayersSides()
 {
 	for(char playerIndex = 0; playerIndex < _numberOfRegisteredPlayers ; playerIndex++)
 	{
-		setPlayerSide(_players[playerIndex].PlayerSlotIndex, RESISTANT);
+		setPlayerSide(_players[playerIndex].SlotIndex, RESISTANT);
 	}		
 }	
 
@@ -109,7 +109,7 @@ BOOL canGameStart()
 		{
 			if(_playersSlotsStatus[slotIndex])
 			{
-				_players[playerIndex++].PlayerSlotIndex = slotIndex;
+				_players[playerIndex++].SlotIndex = slotIndex;
 			}	
 		}
 		
@@ -160,7 +160,7 @@ void initGlobalVariables()
 	_numberOfRegisteredPlayers = 0;
 	for(char playerIndex = 0; playerIndex < MAX_NUMBER_OF_PLAYERS ; playerIndex++)
 	{
-		_players[playerIndex].PlayerSlotIndex = MAX_NUMBER_OF_PLAYERS;
+		_players[playerIndex].SlotIndex = MAX_NUMBER_OF_PLAYERS;
 		_players[playerIndex].VoteStatus = NO_VOTE;
 		_players[playerIndex].Side = RESISTANT;
 	}	
@@ -281,9 +281,9 @@ void updatePlayersSelectedForMiss()
 	if(_toggleBlink != _ledToggled)
 	{
 		if(_toggleBlink == TRUE)
-		{ setPlayerVoteLedColor(_players[_currentPlayerIndex].PlayerSlotIndex, VOTE_GREEN); }	
+		{ setPlayerVoteLedColor(_players[_currentPlayerIndex].SlotIndex, VOTE_GREEN); }	
 		else
-		{ setPlayerVoteLedColor(_players[_currentPlayerIndex].PlayerSlotIndex, VOTE_OFF); }
+		{ setPlayerVoteLedColor(_players[_currentPlayerIndex].SlotIndex, VOTE_OFF); }
 		_ledToggled = _toggleBlink;
 	}	
 	
@@ -291,7 +291,7 @@ void updatePlayersSelectedForMiss()
 	//> Detection des joueurs selectionnés
 	for(char playerIndex = 0; playerIndex < _numberOfRegisteredPlayers; playerIndex++)
 	{
-		char slotIndex = _players[playerIndex].PlayerSlotIndex;
+		char slotIndex = _players[playerIndex].SlotIndex;
 		
 		BOOL yesIsPressed, noIsPressed, selectIsPressed;
 		getPlayerInputState(slotIndex, &yesIsPressed, &noIsPressed, &selectIsPressed);
@@ -299,15 +299,15 @@ void updatePlayersSelectedForMiss()
 		if(selectIsPressed)
 		{	
 			
-			if(_players[playerIndex].PlayerSelectedForMission == SELECTED)
+			if(_players[playerIndex].IsSelectedForMission == SELECTED)
 			{
-				_players[playerIndex].PlayerSelectedForMission = NOT_SELECTED;
+				_players[playerIndex].IsSelectedForMission = NOT_SELECTED;
 				setPlayerSelectLedState(slotIndex, SELECT_OFF);
 				_numPlayersSelForCurMiss--;			
 			}
 			else
 			{
-				_players[playerIndex].PlayerSelectedForMission = SELECTED;
+				_players[playerIndex].IsSelectedForMission = SELECTED;
 				setPlayerSelectLedState(slotIndex, SELECT_ON);
 				_numPlayersSelForCurMiss++;
 			}		
@@ -339,6 +339,8 @@ void resetPlayersVotes()
 	_numPlayerVotes = 0;
 	for(char playerIndex = 0; playerIndex <  _numberOfRegisteredPlayers ; playerIndex++)
 	{
+		//Eteint les votes
+		setPlayerVoteLedColor(_players[playerIndex].SlotIndex, VOTE_OFF);
 		_players[playerIndex].VoteStatus = NO_VOTE;
 	}		
 }	
@@ -351,7 +353,7 @@ void updatePlayersMissionVote()
 	for(char playerIndex = 0; playerIndex <  _numberOfRegisteredPlayers ; playerIndex++)
 	{
 		struct Player player = _players[playerIndex];
-		char slotIndex = player.PlayerSlotIndex;
+		char slotIndex = player.SlotIndex;
 		
 		BOOL yesIsPressed, noIsPressed, selectIsPressed;
 		getPlayerInputState(slotIndex, &yesIsPressed, &noIsPressed, &selectIsPressed);
@@ -390,7 +392,7 @@ void displayVoteResults()
 	for(char playerIndex = 0; playerIndex <  _numberOfRegisteredPlayers ; playerIndex++)
 	{
 		struct Player player = _players[playerIndex];
-		setPlayerVoteLedColor(player.PlayerSlotIndex, player.VoteStatus);
+		setPlayerVoteLedColor(player.SlotIndex, player.VoteStatus);
 	}	
 }	
 
@@ -413,6 +415,19 @@ BOOL isAbsoluteMajorityReached()
 	else
 	{ return FALSE; }	
 }	
+
+//======================================================================================
+//> Permet de passer au joueur suivant
+//======================================================================================
+void moveToNextPlayer()
+{
+	_currentPlayerIndex ++;
+	if(_currentPlayerIndex >= _numberOfRegisteredPlayers)
+	{
+		_currentPlayerIndex = 0;
+	}	
+}
+
 
 //======================================================================================
 //>
@@ -449,7 +464,7 @@ main(void)
 			
 		switch(_gameState)
 		{
-			case WAIT_FOR_PLAYERS:
+			case GAMESTATE_WAIT_FOR_PLAYERS:
 
 				updatePlayersWhoWantToPlay();
 				
@@ -458,55 +473,58 @@ main(void)
 					assignSpiesAndFirstPlayerRand();
 					notifyPlayersSides();
 					switchOffAllSelPlayersLeds();
-					_gameState = NOTIFY_PLAYER_SIDES;
+					_gameState = GAMESTATE_NOTIFY_PLAYER_SIDES;
 				}
 				
 				break;
-			case NOTIFY_PLAYER_SIDES: 
+			case GAMESTATE_NOTIFY_PLAYER_SIDES: 
 				if(isEnterButtonPressed())
 				{
 					stopNotifyPlayersSides();
 					initCurrentMission();
-					_gameState = WAIT_CUR_PLAYER_SELECT_PLAYERS;
+					_gameState = GAMESTATE_WAIT_CUR_PLAYER_SELECT_PLAYERS;
 				}	
 				
 				break;
-			case WAIT_CUR_PLAYER_SELECT_PLAYERS:
+			case GAMESTATE_WAIT_CUR_PLAYER_SELECT_PLAYERS:
 			
 				updatePlayersSelectedForMiss();
 				
 				if(canVoteForMission())
 				{
 					resetPlayersVotes();
-					_gameState = WAIT_MISSION_VOTE;	
+					_gameState = GAMESTATE_WAIT_MISSION_VOTE;	
 				}	
 				
 				break;
 				
-			case WAIT_MISSION_VOTE:
+			case GAMESTATE_WAIT_MISSION_VOTE:
 			
 				updatePlayersMissionVote();
 				
 				if(canDisplayVoteResults())
 				{
 					displayVoteResults();
-					_gameState = DISP_VOTE_RESULTS;	
+					_gameState = GAMESTATE_DISP_VOTE_RESULTS;	
 				}	
 				
 				break;
-			case DISP_VOTE_RESULTS:
+			case GAMESTATE_DISP_VOTE_RESULTS:
 				if(isEnterButtonPressed())
 				{
+					resetPlayersVotes();
+					switchOffAllSelPlayersLeds();
+					
 					if(isAbsoluteMajorityReached())
 					{
-						setMissionState(0,MISSION_GREEN);
+						_gameState = GAMESTATE_PLAY_MISSION;		
 					}	
 					else
 					{
-						setMissionState(0,MISSION_RED);
+						moveToNextPlayer();
+						initCurrentMission();
+						_gameState = GAMESTATE_WAIT_CUR_PLAYER_SELECT_PLAYERS;
 					}
-						resetPlayersVotes();
-						_gameState = WAIT_MISSION_VOTE;		
 		
 				}
 				break;	

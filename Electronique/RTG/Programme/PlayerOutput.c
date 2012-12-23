@@ -48,7 +48,7 @@ void setPlayerSelectLedState(char playerIndex, char ledState)
 }
 
 //======================================================================================
-//>
+//> Permet d'allumer la led de vote à la couleur spécifiée pour un joueur donné
 //======================================================================================
 void setPlayerVoteLedColor(char playerIndex, char ledColor)
 {
