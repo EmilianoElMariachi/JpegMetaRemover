@@ -101,14 +101,14 @@
 	const char NUM_SPIES_PER_NUM_PLAYERS[NUM_PLAYERS_RANGE] = {2, 2, 3, 3, 3, 4};
 	const char VOTE_ABSOLUTE_MAJORITYS[NUM_PLAYERS_RANGE] = {3, 4, 4, 5, 5, 6};
 
-	const char SPIES_PER_MISSION [MAX_NUMBER_OF_MISSIONS][NUM_PLAYERS_RANGE]  = { {2, 2, 2, 3, 3, 3},
+	const char PLAYERS_PER_MISSION [MAX_NUMBER_OF_MISSIONS][NUM_PLAYERS_RANGE]  = { {2, 2, 2, 3, 3, 3},
 																				  {3, 3, 3, 4, 4, 4},
 																				  {2, 4, 3, 4, 4, 4},
 																				  {3, 3, 4, 5, 5, 5},
 																				  {3, 4, 4, 5, 5, 5} };
 																				  
 	char _numPlayersSelForCurMiss = 0;
-	char _numSpiesExpectedForCurMiss = 0;
+	char _numPlayersExpectedForCurMiss = 0;
 	char _numPlayerVotes = 0;
 	volatile UCHAR _enterButtonFilterCounter = 0; 
 	volatile BOOL _toggleBlink; 
