@@ -397,6 +397,26 @@ void displayVoteResults()
 //======================================================================================
 //>
 //======================================================================================
+BOOL isAbsoluteMajorityReached()
+{
+	char numVotesYesForMiss = 0;
+	for(char playerIndex = 0; playerIndex <  _numberOfRegisteredPlayers ; playerIndex++)
+	{
+		if(_players[playerIndex].VoteStatus == VOTE_YES)
+		{
+			numVotesYesForMiss++;
+		}	
+	}	
+	
+	if(numVotesYesForMiss >= VOTE_ABSOLUTE_MAJORITYS[_numberOfRegisteredPlayers - MIN_NUMBER_OF_PLAYERS])
+	{ return TRUE; }		
+	else
+	{ return FALSE; }	
+}	
+
+//======================================================================================
+//>
+//======================================================================================
 main(void)
 {
 	//Initialisation des variables globales
@@ -474,7 +494,22 @@ main(void)
 				}	
 				
 				break;
-
+			case DISP_VOTE_RESULTS:
+				if(isEnterButtonPressed())
+				{
+					if(isAbsoluteMajorityReached())
+					{
+						setMissionState(0,MISSION_GREEN);
+					}	
+					else
+					{
+						setMissionState(0,MISSION_RED);
+					}
+						resetPlayersVotes();
+						_gameState = WAIT_MISSION_VOTE;		
+		
+				}
+				break;	
 		}	
 		
 

@@ -16,7 +16,7 @@
 	
 	#define MIN_NUMBER_OF_PLAYERS 5
 	#define MAX_NUMBER_OF_PLAYERS 10
-	
+	#define NUM_PLAYERS_RANGE (MAX_NUMBER_OF_PLAYERS - MIN_NUMBER_OF_PLAYERS)+1
 	#define MAX_NUMBER_OF_MISSIONS 5
 	
 	
@@ -96,13 +96,15 @@
 	char _currentPlayerIndex = 0;
 	char _currentMissionIndex = 0;
 	
-	const char NUM_SPIES_PER_NUM_PLAYERS[MIN_NUMBER_OF_PLAYERS+1] = {2, 2, 3, 3, 3, 4};
+	const char NUM_SPIES_PER_NUM_PLAYERS[NUM_PLAYERS_RANGE] = {2, 2, 3, 3, 3, 4};
+	const char VOTE_ABSOLUTE_MAJORITYS[NUM_PLAYERS_RANGE] = {3, 4, 4, 5, 5, 6};
 
-	const char SPIES_PER_MISSION [MAX_NUMBER_OF_MISSIONS][MIN_NUMBER_OF_PLAYERS+1]  = { {2, 2, 2, 3, 3, 3},
-																						{3, 3, 3, 4, 4, 4},
-																						{2, 4, 3, 4, 4, 4},
-																						{3, 3, 4, 5, 5, 5},
-																						{3, 4, 4, 5, 5, 5} };
+	const char SPIES_PER_MISSION [MAX_NUMBER_OF_MISSIONS][NUM_PLAYERS_RANGE]  = { {2, 2, 2, 3, 3, 3},
+																				  {3, 3, 3, 4, 4, 4},
+																				  {2, 4, 3, 4, 4, 4},
+																				  {3, 3, 4, 5, 5, 5},
+																				  {3, 4, 4, 5, 5, 5} };
+																				  
 	char _numPlayersSelForCurMiss = 0;
 	char _numSpiesExpectedForCurMiss = 0;
 	char _numPlayerVotes = 0;
