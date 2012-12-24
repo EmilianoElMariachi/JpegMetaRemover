@@ -14,6 +14,8 @@
    
 	#define UCHAR_MAX 255
 	
+	#define NUM_NON_ACCEPT_CONSEC_MISS_GAMEOVER 5
+	
 	#define NUM_MISSIONS_TO_WIN 	3
 	#define MIN_NUMBER_OF_PLAYERS 	5
 	#define MAX_NUMBER_OF_PLAYERS 	10
@@ -86,6 +88,11 @@
 	#define GAMESTATE_DISP_MISSION_RESULT				7	
 	#define GAMESTATE_GAMEOVER							8
 		
+	#define WINNER_IS_RESISTANCE		SIDE_RESISTANT
+	#define WINNER_IS_SPIES				SIDE_SPY
+	#define WINNER_NOT_YET				2
+	
+		
 	struct Player
 	{
 		BOOL Side:1;
@@ -120,6 +127,9 @@
 	
 	char _numMissionsWonBySpies = 0;
 	char _numMissionsWonByResistance = 0;
+	char _numConsecMissNonAccepted = 0;
+	char _winnersIs = WINNER_NOT_YET;
+	
 
 #endif
 

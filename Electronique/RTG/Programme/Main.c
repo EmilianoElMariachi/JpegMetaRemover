@@ -157,6 +157,7 @@ void initGlobalVariables()
 {
 	switchOffAllMissionLeds();
 	
+	_winnersIs = WINNER_NOT_YET;
 	_numberOfRegisteredPlayers = 0;
 	_numMissionsWonBySpies = 0;
 	_numMissionsWonByResistance = 0;
@@ -284,14 +285,23 @@ void resetSelectedPlayers()
 }	
 
 //======================================================================================
+//> Initialise les votes et les sélections
+//======================================================================================
+void initVotesAndSelPlayers()
+{
+	resetPlayersVotes();
+	resetSelectedPlayers();	
+}	
+
+//======================================================================================
 //> Initialise le début de la mission
 //======================================================================================
 void initCurrentMission()
 {
+	initVotesAndSelPlayers();
 	
-	resetPlayersVotes();
-
-	resetSelectedPlayers();
+	//Reinitialise le compteur du nombre de fois que les missions consécutives n'ont pas été acceptées
+	_numConsecMissNonAccepted = 0;
 	
 	//Allume la mission courante à l'état en cours
 	setMissionLedColor(_currentMissionIndex,MISSION_BLUE);
@@ -533,15 +543,40 @@ void displayMissionStatus()
 //======================================================================================
 //>
 //======================================================================================
-BOOL isGameOver()
+void checkIfGameOver()
 {
-	if(_numMissionsWonBySpies >= NUM_MISSIONS_TO_WIN || _numMissionsWonByResistance >= NUM_MISSIONS_TO_WIN)
+	if(_numMissionsWonBySpies >= NUM_MISSIONS_TO_WIN || _numConsecMissNonAccepted >= NUM_NON_ACCEPT_CONSEC_MISS_GAMEOVER)
 	{
-		return TRUE;
+		_winnersIs = WINNER_IS_SPIES;
 	}	
-	else
+	else if(_numMissionsWonByResistance >= NUM_MISSIONS_TO_WIN)
 	{
-		return FALSE;
+		_winnersIs = WINNER_IS_RESISTANCE;
+	}	
+}	
+
+//======================================================================================
+//>
+//======================================================================================
+void displayGameOver()
+{
+
+	for(char playerIndex = 0; playerIndex <  _numberOfRegisteredPlayers ; playerIndex++)
+	{
+		char playerSide =_players[playerIndex].Side;
+		char playerSideColor =  (playerSide == SIDE_RESISTANT)? VOTE_GREEN : VOTE_RED;
+		
+		if(playerSide == _winnersIs)
+		{
+			if(_toggleBlink)
+			{ setPlayerVoteLedColor(_players[playerIndex].SlotIndex, playerSideColor); }	
+			else
+			{ setPlayerVoteLedColor(_players[playerIndex].SlotIndex, VOTE_OFF); }
+		}
+		else
+		{
+			setPlayerVoteLedColor(_players[playerIndex].SlotIndex, playerSideColor);
+		}	
 	}	
 }	
 
@@ -635,8 +670,9 @@ main(void)
 					}	
 					else
 					{
+						_numConsecMissNonAccepted++;
 						moveToNextPlayer();
-						initCurrentMission();
+						initVotesAndSelPlayers();
 						_gameState = GAMESTATE_WAIT_CUR_PLAYER_SELECT_PLAYERS;
 					}
 				}
@@ -648,8 +684,9 @@ main(void)
 				if(canDisplayMissionStatus())
 				{
 					displayMissionStatus();
+					checkIfGameOver();
 					
-					if(isGameOver())
+					if(_winnersIs != WINNER_NOT_YET)
 					{ _gameState = GAMESTATE_GAMEOVER; }
 					else
 					{ _gameState = GAMESTATE_DISP_MISSION_RESULT; }	
@@ -669,6 +706,8 @@ main(void)
 				break;
 				
 			case GAMESTATE_GAMEOVER:
+				
+				displayGameOver();
 				
 				break;
 			
