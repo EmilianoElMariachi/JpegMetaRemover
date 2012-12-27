@@ -113,6 +113,8 @@
 	//======================================================================================
 	//> Déclaration des variables globales
 	//======================================================================================
+	char _MCPPorts[MAX_NUMBER_OF_PLAYERS] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+
 	char _gameState = GAMESTATE_WAIT_FOR_PLAYERS;
 	BOOL _playersSlotsStatus[MAX_NUMBER_OF_PLAYERS];
 	char _numberOfRegisteredPlayers = 0;
@@ -129,13 +131,18 @@
 																				  	{3, 4, 4, 5, 5, 5} };
 		
 	
-	char _MCPPorts[MAX_NUMBER_OF_PLAYERS] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 	char _numPlayersSelForCurMiss = 0;
 	char _numPlayersExpectedForCurMiss = 0;
 	char _numPlayerVotes = 0;
+	
+	
 	volatile char _buttonsFilterCounters[NUM_BUTTONS_FILTERED] = {0,0,0,0,0,0,0,0,0,0};
 	volatile BOOL _toggleBlink = FALSE; 
 	
+	char _numSpiesWhoVotesForMissFailed = 0;		//Nombre d'espions ayant votés pour l'échec de la mission en cours
+	char _slotIndexForMissionResultAnim = 0;
+
+
 	char _numMissionsWonBySpies = 0;
 	char _numMissionsWonByResistance = 0;
 	char _numConsecMissNonAccepted = 0;

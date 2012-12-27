@@ -98,6 +98,17 @@ void setPlayerVoteLedColor(char playerIndex, char ledColor)
 }
 
 //======================================================================================
+//> Permet d'eteindre toutes les leds de vote des joueurs
+//======================================================================================
+void switchOffAllVotePlayersLeds()
+{
+	for(char slotIndex = 0; slotIndex < MAX_NUMBER_OF_PLAYERS; slotIndex++)
+	{
+		setPlayerVoteLedColor(slotIndex, VOTE_OFF);
+	}	
+}
+
+//======================================================================================
 //>
 //======================================================================================
 void setPlayerSideLedState(char playerIndex, char ledState)
