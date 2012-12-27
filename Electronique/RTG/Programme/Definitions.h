@@ -34,11 +34,17 @@
 	#define BIT6 01000000 
 	#define BIT7 10000000 
 	
+	#define  testbit(var, bit)  ((var) & (1 <<(bit)))
+	#define  setbit(var, bit)   ((var) |= (1 << (bit)))
+	#define  clrbit(var, bit)   ((var) &= ~(1 << (bit)))
+	
+	
 	#define FALSE 0
 	#define TRUE 1
 	
-	#define RESET 	RC7 //Définition de la pi de reset
-	#define CS 		RC6 //Définition de la pin correspondant au Chip Select (CS)
+	#define RESET 				RC7 	//Définition de la pi de reset
+	#define CS 					RC6 	//Définition de la pin correspondant au Chip Select (CS)
+	#define ENTER_BUTTON_STATE	RB6 	//La pin correspondant au bouton 'Enter' (0 relaché, 1 appuyé)
 	
 	
 	#define CHAR char
@@ -99,7 +105,7 @@
 		char SlotIndex:4;
 		BOOL IsSelectedForMission:1;
 		char VoteStatus:2;
-	}  _players[MAX_NUMBER_OF_PLAYERS];;	
+	}  _players[MAX_NUMBER_OF_PLAYERS];	
 
 	//======================================================================================
 	//> Déclaration des variables globales

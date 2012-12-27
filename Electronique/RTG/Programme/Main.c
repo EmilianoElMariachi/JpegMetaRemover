@@ -364,10 +364,7 @@ BOOL canVoteForMission()
 		if(_numPlayersSelForCurMiss == _numPlayersExpectedForCurMiss)
 		{ return TRUE; }	
 		else
-		{
-			 displayError(_numPlayersExpectedForCurMiss, MISSION_BLUE);
-			 displayError(_numPlayersSelForCurMiss, MISSION_RED);
-		}	
+		{ displayError(_numPlayersExpectedForCurMiss, MISSION_BLUE); }	
 	}
 	
 	return FALSE;

@@ -11,28 +11,16 @@
 //======================================================================================
 BOOL isEnterButtonPressed()
 {
-	static BOOL _btnSeenReleasedSinceLastPush = TRUE;
-	
-	BOOL _currentButtonState = (PORTB & B8(BIT6)) == B8(BIT6)?TRUE:FALSE;
-
-	//Si le temps de filtrage est passé et que le bouton est vu relaché,
-	//alors on peut considérer que le bouton a été relâché depuis le dernier appui
-	if(!_enterButtonFilterCounter && !_currentButtonState)
-	{ _btnSeenReleasedSinceLastPush = TRUE; }	
-	
-	if(!_enterButtonFilterCounter && _btnSeenReleasedSinceLastPush && _currentButtonState == TRUE)
+	if(ENTER_BUTTON_STATE)
 	{
-		_btnSeenReleasedSinceLastPush = FALSE;
-		_enterButtonFilterCounter = 10;
+		_enterButtonFilterCounter = 2;
+	}	
+	else if(_enterButtonFilterCounter == 1)
+	{
 		return TRUE;
 	}
-	else
-	{
-		return FALSE;
-	}	
-	
-	
-	
+		
+	return FALSE;
 }	
 
 //======================================================================================
@@ -45,37 +33,15 @@ void getPlayerInputState(char playerIndex, BOOL* yesIsPressed, BOOL* noIsPressed
 	if(getPortLetterForPlayerIndex(playerIndex)	== 'A')
 	{
 		char portState = MCP23S17_GetPortA(addressMCP);
-		if((portState & B8(BIT7)) == B8(BIT7))
-		{ *selectIsPressed = TRUE; }
-		else
-		{ *selectIsPressed = FALSE; }
-		
-		if((portState & B8(BIT3)) == B8(BIT3))
-		{ *noIsPressed = FALSE; }
-		else
-		{ *noIsPressed = TRUE; }
-		
-		if((portState & B8(BIT2)) == B8(BIT2))
-		{ *yesIsPressed = FALSE; }
-		else
-		{ *yesIsPressed = TRUE; }
+		*selectIsPressed = testbit(portState, 7)?TRUE:FALSE;
+		*noIsPressed = testbit(portState, 3)?FALSE:TRUE;
+		*yesIsPressed = testbit(portState, 2)?FALSE:TRUE;
 	}	
 	else
 	{
 		char portState = MCP23S17_GetPortB(addressMCP);
-		if((portState & B8(BIT0)) == B8(BIT0))
-		{ *selectIsPressed = TRUE; }
-		else
-		{ *selectIsPressed = FALSE; }
-
-		if((portState & B8(BIT4)) == B8(BIT4))
-		{ *noIsPressed = FALSE; }
-		else
-		{ *noIsPressed = TRUE; }
-		
-		if((portState & B8(BIT5)) == B8(BIT5))
-		{ *yesIsPressed = FALSE; }
-		else
-		{ *yesIsPressed = TRUE; }
+		*selectIsPressed = testbit(portState, 0)?TRUE:FALSE;
+		*noIsPressed = testbit(portState, 4)?FALSE:TRUE;
+		*yesIsPressed = testbit(portState, 5)?FALSE:TRUE;
 	}	
 }
