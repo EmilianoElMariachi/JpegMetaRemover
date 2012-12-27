@@ -132,9 +132,13 @@ void interrupt tc_int(void)
 	//Test si c'est le timer 0 qui à déclenché l'interruption
 	if (T0IE && T0IF)
 	{
-		//Changer les variables globales ICI
-		if(_enterButtonFilterCounter != 0)
-		{ _enterButtonFilterCounter--; }
+		
+		for(char iFilterIndex = 0; iFilterIndex < NUM_BUTTONS_FILTERED; iFilterIndex++)
+		{
+			
+			if(_buttonsFilterCounters[iFilterIndex] != 0)
+			{ _buttonsFilterCounters[iFilterIndex]--; }
+		}	
 		
 		if(_blinkCounter > BLINK_FREQ)
 		{

@@ -98,7 +98,10 @@
 	#define WINNER_IS_SPIES				SIDE_SPY
 	#define WINNER_NOT_YET				2
 	
-		
+	#define BUTTON_FILTER_TIME			3
+	#define NUM_BUTTONS_FILTERED		11
+	#define ENTER_BTN_FILTER_INDEX		10
+	
 	struct Player
 	{
 		BOOL Side:1;
@@ -120,22 +123,24 @@
 	const char VOTE_ABSOLUTE_MAJORITYS[NUM_PLAYERS_RANGE] = {3, 4, 4, 5, 5, 6};
 
 	const char PLAYERS_PER_MISSION [MAX_NUMBER_OF_MISSIONS][NUM_PLAYERS_RANGE]  = { {2, 2, 2, 3, 3, 3},
-																				  {3, 3, 3, 4, 4, 4},
-																				  {2, 4, 3, 4, 4, 4},
-																				  {3, 3, 4, 5, 5, 5},
-																				  {3, 4, 4, 5, 5, 5} };
-																				  
+																				  	{3, 3, 3, 4, 4, 4},
+																				  	{2, 4, 3, 4, 4, 4},
+																				  	{3, 3, 4, 5, 5, 5},
+																				  	{3, 4, 4, 5, 5, 5} };
+		
+	
+	char _MCPPorts[MAX_NUMBER_OF_PLAYERS] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 	char _numPlayersSelForCurMiss = 0;
 	char _numPlayersExpectedForCurMiss = 0;
 	char _numPlayerVotes = 0;
-	volatile UCHAR _enterButtonFilterCounter = 0; 
-	volatile BOOL _toggleBlink; 
+	volatile char _buttonsFilterCounters[NUM_BUTTONS_FILTERED] = {0,0,0,0,0,0,0,0,0,0};
+	volatile BOOL _toggleBlink = FALSE; 
 	
 	char _numMissionsWonBySpies = 0;
 	char _numMissionsWonByResistance = 0;
 	char _numConsecMissNonAccepted = 0;
-	char _winnersIs = WINNER_NOT_YET;
-	
+	char _winnersIs = WINNER_NOT_YET;	
 
 #endif
+
 

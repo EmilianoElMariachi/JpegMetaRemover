@@ -30,8 +30,6 @@ BYTE SPI_SendReceive(BYTE byteToSend)
 //======================================================================================
 void SPI_Init()
 {
-	
-	
 	//_____________________________________________________________________________
 	//> Configuration registre SSPSTAT : Synchronous Serial Port Status Register
 	SSPSTAT = 0x40;// Configure register for SPI..(b6=0).
