@@ -21,7 +21,7 @@ void switchOffAllMissionLeds()
 //======================================================================================
 void setMissionLedColor(char missionIndex, char ledColor)
 {
-	if(missionIndex == 0)
+	if(missionIndex == 4)
 	{
 		switch(ledColor)
 		{
@@ -39,7 +39,7 @@ void setMissionLedColor(char missionIndex, char ledColor)
 				break;
 		}	
 	}
-	else if(missionIndex == 1)	
+	else if(missionIndex == 3)	
 	{
 		switch(ledColor)
 		{
@@ -75,7 +75,7 @@ void setMissionLedColor(char missionIndex, char ledColor)
 				break;
 		}
 	}	
-	else if(missionIndex == 3)		
+	else if(missionIndex == 1)		
 	{
 		switch(ledColor)
 		{
@@ -93,7 +93,7 @@ void setMissionLedColor(char missionIndex, char ledColor)
 				break;
 		}
 	}
-	else if(missionIndex == 4)		
+	else if(missionIndex == 0)		
 	{
 		switch(ledColor)
 		{
