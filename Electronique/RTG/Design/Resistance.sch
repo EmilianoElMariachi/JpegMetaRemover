@@ -5611,7 +5611,7 @@ Source: www.kingbright.com</description>
 <part name="SW2" library="switch-dil" deviceset="DS01E" device="" value="No"/>
 <part name="SW1" library="switch-dil" deviceset="DS01E" device="" value="Yes"/>
 <part name="GND6" library="supply1" deviceset="0V" device=""/>
-<part name="R2" library="resistor" deviceset="R-US_" device="0204/7" value="180"/>
+<part name="R2" library="resistor" deviceset="R-US_" device="0204/7" value="2.2k"/>
 <part name="P+6" library="supply1" deviceset="+5V" device=""/>
 <part name="R3" library="resistor" deviceset="R-US_" device="0204/7" value="10k"/>
 <part name="SW3" library="switch-dil" deviceset="DS01E" device="" value="Select"/>
@@ -5651,8 +5651,8 @@ Source: www.kingbright.com</description>
 <part name="R79" library="resistor" deviceset="R-US_" device="0204/7" value="1k"/>
 <part name="P+17" library="supply1" deviceset="+5V" device=""/>
 <part name="GND7" library="supply1" deviceset="0V" device=""/>
-<part name="R4" library="resistor" deviceset="R-US_" device="0204/7" value="180"/>
-<part name="R5" library="resistor" deviceset="R-US_" device="0204/7" value="180"/>
+<part name="R4" library="resistor" deviceset="R-US_" device="0204/7" value="220"/>
+<part name="R5" library="resistor" deviceset="R-US_" device="0204/7" value="220"/>
 <part name="R6" library="resistor" deviceset="R-US_" device="0204/7" value="180"/>
 <part name="LED1" library="led" deviceset="LED" device="3MM" value="Spy"/>
 <part name="SW0" library="switch-dil" deviceset="DS01E" device="" value="Enter"/>
@@ -5662,7 +5662,7 @@ Source: www.kingbright.com</description>
 <part name="SW4" library="switch-dil" deviceset="DS01E" device="" value="No"/>
 <part name="SW5" library="switch-dil" deviceset="DS01E" device="" value="Yes"/>
 <part name="GND9" library="supply1" deviceset="0V" device=""/>
-<part name="R8" library="resistor" deviceset="R-US_" device="0204/7" value="180"/>
+<part name="R8" library="resistor" deviceset="R-US_" device="0204/7" value="2.2k"/>
 <part name="P+8" library="supply1" deviceset="+5V" device=""/>
 <part name="R9" library="resistor" deviceset="R-US_" device="0204/7" value="10k"/>
 <part name="SW6" library="switch-dil" deviceset="DS01E" device="" value="Select"/>
@@ -5674,8 +5674,8 @@ Source: www.kingbright.com</description>
 <part name="R11" library="resistor" deviceset="R-US_" device="0204/7" value="1k"/>
 <part name="P+9" library="supply1" deviceset="+5V" device=""/>
 <part name="GND11" library="supply1" deviceset="0V" device=""/>
-<part name="R12" library="resistor" deviceset="R-US_" device="0204/7" value="180"/>
-<part name="R13" library="resistor" deviceset="R-US_" device="0204/7" value="180"/>
+<part name="R12" library="resistor" deviceset="R-US_" device="0204/7" value="220"/>
+<part name="R13" library="resistor" deviceset="R-US_" device="0204/7" value="220"/>
 <part name="R15" library="resistor" deviceset="R-US_" device="0204/7" value="180"/>
 <part name="LED6" library="led" deviceset="LED" device="3MM" value="Spy"/>
 </parts>
