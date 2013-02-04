@@ -29,24 +29,21 @@ void updatePlayersWhoWantToPlay()
 		BOOL yesIsPressed, noIsPressed, selectIsPressed;
 		getPlayerInputState(playerIndex, &yesIsPressed, &noIsPressed, &selectIsPressed);
 		
-		if(yesIsPressed || selectIsPressed)
+		BOOL slotTaken = _playersSlotsStatus[playerIndex];
+		
+		if(!slotTaken && (yesIsPressed || selectIsPressed))
 		{
-			if(_playersSlotsStatus[playerIndex] == FALSE)
-			{
-				_numberOfRegisteredPlayers++;
-				_playersSlotsStatus[playerIndex] = TRUE;
-				setPlayerSelectLedState(playerIndex, SELECT_ON);
-			}
+			_numberOfRegisteredPlayers++;
+			_playersSlotsStatus[playerIndex] = TRUE;
+			setPlayerSelectLedState(playerIndex, SELECT_ON);
 		}
-		else if(noIsPressed)
+		else if(slotTaken && (noIsPressed || selectIsPressed))
 		{
-			if(_playersSlotsStatus[playerIndex] == TRUE)
-			{
-				_numberOfRegisteredPlayers--;
-				_playersSlotsStatus[playerIndex] = FALSE;
-				setPlayerSelectLedState(playerIndex, SELECT_OFF);
-			}	
-		}		
+			_numberOfRegisteredPlayers--;
+			_playersSlotsStatus[playerIndex] = FALSE;
+			setPlayerSelectLedState(playerIndex, SELECT_OFF);
+		}
+			
 	}
 }	
 

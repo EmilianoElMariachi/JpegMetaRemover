@@ -1,0 +1,8 @@
+- Fonction permettant de donner la victoire aux espions après refus de mission consécutifs
+
+- Fonction permettant d'avertir les joueurs que le 5ème refus de mission est atteint
+
+- Fonction permettant d'indiquer le nombre min de joueurs si la touche "enter" est pressée 
+alors que tous le nombre min de joueurs n'est pas atteint
+
+- Fonction permettant d'indiquer le nombre d'espions présents pendant l'affichage des espions
