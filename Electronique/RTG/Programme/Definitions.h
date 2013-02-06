@@ -45,7 +45,7 @@
 	#define RESET 				RC7 	//Définition de la pi de reset
 	#define CS 					RC6 	//Définition de la pin correspondant au Chip Select (CS)
 	#define ENTER_BUTTON_STATE	RB6 	//La pin correspondant au bouton 'Enter' (0 relaché, 1 appuyé)
-	
+	#define LED_TWO_SPY_MIN		RB7		//Pin de la led indiquant qu'il faut minimum deux espions pour faire échouer la mission
 	
 	#define CHAR char
 	#define UCHAR unsigned char
@@ -79,8 +79,11 @@
 	#define VOTE_MISSION_DEFEAT  VOTE_NO
 	#define VOTE_MISSION_SUCCESS VOTE_YES
 
-	#define SIDE_LED_OFF		0
-	#define SIDE_LED_ON			1
+	#define LED_OFF			0
+	#define LED_ON			1
+
+	#define SIDE_LED_OFF		LED_OFF
+	#define SIDE_LED_ON			LED_ON
 
 	#define SIDE_RESISTANT 		SIDE_LED_OFF
 	#define SIDE_SPY 			SIDE_LED_ON

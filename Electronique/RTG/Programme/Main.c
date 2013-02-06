@@ -239,7 +239,8 @@ void initializePortsDirections()
 	//RA0 -> RA2 : Sortie leds Mission 4
 	//RA3 -> RA5 : Sortie leds Mission 5
 	//RA6 : Entrée bouton "Enter"
-	TRISB  = B8(11000000);
+	//RA7 : Sortie led x2 espions pour échec mission
+	TRISB  = B8(01000000);
 	
 	//RC0 -> RC2 : Sortie leds Mission 3
 	//RC3 : Sortie SDI (SCK)
@@ -253,7 +254,7 @@ void initializePortsDirections()
 	//> Initialisation de la valeur de sortie des PORTS
 	PORTA  = B8(00000000);
 	PORTB  = B8(00000000);
-	PORTB  = B8(00000000);
+	PORTC  = B8(00000000);
 }	
 
 //======================================================================================
@@ -294,6 +295,18 @@ void initVotesAndSelPlayers()
 }	
 
 //======================================================================================
+//> Retourne le nombre minimum de votes d'échec de mission requis pour que la mission
+//> courante puisse echouer
+//======================================================================================
+char getMinSpyVotesForCurMissDefeat()
+{
+	if(_currentMissionIndex == 3 && (_numberOfRegisteredPlayers>= 7 && _numberOfRegisteredPlayers <= MAX_NUMBER_OF_PLAYERS))
+	{ return 2; }	
+	else
+	{ return 1; }	
+}	
+
+//======================================================================================
 //> Initialise le début de la mission
 //======================================================================================
 void initCurrentMission()
@@ -308,6 +321,10 @@ void initCurrentMission()
 	
 	//Détermine le nombre d'espions attendus pour la mission courante
 	_numPlayersExpectedForCurMiss = PLAYERS_PER_MISSION[_currentMissionIndex][_numberOfRegisteredPlayers - MIN_NUMBER_OF_PLAYERS];
+	
+	//Allume ou éteint la led qui indique si deux espions sont requis pour faire échouer la mission
+	LED_TWO_SPY_MIN = (getMinSpyVotesForCurMissDefeat() > 1)? LED_ON: LED_OFF;
+	
 }	
 
 //======================================================================================
@@ -500,18 +517,6 @@ void updatePlayersMissionStatus()
 BOOL canDisplayMissionStatus()
 {
 	return (_numPlayerVotes == _numPlayersSelForCurMiss)?TRUE:FALSE;
-}	
-
-//======================================================================================
-//> Retourne le nombre minimum de votes d'échec de mission requis pour que la mission
-//> courante puisse echouer
-//======================================================================================
-char getMinSpyVotesForCurMissDefeat()
-{
-	if(_currentMissionIndex == 3 && (_numberOfRegisteredPlayers>= 7 && _numberOfRegisteredPlayers <= MAX_NUMBER_OF_PLAYERS))
-	{ return 2; }	
-	else
-	{ return 1; }	
 }	
 
 //======================================================================================
