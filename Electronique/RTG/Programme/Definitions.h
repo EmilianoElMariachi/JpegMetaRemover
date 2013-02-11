@@ -120,9 +120,9 @@
 
 	char _gameState = GAMESTATE_WAIT_FOR_PLAYERS;
 	BOOL _playersSlotsStatus[MAX_NUMBER_OF_PLAYERS];
-	char _numberOfRegisteredPlayers = 0;
-	char _currentPlayerIndex = 0;
-	char _currentMissionIndex = 0;
+	char _numberOfRegisteredPlayers = 0;	//Le nombre de joueurs
+	char _currentPlayerIndex = 0;			//L'index du joueur ayant le role de désigner les joueurs sélectionnés pour la mission courante
+	char _currentMissionIndex = 0;			//L'index de la mission en cours
 	
 	const char NUM_SPIES_PER_NUM_PLAYERS[NUM_PLAYERS_RANGE] = {2, 2, 3, 3, 3, 4};
 	const char VOTE_ABSOLUTE_MAJORITYS[NUM_PLAYERS_RANGE] = {3, 4, 4, 5, 5, 6};
@@ -137,6 +137,7 @@
 	char _numPlayersSelForCurMiss = 0;
 	char _numPlayersExpectedForCurMiss = 0;
 	char _numPlayerVotes = 0;
+	BOOL _absoluteMajorityReached = FALSE; 		//Booléen mis à jour à la fin des votes pour la missions en cours
 	
 	
 	volatile char _buttonsFilterCounters[NUM_BUTTONS_FILTERED] = {0,0,0,0,0,0,0,0,0,0};

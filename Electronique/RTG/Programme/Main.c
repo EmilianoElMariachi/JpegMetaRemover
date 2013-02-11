@@ -307,6 +307,30 @@ char getMinSpyVotesForCurMissDefeat()
 }	
 
 //======================================================================================
+//> Permet d'incrémenter de façon circulaire l'index passé en argument
+//======================================================================================
+void getNextIndex(char *index, char maxIndexExcluded)
+{
+	(*index)++;
+	if((*index) >= maxIndexExcluded)
+	{
+		(*index) = 0;
+	}
+}
+
+//======================================================================================
+//> Permet de décrémenter de façon circulaire l'index passé en argument
+//======================================================================================
+void getPrevIndex(char *index, char maxIndexExcluded)
+{
+	(*index)--;
+	if((*index) >= maxIndexExcluded)
+	{
+		(*index) = maxIndexExcluded - 1;
+	}
+}
+
+//======================================================================================
 //> Initialise le début de la mission
 //======================================================================================
 void initCurrentMission()
@@ -316,8 +340,8 @@ void initCurrentMission()
 	//Reinitialise le compteur du nombre de fois que les missions consécutives n'ont pas été acceptées
 	_numConsecMissNonAccepted = 0;
 	
-	//Allume la mission courante à l'état en cours
-	setMissionLedColor(_currentMissionIndex,MISSION_BLUE);
+	//Allume la led de la mission courante
+	setMissionLedColor(_currentMissionIndex, MISSION_BLUE);
 	
 	//Détermine le nombre d'espions attendus pour la mission courante
 	_numPlayersExpectedForCurMiss = PLAYERS_PER_MISSION[_currentMissionIndex][_numberOfRegisteredPlayers - MIN_NUMBER_OF_PLAYERS];
@@ -388,9 +412,31 @@ BOOL canVoteForMission()
 }
 
 //======================================================================================
-//> Met à jour les votes des joueurs
+//> Fonction permettant de savoir si la majorité absolue a été atteinte dans les votes
+//> pour la mission courante
 //======================================================================================
-void updatePlayersMissionVote()
+BOOL isAbsoluteMajorityReached()
+{
+	char numVotesYesForMiss = 0;
+	for(char playerIndex = 0; playerIndex <  _numberOfRegisteredPlayers ; playerIndex++)
+	{
+		if(_players[playerIndex].VoteStatus == VOTE_YES)
+		{
+			numVotesYesForMiss++;
+		}	
+	}	
+	
+	if(numVotesYesForMiss >= VOTE_ABSOLUTE_MAJORITYS[_numberOfRegisteredPlayers - MIN_NUMBER_OF_PLAYERS])
+	{ return TRUE; }		
+	else
+	{ return FALSE; }	
+}
+
+//======================================================================================
+//> Met à jour les votes des joueurs
+//> Retourne TRUE si tous les joueurs ont voté, sinon retourne FALSE
+//======================================================================================
+BOOL updatePlayersMissionVote()
 {
 	for(char playerIndex = 0; playerIndex <  _numberOfRegisteredPlayers ; playerIndex++)
 	{
@@ -412,16 +458,21 @@ void updatePlayersMissionVote()
 			{ _players[playerIndex].VoteStatus = VOTE_NO; }		
 		}	
 	}
+	
+	BOOL allPlayersHaveVoted = (_numPlayerVotes == _numberOfRegisteredPlayers)?TRUE:FALSE;
+	
+	if(allPlayersHaveVoted)
+	{
+		_absoluteMajorityReached = isAbsoluteMajorityReached();
+		if(!_absoluteMajorityReached)
+		{
+			_numConsecMissNonAccepted++;
+		}	
+	}	
+	
+	
+	return allPlayersHaveVoted;
 }
-
-//======================================================================================
-//> Permet de savoir si les résultats de vote peuvent être affichés (si tout le monde à
-//> voté)
-//======================================================================================
-BOOL canDisplayVoteResults()
-{
-	return (_numPlayerVotes == _numberOfRegisteredPlayers)?TRUE:FALSE;
-}	
 
 //======================================================================================
 //>
@@ -433,38 +484,6 @@ void displayVoteResults()
 		setPlayerVoteLedColor(_players[playerIndex].SlotIndex, _players[playerIndex].VoteStatus);
 	}	
 }	
-
-//======================================================================================
-//>
-//======================================================================================
-BOOL isAbsoluteMajorityReached()
-{
-	char numVotesYesForMiss = 0;
-	for(char playerIndex = 0; playerIndex <  _numberOfRegisteredPlayers ; playerIndex++)
-	{
-		if(_players[playerIndex].VoteStatus == VOTE_YES)
-		{
-			numVotesYesForMiss++;
-		}	
-	}	
-	
-	if(numVotesYesForMiss >= VOTE_ABSOLUTE_MAJORITYS[_numberOfRegisteredPlayers - MIN_NUMBER_OF_PLAYERS])
-	{ return TRUE; }		
-	else
-	{ return FALSE; }	
-}	
-
-//======================================================================================
-//> Permet d'incrémenter de façon circulaire l'index passé en argument
-//======================================================================================
-void getNextIndex(char *index, char maxIndexExcluded)
-{
-	(*index)++;
-	if((*index) >= maxIndexExcluded)
-	{
-		(*index) = 0;
-	}
-}
 
 //======================================================================================
 //> Permet de passer au joueur suivant
@@ -614,16 +633,23 @@ BOOL canStopDisplayMissionStatus()
 //======================================================================================
 //>
 //======================================================================================
-void checkIfGameOver()
+BOOL isGameOver()
 {
 	if(_numMissionsWonBySpies >= NUM_MISSIONS_TO_WIN || _numConsecMissNonAccepted >= NUM_NON_ACCEPT_CONSEC_MISS_GAMEOVER)
 	{
 		_winnersIs = WINNER_IS_SPIES;
+		return TRUE;
 	}	
 	else if(_numMissionsWonByResistance >= NUM_MISSIONS_TO_WIN)
 	{
 		_winnersIs = WINNER_IS_RESISTANCE;
-	}	
+		return TRUE;
+	}
+	else
+	{
+		_winnersIs = WINNER_NOT_YET;
+		return FALSE;
+	}		
 }	
 
 //======================================================================================
@@ -649,6 +675,25 @@ void displayGameOver()
 			setPlayerVoteLedColor(_players[playerIndex].SlotIndex, playerSideColor);
 		}	
 	}	
+}	
+
+
+//======================================================================================
+//> Initialise l'état d'attente de selection des joueurs par le leader
+//======================================================================================
+void enterStateLeaderSelectPlayers()
+{
+	resetSelectedPlayers();
+	
+	char playerIndexTmp = _currentPlayerIndex;
+	
+	for(char i = 0; i <= _numConsecMissNonAccepted; i++)
+	{
+		setPlayerVoteLedColor(_players[playerIndexTmp].SlotIndex, VOTE_GREEN);
+		getPrevIndex(&playerIndexTmp, _numberOfRegisteredPlayers);
+	}	
+	
+	_gameState = GAMESTATE_WAIT_CUR_PLAYER_SELECT_PLAYERS;	
 }	
 
 //======================================================================================
@@ -704,7 +749,7 @@ main(void)
 				{
 					stopNotifyPlayersSides();
 					initCurrentMission();
-					_gameState = GAMESTATE_WAIT_CUR_PLAYER_SELECT_PLAYERS;
+					enterStateLeaderSelectPlayers();
 				}	
 				
 				break;
@@ -722,29 +767,33 @@ main(void)
 				
 			case GAMESTATE_WAIT_MISSION_VOTE:
 			
-				updatePlayersMissionVote();
-				
-				if(canDisplayVoteResults())
+				if(updatePlayersMissionVote())
 				{
-					displayVoteResults();
-					_gameState = GAMESTATE_DISP_VOTE_RESULTS;	
+					if(isGameOver())
+					{
+						_gameState = GAMESTATE_GAMEOVER;
+					}	
+					else
+					{
+						displayVoteResults();
+						_gameState = GAMESTATE_DISP_VOTE_RESULTS;	
+					}
 				}	
 				
 				break;
 			case GAMESTATE_DISP_VOTE_RESULTS:
 				if(isEnterButtonPressed())
 				{
-					if(isAbsoluteMajorityReached())
+					if(_absoluteMajorityReached)
 					{
 						resetPlayersVotes();	
 						_gameState = GAMESTATE_PLAY_MISSION;		
 					}	
 					else
 					{
-						_numConsecMissNonAccepted++;
 						moveToNextPlayer();
 						initVotesAndSelPlayers();
-						_gameState = GAMESTATE_WAIT_CUR_PLAYER_SELECT_PLAYERS;
+						enterStateLeaderSelectPlayers();
 					}
 				}
 				
@@ -755,9 +804,8 @@ main(void)
 				if(canDisplayMissionStatus())
 				{
 					displayMissionStatus();
-					checkIfGameOver();
 					
-					if(_winnersIs != WINNER_NOT_YET)
+					if(isGameOver())
 					{ _gameState = GAMESTATE_GAMEOVER; }
 					else
 					{ _gameState = GAMESTATE_DISP_MISSION_RESULT; }	
@@ -773,8 +821,7 @@ main(void)
 					moveToNextPlayer();
 					moveToNextMission();
 					initCurrentMission();
-					
-					_gameState = GAMESTATE_WAIT_CUR_PLAYER_SELECT_PLAYERS;
+					enterStateLeaderSelectPlayers();
 				}	
 				break;
 				
