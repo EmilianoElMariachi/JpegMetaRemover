@@ -90,7 +90,7 @@
 
 	#define GAMESTATE_WAIT_FOR_PLAYERS 					1
 	#define GAMESTATE_NOTIFY_PLAYER_SIDES 				2
-	#define GAMESTATE_WAIT_CUR_PLAYER_SELECT_PLAYERS 	3
+	#define GAMESTATE_WAIT_LEADER_SELECT_PLAYERS 		3
 	#define GAMESTATE_WAIT_MISSION_VOTE 				4
 	#define GAMESTATE_DISP_VOTE_RESULTS 				5
 	#define GAMESTATE_PLAY_MISSION 						6
@@ -121,7 +121,7 @@
 	char _gameState = GAMESTATE_WAIT_FOR_PLAYERS;
 	BOOL _playersSlotsStatus[MAX_NUMBER_OF_PLAYERS];
 	char _numberOfRegisteredPlayers = 0;	//Le nombre de joueurs
-	char _currentPlayerIndex = 0;			//L'index du joueur ayant le role de désigner les joueurs sélectionnés pour la mission courante
+	char _currentLeaderIndex = 0;			//L'index du joueur ayant le role de désigner les joueurs sélectionnés pour la mission courante
 	char _currentMissionIndex = 0;			//L'index de la mission en cours
 	
 	const char NUM_SPIES_PER_NUM_PLAYERS[NUM_PLAYERS_RANGE] = {2, 2, 3, 3, 3, 4};
