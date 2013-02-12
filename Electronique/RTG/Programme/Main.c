@@ -531,13 +531,40 @@ BOOL updatePlayersMissionStatus()
 		}	
 	}	
 	
-	return (_numPlayerVotes == _numPlayersSelForCurMiss)?TRUE:FALSE;	
+	BOOL missionFinished = (_numPlayerVotes == _numPlayersSelForCurMiss)?TRUE:FALSE;
+	
+	//Si la mission est terminée, détermine le résultat
+	if(missionFinished)
+	{
+		_numSpiesWhoVotesForMissFailed = 0;
+	
+		for(char playerIndex = 0; playerIndex <  _numberOfRegisteredPlayers ; playerIndex++)
+		{
+			if(_players[playerIndex].Side == SIDE_SPY && _players[playerIndex].VoteStatus == VOTE_MISSION_DEFEAT )
+			{
+				_numSpiesWhoVotesForMissFailed ++;
+			}	
+		}	
+		
+		if(_numSpiesWhoVotesForMissFailed >= getMinSpyVotesForCurMissDefeat())
+		{
+			_numMissionsWonBySpies++;
+			setMissionLedColor(_currentMissionIndex, MISSION_RED);
+		}
+		else
+		{
+			_numMissionsWonByResistance++;
+			setMissionLedColor(_currentMissionIndex, MISSION_GREEN);
+		}
+	}	
+	
+	return missionFinished;	
 }	
 
 //======================================================================================
 //>
 //======================================================================================
-BOOL updateDisplayMissionStatus()
+BOOL updateDisplayMissionResult()
 {
 
 	static char _ledToggled = FALSE;
@@ -708,27 +735,6 @@ void enterStatePlayMission()
 //======================================================================================
 void enterStateDisplayMissionResult()
 {
-	_numSpiesWhoVotesForMissFailed = 0;
-	
-	for(char playerIndex = 0; playerIndex <  _numberOfRegisteredPlayers ; playerIndex++)
-	{
-		if(_players[playerIndex].Side == SIDE_SPY && _players[playerIndex].VoteStatus == VOTE_MISSION_DEFEAT )
-		{
-			_numSpiesWhoVotesForMissFailed ++;
-		}	
-	}	
-	
-	if(_numSpiesWhoVotesForMissFailed >= getMinSpyVotesForCurMissDefeat())
-	{
-		_numMissionsWonBySpies++;
-		setMissionLedColor(_currentMissionIndex, MISSION_RED);
-	}
-	else
-	{
-		_numMissionsWonByResistance++;
-		setMissionLedColor(_currentMissionIndex, MISSION_GREEN);
-	}
-	
 	_slotIndexForMissionResultAnim = _players[_currentLeaderIndex].SlotIndex;
 	
 	_gameState = GAMESTATE_DISP_MISSION_RESULT;
@@ -843,7 +849,7 @@ main(void)
 				break;
 			case GAMESTATE_DISP_MISSION_RESULT:
 								
-				if(updateDisplayMissionStatus())
+				if(updateDisplayMissionResult())
 				{
 					moveToNextLeader();
 					moveToNextMission();
@@ -867,8 +873,5 @@ main(void)
 
 	
 }
-
-
-
 
 	
