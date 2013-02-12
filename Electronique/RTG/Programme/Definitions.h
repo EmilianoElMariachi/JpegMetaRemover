@@ -10,7 +10,7 @@
 	#define BLINK_ERROR_DELAY_MS 100
 	#define NUM_BLINKS_ERROR 3
 
-	#define BLINK_FREQ 3
+	#define BLINK_FREQ 5
    
 	#define UCHAR_MAX 255
 	

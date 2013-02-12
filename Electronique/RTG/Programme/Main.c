@@ -21,8 +21,10 @@ __CONFIG(DEBUG_OFF & LVP_OFF & FCMEN_OFF & IESO_OFF & BOREN_OFF & CP_OFF & MCLRE
 
 //======================================================================================
 //> Met à jour la liste des joueurs participant
+//> Si le bouton 'enter' est pressé et qu'un nombre suffisant de joueur est atteint,
+//> retourne TRUE pour indiquer que la partie peut commencer, sinon retourne FALSE
 //======================================================================================
-void updatePlayersWhoWantToPlay()
+BOOL updatePlayersWhoWantToPlay()
 {
 	for(char playerIndex = 0; playerIndex < MAX_NUMBER_OF_PLAYERS ; playerIndex++)
 	{
@@ -45,6 +47,45 @@ void updatePlayersWhoWantToPlay()
 		}
 			
 	}
+	
+	BOOL gameCanStart = FALSE;
+	
+	if(isEnterButtonPressed())
+	{
+		if(_numberOfRegisteredPlayers >= MIN_NUMBER_OF_PLAYERS)
+		{
+			char playerIndex = 0;
+			for(char slotIndex = 0; slotIndex < MAX_NUMBER_OF_PLAYERS ; slotIndex++)
+			{
+				if(_playersSlotsStatus[slotIndex])
+				{
+					_players[playerIndex++].SlotIndex = slotIndex;
+				}	
+			}
+			gameCanStart = TRUE;
+		}	
+		else
+		{
+			displayError(MIN_NUMBER_OF_PLAYERS, MISSION_BLUE);
+		}	
+	}	
+		
+	return gameCanStart;
+}	
+
+//======================================================================================
+//> Permet d'afficher le nombre d'espions présents en fonction du nombre de joueurs
+//> enregistrés
+//======================================================================================
+void dispNumSpiesForNumOfRegPlayers()
+{
+	char numSpiesForCurrentGame = NUM_SPIES_PER_NUM_PLAYERS[_numberOfRegisteredPlayers - MIN_NUMBER_OF_PLAYERS];
+	
+	for(char missionIndex = 0; missionIndex < numSpiesForCurrentGame ; missionIndex++)
+	{
+		setMissionLedColor(missionIndex, MISSION_RED);	
+	}	
+	
 }	
 
 //======================================================================================
@@ -90,31 +131,6 @@ void assignSpiesAndFirstPlayerRand()
 	_currentLeaderIndex = getRandomNumberBetweenZeroAnd(_numberOfRegisteredPlayers);
 	
 	saveRandomNumberToFlash();
-}	
-
-//======================================================================================
-//> Si le bouton 'enter' est pressé et qu'un nombre suffisant de joueur est présent,
-//> alors la partie peut commencer
-//======================================================================================
-BOOL canGameStart()
-{
-	if(_numberOfRegisteredPlayers >= MIN_NUMBER_OF_PLAYERS && isEnterButtonPressed())
-	{
-		char playerIndex = 0;
-		for(char slotIndex = 0; slotIndex < MAX_NUMBER_OF_PLAYERS ; slotIndex++)
-		{
-			if(_playersSlotsStatus[slotIndex])
-			{
-				_players[playerIndex++].SlotIndex = slotIndex;
-			}	
-		}
-		
-		return TRUE;
-	}	
-	else
-	{
-		return FALSE;
-	}	
 }	
 
 //#########################################################################//
@@ -618,6 +634,22 @@ void displayGameOver()
 	}	
 }	
 
+//======================================================================================
+//> Initialise l'état permettant d'indiquer le camps de chaque joueur
+//======================================================================================
+void enterStateNotifyPlayerSides()
+{
+	assignSpiesAndFirstPlayerRand();
+	
+	switchOffAllSelPlayersLeds();
+	
+	dispNumSpiesForNumOfRegPlayers();
+	
+	notifyPlayersSides();
+	
+	_gameState = GAMESTATE_NOTIFY_PLAYER_SIDES;	
+}	
+
 
 //======================================================================================
 //> Initialise l'état d'attente de selection des joueurs par le leader
@@ -748,21 +780,16 @@ main(void)
 		switch(_gameState)
 		{
 			case GAMESTATE_WAIT_FOR_PLAYERS:
-
-				updatePlayersWhoWantToPlay();
-				
-				if(canGameStart())
+				if(updatePlayersWhoWantToPlay())
 				{
-					assignSpiesAndFirstPlayerRand();
-					notifyPlayersSides();
-					switchOffAllSelPlayersLeds();
-					_gameState = GAMESTATE_NOTIFY_PLAYER_SIDES;
+					enterStateNotifyPlayerSides();
 				}
 				
 				break;
 			case GAMESTATE_NOTIFY_PLAYER_SIDES: 
 				if(isEnterButtonPressed())
 				{
+					switchOffAllMissionLeds();
 					stopNotifyPlayersSides();
 					initCurrentMission();
 					enterStateLeaderSelectPlayers();
