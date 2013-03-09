@@ -11,6 +11,7 @@
 #include "playerIO.h";
 #include "EEPROM.h"
 #include "Random.h"
+#include "SoundManager.h"
 //¤¤¤              INCLUDES              ¤¤¤//
 //¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤//
 
@@ -771,6 +772,9 @@ main(void)
 	//Initialise l'accès à l'EEPROM
 	setupEEPROM();
 
+
+	initSound();
+
 	//===================
 
 	initializeTimer0();
@@ -795,6 +799,7 @@ main(void)
 			case GAMESTATE_NOTIFY_PLAYER_SIDES: 
 				if(isEnterButtonPressed())
 				{
+					playSoundCloseYourEyes();
 					switchOffAllMissionLeds();
 					stopNotifyPlayersSides();
 					initCurrentMission();
@@ -809,7 +814,6 @@ main(void)
 				}	
 				
 				break;
-				
 			case GAMESTATE_WAIT_MISSION_VOTE:
 			
 				if(updatePlayersMissionVote())

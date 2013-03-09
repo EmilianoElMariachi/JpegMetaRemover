@@ -93,7 +93,10 @@ void MCP23S17_Setup()
 	for(char addressMCP23S17 = 0; addressMCP23S17 <= 4; addressMCP23S17++)
 	{
 		MCP23S17_SetIODirectionA(addressMCP23S17, B8(10001100)); 
-		MCP23S17_SetIODirectionB(addressMCP23S17, B8(00110001));		
+		MCP23S17_SetIODirectionB(addressMCP23S17, B8(00110001));	
+		
+		MCP23S17_SetPortA(addressMCP23S17, B8(00000000));
+		MCP23S17_SetPortB(addressMCP23S17, B8(00000000));	
 	}	
 }	
 

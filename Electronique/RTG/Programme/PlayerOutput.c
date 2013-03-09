@@ -1,7 +1,7 @@
 #include "Definitions.h"
 #include "PlayerOutput.h"
 #include "PlayerIO.h"
-#include "MCP23S17.h";
+#include "MCP23S17.h"
 
 //======================================================================================
 //> Permet d'eteindre toutes les leds de selection des joueurs
