@@ -388,6 +388,8 @@ BOOL updatePlayersSelectedForMiss()
 		_ledToggled = _toggleBlink;
 	}	
 	
+	BOOL leaderIsPressingYes = FALSE;
+	
 	//___________________________________________
 	//> Detection des joueurs selectionnés
 	for(char playerIndex = 0; playerIndex < _numberOfRegisteredPlayers; playerIndex++)
@@ -410,9 +412,12 @@ BOOL updatePlayersSelectedForMiss()
 				_numPlayersSelForCurMiss++;
 			}		
 		}	
+		
+		if(yesIsPressed && (playerIndex == _currentLeaderIndex))
+		{ leaderIsPressingYes = TRUE; }	
 	}
 	
-	if(isEnterButtonPressed())
+	if(leaderIsPressingYes)
 	{
 		if(_numPlayersSelForCurMiss == _numPlayersExpectedForCurMiss)
 		{ return TRUE; }	
@@ -749,6 +754,80 @@ void enterStateGameOver()
 	_gameState = GAMESTATE_GAMEOVER;
 }	
 
+//======================================================================================
+//> Fonction permettant de tester le plateau (leds, boutons, etc...)
+//======================================================================================
+void testMode()
+{
+	char missionLedColor = MISSION_OFF;
+	char ledSpy = SIDE_LED_OFF;
+	char index = 0;
+	//¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤//
+	//¤¤¤ BOUCLE SANS FIN ¤¤¤//
+	while(TRUE)
+	{
+		if(_toggleBlink)
+		{
+			_toggleBlink = FALSE;
+			switch(missionLedColor)
+			{
+				case MISSION_OFF:
+					missionLedColor = MISSION_BLUE;
+					break;
+				case MISSION_BLUE:
+					missionLedColor = MISSION_RED;
+					break;
+				case MISSION_RED:
+					missionLedColor = MISSION_GREEN;
+					break;
+				default:
+					missionLedColor = MISSION_OFF;
+					break;
+			}	
+			for(index = 0; index < MAX_NUMBER_OF_MISSIONS ; index++)
+			{
+				setMissionLedColor(index, missionLedColor);
+			}
+			if(ledSpy == SIDE_LED_OFF)
+			{ ledSpy = SIDE_LED_ON; }
+			else
+			{ ledSpy = SIDE_LED_OFF; }
+		}
+		
+		LED_TWO_SPY_MIN = isEnterButtonPressed()?LED_ON: LED_OFF; 
+		
+		for(index = 0; index < MAX_NUMBER_OF_PLAYERS ; index++)
+		{
+			BOOL yesIsPressed, noIsPressed, selectIsPressed;
+			getPlayerInputState(index, &yesIsPressed, &noIsPressed, &selectIsPressed);
+			
+			setPlayerSelectLedState(index, selectIsPressed? SELECT_ON:SELECT_OFF);
+			
+			if(yesIsPressed && !noIsPressed)
+			{
+				setPlayerVoteLedColor(index, VOTE_GREEN);				
+			}
+			else if(!yesIsPressed && noIsPressed)
+			{
+				setPlayerVoteLedColor(index, VOTE_RED);				
+			}
+			else if(yesIsPressed && noIsPressed)
+			{
+				setPlayerVoteLedColor(index, VOTE_GREEN_RED);				
+			}	
+			else
+			{
+				setPlayerVoteLedColor(index, VOTE_OFF);				
+			}
+			
+			setPlayerSideLedState(index, ledSpy);	
+		}	
+		
+	}
+	//¤¤¤ BOUCLE SANS FIN ¤¤¤//			
+	//¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤//
+}	
+
 //######################################################################################################################//
 //###                                               ROUTINE PRINCIPALE                                               ###//
 //######################################################################################################################//
@@ -781,6 +860,12 @@ main(void)
 	
 	//enable global interrupts
 	GIE = 1;
+	
+	//Si le bouton 'enter' est pressé, met le jeu en mode de test
+	if(ENTER_BUTTON_STATE)
+	{
+		testMode();
+	}
 	
 	//¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤//
 	//¤¤¤ BOUCLE SANS FIN ¤¤¤//
