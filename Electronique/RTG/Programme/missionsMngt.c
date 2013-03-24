@@ -4,6 +4,7 @@
 
 #include "Definitions.h"
 #include "missionsMngt.h"
+#include "MCP23S17.h"
 //¤¤¤              INCLUDES              ¤¤¤//
 //¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤//
 
@@ -148,3 +149,23 @@ void displayError(char nbErrors, char blinkColor)
 	PORTC = backUpPortC;
 	
 }
+
+//======================================================================================
+// Fonction permettant d'allumer ou éteindre la diode du plateau indiquant que minimum
+// 2 espions sont requis pour faire échouer la mission
+//======================================================================================
+void setTwoSpyLedState(char ledState)
+{
+	BYTE portState = MCP23S17_GetPortA(0);
+	
+	if(ledState == LED_ON)
+	{
+		portState = portState | 0x01;	
+	}
+	else
+	{
+		portState = portState & 0xFE;	
+	}
+	
+	MCP23S17_SetPortA(0, portState);		
+}	

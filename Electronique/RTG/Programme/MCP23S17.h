@@ -1,8 +1,5 @@
 #include "Definitions.h"
 
-
-void MCP23S17_Reset();
-
 void MCP23S17_Setup();
 
 void MCP23S17_SetIODirectionA(BYTE address, BYTE portDirection);

@@ -7,7 +7,7 @@
 
 	#define BUTTON_FILTER_DELAY 10
 	
-	#define BLINK_ERROR_DELAY_MS 100
+	#define BLINK_ERROR_DELAY_MS 200
 	#define NUM_BLINKS_ERROR 3
 
 	#define BLINK_FREQ 5
@@ -42,10 +42,8 @@
 	#define FALSE 0
 	#define TRUE 1
 	
-	#define RESET 				RC7 	//Définition de la pin de reset
-	#define CS 					RC6 	//Définition de la pin correspondant au Chip Select (CS)
+	#define CS 					RB7 	//Définition de la pin correspondant au Chip Select (CS)
 	#define ENTER_BUTTON_STATE	RB6 	//La pin correspondant au bouton 'Enter' (0 relaché, 1 appuyé)
-	#define LED_TWO_SPY_MIN		RB7		//Pin de la led indiquant qu'il faut minimum deux espions pour faire échouer la mission
 	
 	#define CHAR char
 	#define UCHAR unsigned char

@@ -5,3 +5,5 @@ void switchOffAllMissionLeds();
 void setMissionLedColor(char missionIndex, char ledColor);
 
 void displayError(char nbErrors, char blinkColor);
+
+void setTwoSpyLedState(char ledState);

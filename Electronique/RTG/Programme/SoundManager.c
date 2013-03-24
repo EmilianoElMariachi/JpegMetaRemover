@@ -1,104 +1,60 @@
 #include <htc.h>
 #include "Definitions.h"
-#include "MCP23S17.h";
-
-#define SHORT_PRESS_DELAY 50
-#define LONG_PRESS_DELAY 1000
-	
-#define BTN_ADR_NEXT_VOL_UP 0
-#define BTN_IDX_NEXT_VOL_UP 0
-
-#define BTN_ADR_STOP_PAUSE 0
-#define BTN_IDX_STOP_PAUSE 1
-
-#define BTN_ADR_PREV_VOL_DN 1
-#define BTN_IDX_PREV_VOL_DN 2
+#include "MCP23S17.h"
 
 //============================
 
-void _pushNextBtn()
-{
-	_MCPPorts[BTN_IDX_NEXT_VOL_UP] = _MCPPorts[BTN_IDX_NEXT_VOL_UP] & B8(01111111);
-	MCP23S17_SetPortB(BTN_ADR_NEXT_VOL_UP,_MCPPorts[BTN_IDX_NEXT_VOL_UP]);		
-}	
-
-void _releaseNextBtn()
-{
-	_MCPPorts[BTN_IDX_NEXT_VOL_UP] = _MCPPorts[BTN_IDX_NEXT_VOL_UP] | B8(10000000);
-	MCP23S17_SetPortB(BTN_ADR_NEXT_VOL_UP, _MCPPorts[BTN_IDX_NEXT_VOL_UP]);		
-}	
-
-void pressNextBtn()
-{
-	_pushNextBtn();	
-	__delay_ms(SHORT_PRESS_DELAY);
-	_releaseNextBtn();	
-}
+#define MP3_NUM_CLOSE_YOUR_EYES 1
 
 //============================
 
-void _pushPlayPauseBtn()
+void _sendUsart(unsigned char byteToSend)
 {
-	_MCPPorts[BTN_IDX_STOP_PAUSE] = _MCPPorts[BTN_IDX_STOP_PAUSE] & B8(11111110);
-	MCP23S17_SetPortA(BTN_ADR_STOP_PAUSE, _MCPPorts[BTN_IDX_STOP_PAUSE]);		
+	TXREG = byteToSend;
+	while(!TRMT);//Attend la fin de l'envoi de l'octet
 }	
 
-void _releasePlayPauseBtn()
+void stopPlaying()
 {
-	_MCPPorts[BTN_IDX_STOP_PAUSE] = _MCPPorts[BTN_IDX_STOP_PAUSE] | B8(00000001);
-	MCP23S17_SetPortA(BTN_ADR_STOP_PAUSE, _MCPPorts[BTN_IDX_STOP_PAUSE]);		
-}
-
-void pressPlayBtn()
-{
-	_pushPlayPauseBtn();
-	__delay_ms(SHORT_PRESS_DELAY);
-	_releasePlayPauseBtn();
+	_sendUsart(0xEF);
 }	
 
-void longPressPlayBtn()
+BOOL isPlaying()
 {
-	_pushPlayPauseBtn();
-	__delay_ms(LONG_PRESS_DELAY);
-	_releasePlayPauseBtn();
+	return (MCP23S17_GetPortB(0) & 0x80);
 }	
 
-
-//============================
-
-void _pushPrevBtn()
+void _playFile(char fileNumber, BOOL waitEnd)
 {
-	_MCPPorts[BTN_IDX_PREV_VOL_DN] = _MCPPorts[BTN_IDX_PREV_VOL_DN] & B8(01111111);
-	MCP23S17_SetPortB(BTN_ADR_PREV_VOL_DN, _MCPPorts[BTN_IDX_PREV_VOL_DN]);		
+	if(fileNumber > 0 && fileNumber < 200)
+	{
+		_sendUsart(fileNumber);
+		
+		if(waitEnd)
+		{
+			while(!isPlaying());	//Attend que la lecture commence
+			while(isPlaying());		//Attend que la lecture se termine
+		}
+	}	
 }	
-
-void _releasePrevBtn()
-{
-	_MCPPorts[BTN_IDX_PREV_VOL_DN] = _MCPPorts[BTN_IDX_PREV_VOL_DN] | B8(10000000);
-	MCP23S17_SetPortB(BTN_ADR_PREV_VOL_DN, _MCPPorts[BTN_IDX_PREV_VOL_DN]);		
-}
-
-void pressPrevBtn()
-{
-	_pushPrevBtn();
-	__delay_ms(SHORT_PRESS_DELAY);
-	_releasePrevBtn();
-}
-
-//============================
 
 void playSoundCloseYourEyes()
 {
-	pressPlayBtn();
-	__delay_ms(8000);
-	longPressPlayBtn();
-}	
-
-//============================
+	_playFile(MP3_NUM_CLOSE_YOUR_EYES, TRUE);
+}
 
 void initSound()
 {
-	_releaseNextBtn();
-	_releasePrevBtn();
-	longPressPlayBtn();//STOP
+	//Baud rate de 4800 pour un Oscillateur à 8Mhz
+	SPBRG = 24;
+	SPBRGH = 0;
+	
+	TXEN = 1;
+	SYNC = 0;
+	SPEN = 1;
+	
+	stopPlaying();	//Demande l'arrêt
+	_sendUsart(231);//Met le volume au max	
+	
+	__delay_ms(500);
 }

@@ -109,7 +109,7 @@ void switchOffAllVotePlayersLeds()
 }
 
 //======================================================================================
-//>
+//> Fonction permettant d'allumer ou éteindre la diode rouge des télécommandes
 //======================================================================================
 void setPlayerSideLedState(char playerIndex, char ledState)
 {

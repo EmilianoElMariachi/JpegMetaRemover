@@ -364,7 +364,7 @@ void initCurrentMission()
 	_numPlayersExpectedForCurMiss = PLAYERS_PER_MISSION[_currentMissionIndex][_numberOfRegisteredPlayers - MIN_NUMBER_OF_PLAYERS];
 	
 	//Allume ou éteint la led qui indique si deux espions sont requis pour faire échouer la mission
-	LED_TWO_SPY_MIN = (getMinSpyVotesForCurMissDefeat() > 1)? LED_ON: LED_OFF;
+	setTwoSpyLedState((getMinSpyVotesForCurMissDefeat() > 1)? LED_ON: LED_OFF);
 	
 }	
 
@@ -417,7 +417,7 @@ BOOL updatePlayersSelectedForMiss()
 		{ leaderIsPressingYes = TRUE; }	
 	}
 	
-	if(leaderIsPressingYes)
+	if(isEnterButtonPressed())
 	{
 		if(_numPlayersSelForCurMiss == _numPlayersExpectedForCurMiss)
 		{ return TRUE; }	
@@ -794,7 +794,7 @@ void testMode()
 			{ ledSpy = SIDE_LED_OFF; }
 		}
 		
-		LED_TWO_SPY_MIN = isEnterButtonPressed()?LED_ON: LED_OFF; 
+		setTwoSpyLedState(ENTER_BUTTON_STATE?LED_ON: LED_OFF); 
 		
 		for(index = 0; index < MAX_NUMBER_OF_PLAYERS ; index++)
 		{
@@ -833,14 +833,16 @@ void testMode()
 //######################################################################################################################//
 main(void)
 {
+	//Configure l'oscillateur à 4Mhz
+	IRCF0 = 1;
+	IRCF1 = 1;
+	IRCF2 = 1;
+	
 	//Initialisation des variables globales
 	initGlobalVariables();
 	
 	//Initialisation de la direction des ports
 	initializePortsDirections();
-	
-	//Reset le Port Expandeur (Cette action n'emet rien sur la liaison SPI)
-	MCP23S17_Reset();
 	
 	//Configure le PIC pour permettre la com SPI
 	SPI_Init();
@@ -850,7 +852,6 @@ main(void)
 
 	//Initialise l'accès à l'EEPROM
 	setupEEPROM();
-
 
 	initSound();
 

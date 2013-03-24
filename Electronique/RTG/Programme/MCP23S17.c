@@ -70,19 +70,6 @@ BYTE MCP23S17_Read(BYTE deviceAdr, BYTE registerToRead)
 }
 
 //======================================================================================
-//> Fonction permettant de réinitialiser les MCP23S17
-//======================================================================================
-void MCP23S17_Reset()
-{
-	CS = 1; // disable I/O expander
-	RESET = 0;
-	
-	for(int i = 0; i < 1000 ; i++);
-	
-	RESET = 1;
-}	
-
-//======================================================================================
 //> Fonction permettant d'initialiser et configurer les MCP23S17
 //======================================================================================
 void MCP23S17_Setup()
@@ -90,14 +77,29 @@ void MCP23S17_Setup()
 	//Ecriture de l'Opcode (1ere trame à l'adresse 0)
 	MCP23S17_Write(0, IOCON, B8(00101000)); //SEQOP=1; HAEN=1 pour activer l'adressage hardware
 	
+	MCP23S17_SetIODirectionB(0, B8(10110001));	
+	MCP23S17_SetIODirectionA(0, B8(10001100)); 
+	
+	MCP23S17_SetIODirectionB(1, B8(10110001));	
+	MCP23S17_SetIODirectionA(1, B8(00001101)); 
+
+	MCP23S17_SetIODirectionB(2, B8(10110001));	
+	MCP23S17_SetIODirectionA(2, B8(10001101)); 
+
+	MCP23S17_SetIODirectionB(3, B8(10110001));	
+	MCP23S17_SetIODirectionA(3, B8(10001101)); 
+
+	MCP23S17_SetIODirectionA(4, B8(10001101)); 
+	MCP23S17_SetIODirectionB(4, B8(10110001));	
+	
+	
 	for(char addressMCP23S17 = 0; addressMCP23S17 <= 4; addressMCP23S17++)
 	{
-		MCP23S17_SetIODirectionA(addressMCP23S17, B8(10001100)); 
-		MCP23S17_SetIODirectionB(addressMCP23S17, B8(00110001));	
-		
 		MCP23S17_SetPortA(addressMCP23S17, B8(00000000));
 		MCP23S17_SetPortB(addressMCP23S17, B8(00000000));	
 	}	
+	
+	CS = 1; // disable I/O expander
 }	
 
 
