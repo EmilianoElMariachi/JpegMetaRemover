@@ -1,0 +1,24 @@
+﻿<languages>
+	<language name="Français" shortname="fr">
+
+		<element id="_fileToolStripMenuItem">Fichier</element>
+		<element id="_selectFileToolStripMenuItem">Choisir une image...</element>
+		<element id="_selectDirectoryToolStripMenuItem">Choisir un dossier...</element>
+		<element id="_exitToolStripMenuItem">Quitter</element>
+		
+		<element id="_editToolStripMenuItem">Edition</element>
+		<element id="_runToolStripMenuItem">Executer</element>
+		<element id="_languageToolStripMenuItem">Langage</element>
+	
+		<element id="_checkBoxRemoveComments">Supprimer les commentaires</element>
+		<element id="_checkBoxRemoveMetadatas">Supprimer les métadonnées</element>
+		<element id="_labelInputPath">Fichier ou dossier</element>
+	
+		<element id="_checkBoxOverride">Ecraser</element>
+    <element id="_checkBoxIncludeSubdirectories">Sous-répertoire(s)</element>
+    
+
+
+  </language>
+
+</languages>
