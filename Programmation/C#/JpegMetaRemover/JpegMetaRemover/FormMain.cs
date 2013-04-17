@@ -6,14 +6,23 @@ using System.IO;
 using System.Reflection;
 using JpegMetaRemover.Log;
 using JpegMetaRemover.Translation;
+using Microsoft.Win32;
+using System.Threading;
+using System.Globalization;
+using JpegMetaRemover.Tools;
 
 namespace JpegMetaRemover
 {
     public partial class FormMain : Form
     {
+        private const string EDITOR_NAME = "Emignatik";
+        private const string APP_NAME = "JpegMetaRemover";
+
+        private const string REG_KEY_APP = "SOFTWARE\\" + EDITOR_NAME + "\\" + APP_NAME;
+        private const string REG_VAL_LANGUAGE = "lang";
 
         private List<LocalizableControlWrapper> LocalizableControls { get; set; }
-        private List<Localization> LoadedLocalizations { get; set; }
+        private LocalizationCollection LoadedLocalizations { get; set; }
 
         public FormMain()
         {
@@ -24,15 +33,14 @@ namespace JpegMetaRemover
             InitializeLanguages();
         }
 
-
         private void InitializeLanguages()
         {
-            LoadedLocalizations = new List<Localization>();
+
+            LoadedLocalizations = new LocalizationCollection();
 
             LocalizableControls = LocalizationManager.FetchFormLocalizableControls(this);
 
             var defaultLocalization = LocalizationManager.CreateLocalizationFromLocalizableControls(this.LocalizableControls, "English", "en");
-            defaultLocalization.ChangeUIThread();
 
             LoadedLocalizations.Add(defaultLocalization);
 
@@ -50,7 +58,68 @@ namespace JpegMetaRemover
                 item.Click += new EventHandler(item_Click);
             }
 
-            ((ToolStripMenuItem)_languageToolStripMenuItem.DropDownItems[0]).Checked = true;
+                
+            Localization localizationToApply = null;
+
+            //Charge la localization depuis la base de registre si elle existe
+            RegistryKey regKeyApp = null;
+            try
+            {
+                regKeyApp = Registry.LocalMachine.OpenSubKey(REG_KEY_APP);
+                if (regKeyApp != null)
+                {
+                    var regkeyTowLetterLang = regKeyApp.GetValue(REG_VAL_LANGUAGE) as string;
+                    if (regkeyTowLetterLang != null)
+                    {
+                        var localizationFound = this.LoadedLocalizations.FindLocalizationByTwoLetterLanguageName(regkeyTowLetterLang);
+                        if (localizationFound != null)
+                        { localizationToApply = localizationFound; }
+                    }
+                }
+            }
+            finally
+            { MemHelper.DisposeSecure(regKeyApp); }
+
+            //Charge la localization depuis la culture du PC si elle existe
+            if(localizationToApply == null)
+            {
+                var currentPCTowLetterLang = Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName;
+                var localizationFound = this.LoadedLocalizations.FindLocalizationByTwoLetterLanguageName(currentPCTowLetterLang);
+                if (localizationFound != null)
+                { localizationToApply = localizationFound; }
+            }
+
+            if (localizationToApply == null)
+            {
+                localizationToApply = defaultLocalization;
+            }
+
+            ApplyLocalization(localizationToApply);
+        }
+
+        void ApplyLocalization(Localization localization)
+        {
+            if (localization != null)
+            {
+                foreach (ToolStripMenuItem languageMenuItem in _languageToolStripMenuItem.DropDownItems)
+                {
+                    languageMenuItem.Checked = (localization == languageMenuItem.Tag as Localization);
+                }
+
+                localization.ChangeLanguage(this.LocalizableControls);
+
+                //Sauvegarde la localization séléctionnée dans la base de registre
+                RegistryKey regKeyApp = null;
+                try
+                {
+                    regKeyApp = Registry.LocalMachine.CreateSubKey(REG_KEY_APP);
+                    if (regKeyApp != null)
+                    { regKeyApp.SetValue(REG_VAL_LANGUAGE, localization.TwoLetterISOLanguageName); }
+                }
+                finally
+                { MemHelper.DisposeSecure(regKeyApp); }
+
+            }
         }
 
         void item_Click(object sender, EventArgs e)
@@ -58,13 +127,7 @@ namespace JpegMetaRemover
             var clickedMenuItem = sender as ToolStripMenuItem;
             if (clickedMenuItem != null)
             {
-                foreach (ToolStripMenuItem languageMenuItem in _languageToolStripMenuItem.DropDownItems)
-                {
-                    languageMenuItem.Checked = (languageMenuItem == clickedMenuItem);
-                }
-
-                var localization = clickedMenuItem.Tag as Localization;
-                localization.ChangeLanguage(this.LocalizableControls);
+                ApplyLocalization(clickedMenuItem.Tag as Localization);
             }
         }
 
@@ -351,29 +414,9 @@ namespace JpegMetaRemover
                 }
                 finally
                 {
-                    if (jpgExifRemover != null)
-                    {
-                        try
-                        { jpgExifRemover.Dispose(); }
-                        catch
-                        { }
-                    }
-
-                    if (outputMemoryStream != null)
-                    {
-                        try
-                        { outputMemoryStream.Dispose(); }
-                        catch
-                        { }
-                    }
-
-                    if (outputFileStream != null)
-                    {
-                        try
-                        { outputFileStream.Dispose(); }
-                        catch
-                        { }
-                    }
+                    MemHelper.DisposeSecure(jpgExifRemover);
+                    MemHelper.DisposeSecure(outputMemoryStream);
+                    MemHelper.DisposeSecure(outputFileStream);
                 }
             }
 

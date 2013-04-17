@@ -67,15 +67,17 @@
     <Compile Include="FormMain.Designer.cs">
       <DependentUpon>FormMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="JPGExifRemover.cs" />
+    <Compile Include="JpegTools\JPGExifRemover.cs" />
     <Compile Include="Log\Logger.cs" />
     <Compile Include="Log\MsgType.cs" />
+    <Compile Include="Tools\MemHelper.cs" />
     <Compile Include="Translation\LocalizableControlWrapper.cs" />
     <Compile Include="Translation\Localization.cs" />
+    <Compile Include="Translation\LocalizationCollection.cs" />
     <Compile Include="Translation\LocalizationManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PurificationResult.cs" />
+    <Compile Include="JpegTools\PurificationResult.cs" />
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
     </EmbeddedResource>
@@ -130,6 +132,7 @@
   <ItemGroup>
     <None Include="Resources\Stop.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

@@ -1,5 +1,5 @@
 ﻿<languages>
-	<language name="Français" shortname="fr">
+	<language name="Français" twoLetterISOLanguageName="fr">
 
 		<element id="_fileToolStripMenuItem">Fichier</element>
 		<element id="_selectFileToolStripMenuItem">Choisir une image...</element>

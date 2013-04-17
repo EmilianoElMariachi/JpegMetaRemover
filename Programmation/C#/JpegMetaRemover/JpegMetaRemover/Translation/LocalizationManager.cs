@@ -7,7 +7,7 @@ using JpegMetaRemover.Log;
 
 namespace JpegMetaRemover.Translation
 {
-    internal static class LocalizationManager
+    internal static class LocalizationManager 
     {
 
         public static List<LocalizableControlWrapper> FetchFormLocalizableControls(Form form)
@@ -63,9 +63,16 @@ namespace JpegMetaRemover.Translation
             }
         }
 
+        /// <summary>
+        /// Permet de créer une localization à partir d'une liste de controls wrappés
+        /// </summary>
+        /// <param name="localizableControlWrappers"></param>
+        /// <param name="languageName"></param>
+        /// <param name="shortName"></param>
+        /// <returns></returns>
         public static Localization CreateLocalizationFromLocalizableControls(List<LocalizableControlWrapper> localizableControlWrappers, string languageName, string shortName)
         {
-            var localization = new Localization {LanguageName = languageName, ShortName = shortName};
+            var localization = new Localization {LanguageName = languageName, TwoLetterISOLanguageName = shortName};
 
             foreach (var localizableControl in localizableControlWrappers)
             {
@@ -74,7 +81,6 @@ namespace JpegMetaRemover.Translation
 
             return localization;
         }
-
 
         public static List<Localization> LoadLocalizationFromFile(string languageFile)
         {
@@ -89,12 +95,12 @@ namespace JpegMetaRemover.Translation
             foreach (XmlNode languageNode in languageNodes)
             {
                 var languageName = GetAttributeSecure(languageNode, "name");
-                var shortLanguageName = GetAttributeSecure(languageNode, "shortname");
+                var twoLetterISOLanguageName = GetAttributeSecure(languageNode, "twoLetterISOLanguageName");
 
                 var localization = new Localization()
                     {
                         LanguageName = languageName,
-                        ShortName = shortLanguageName
+                        TwoLetterISOLanguageName = twoLetterISOLanguageName
                     };
 
                 localizations.Add(localization);

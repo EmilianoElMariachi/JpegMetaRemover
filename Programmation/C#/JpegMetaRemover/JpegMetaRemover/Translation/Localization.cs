@@ -16,12 +16,12 @@ namespace JpegMetaRemover.Translation
         {
             this.Elements = new Dictionary<string, string>();
             this.LanguageName = "";
-            this.ShortName = "";
+            this.TwoLetterISOLanguageName = "";
         }
 
         public string LanguageName { get; internal set; }
 
-        public string ShortName { get; internal set; }
+        public string TwoLetterISOLanguageName { get; internal set; }
 
         public Dictionary<string, string> Elements { get; private set; }
 
@@ -45,14 +45,9 @@ namespace JpegMetaRemover.Translation
             }
         }
 
-        public void ChangeUIThread()
-        {
-            Thread.CurrentThread.CurrentUICulture = new CultureInfo(this.ShortName);
-        }
-
         public void ChangeLanguage(IEnumerable<LocalizableControlWrapper> wrappedControls)
         {
-            ChangeUIThread();
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo(this.TwoLetterISOLanguageName);
 
             foreach (var controlWrapper in wrappedControls)
             {
