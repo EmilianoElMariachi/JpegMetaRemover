@@ -216,22 +216,22 @@
             var contentFiltered = "";
             var lines = contentTmp.split("\n");
 
-            for(var lineIndex = 1; lineIndex < lines.length - 1; lineIndex++){
+            for (var lineIndex = 1; lineIndex < lines.length - 1; lineIndex++) {
                 contentFiltered += "\n";
 
                 var line = lines[lineIndex];
 
 
                 var visibleCharReached = false;
-                for(var lineCharIndex = 0; lineCharIndex < line.length; lineCharIndex++){
+                for (var lineCharIndex = 0; lineCharIndex < line.length; lineCharIndex++) {
                     var char = line[lineCharIndex];
 
-                    if(!visibleCharReached && char !== " "){
+                    if (!visibleCharReached && char !== " ") {
                         visibleCharReached = true;
                     }
 
-                    if(visibleCharReached || lineCharIndex > 12){
-                        contentFiltered+= char;
+                    if (visibleCharReached || lineCharIndex > 12) {
+                        contentFiltered += char;
                     }
 
                 }
@@ -319,7 +319,7 @@
 
 <div class="titre">Code<input id="BtnRunExample" type="button" value="" onclick="runExample();"></div>
 
-<textarea id="content"></textarea>
+<textarea id="content" onkeyup="alert('d')"></textarea>
 
 <div class="titre">Sortie<input id="BtnClearLog" type="button" value="" onclick="clearOutput();"></div>
 <div id="outputNode">
@@ -336,6 +336,12 @@
         matchBrackets: true,
         continueComments: "Enter"
     });
+
+    editor.options.onKeyEvent = function (dummy, event) {
+        if (event.type === "keypress" && event.ctrlKey && event.keyCode == 13) {
+            runExample();
+        }
+    }
 
     loadExamplesList();
 
