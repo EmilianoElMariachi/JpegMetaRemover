@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="x-ua-compatible" content="IE=8">
+    <title>Welcome to Emiliano's Tutorials</title>
+
+    <style type="text/css">
+
+        body {
+            background: black;
+        }
+
+        #selectExerciseNode {
+            margin: auto;
+            text-align: center;
+        }
+
+        #selectExerciseNode td {
+            margin: auto;
+            color: #ffffff;
+        }
+
+        #selectExerciseNode .exerciseLabel {
+            text-align: right;
+        }
+
+        #selectExerciseNode .exerciseTitle {
+            font-weight: 900;
+
+            background: #ffffff;
+            color: #000000;
+        }
+
+        #comboExamplesNode {
+
+            font-size: 15;
+            font-weight: bold;
+        }
+
+        #content {
+            background: white;
+            border: 2px solid aqua;
+        }
+
+        #outputNode {
+            background: lightgray;
+            border: 2px solid yellow;
+            min-height: 50px;
+        }
+
+        .titre {
+            color: #ffffff;
+            margin: 10px 0px 5px 0px;
+            font-size: 20px;
+        }
+
+        .titre input {
+            border: 0;
+            width: 16px;
+            height: 16px;
+            margin-left: 10px;
+            vertical-align: middle
+        }
+
+        #BtnClearLog {
+            background: url('Resources/Clear.png');
+        }
+
+        #BtnRunExample {
+            background: url('Resources/Play.png');
+        }
+
+        .InfoMessage {
+            color: blue;
+        }
+
+        .WarningMessage {
+            color: orange;
+        }
+
+        .ErrorMessage {
+            color: red;
+        }
+
+        .AnswerMessage {
+            font-weight: bold;
+            color: green;
+        }
+
+    </style>
+
+    <link rel="stylesheet" href="lib/codemirror.css">
+
+    <style type="text/css"></style>
+    <script type="text/javascript" src="lib/codemirror.js"></script>
+    <script type="text/javascript" src="lib/mode/javascript.js"></script>
+
+    <script type="text/JavaScript" src="./Exos/Introduction.js"></script>
+    <script type="text/JavaScript" src="./Exos/LesVariables.js"></script>
+    <script type="text/JavaScript" src="./Exos/LeMotCléThis.js"></script>
+    <script type="text/JavaScript" src="./Exos/AffecterDesChamps.js"></script>
+    <script type="text/JavaScript" src="./Exos/LesClasses.js"></script>
+
+
+</head>
+
+<body>
+
+<script>
+
+    //TODO:
+    //Ajouter un topic sur la reflexion
+
+    var INITIAL_EXERCISE_INDEX = 1;
+
+    //
+    //var variableX = "Bonjour";
+    //variableX.Champ1 = "Hello";
+    //alert("variableX=" + variableX + "\nvariableX.Champ1=" + variableX.Champ1);
+    //
+    //var variableX = [5, 10];
+    //variableX.Champ1 = "Hello";
+    //alert("variableX=" + variableX + "\nvariableX.Champ1=" + variableX.Champ1);
+
+
+    function z() {
+
+        var methodeA
+        var ClassA = function (membreA) {
+            this.membreA = membreA;
+
+            methodeA = function (arg1) {
+
+                alert("Arg1 méthode A=" + arg1 + "\nMembre A=" + this.membreA);
+                this.membreA = arg1;
+            }
+        }
+    }
+
+    function exemple2() {
+
+
+        var classA1 = new ClassA("instance1");
+
+        alert(methodeA);
+        /*
+         var variable1 = {};
+         variable1.membreA = "coucou";
+
+
+         var classA1 = new ClassA("instance1");
+         var classA2 = new ClassA("instance2");
+
+
+         var variable2 = {};
+         classA1.methodeA.call(variable2,"TTTT");
+         alert(variable2.membreA);
+
+
+         classA1.methodeA();
+         */
+    }
+
+    function switchExample() {
+        if (comboExamplesNode.selectedIndex < 0) {
+            return;
+        }
+        var selectNode = comboExamplesNode.options[comboExamplesNode.selectedIndex];
+
+        var contentNode = document.getElementById("content");
+        editor.setValue(selectNode.content);
+
+        var categoryNode = document.getElementById("category");
+        categoryNode.innerHTML = selectNode.exercise.category;
+
+        clearOutput();
+    }
+
+    function runExample() {
+        if (comboExamplesNode.selectedIndex < 0) {
+            return;
+        }
+
+        var selectedExercise = comboExamplesNode.children[comboExamplesNode.selectedIndex].exercise;
+
+        try {
+            eval(editor.getValue());
+        }
+        catch (ex) {
+            outputError("Exception : " + ex.message);
+        }
+
+        try {
+            selectedExercise.answer();
+        } catch (ex) {
+
+        }
+
+    }
+
+    function loadExamplesList() {
+
+        for (var i = 0; i < EXERCISES.length; i++) {
+
+            var itemNode = document.createElement("option");
+
+            itemNode.appendChild(document.createTextNode(EXERCISES[i].name));
+
+            itemNode.exercise = EXERCISES[i];
+            comboExamplesNode.appendChild(itemNode);
+
+
+            var contentTmp = EXERCISES[i].content.toString();
+
+            var contentFiltered = "";
+            var lines = contentTmp.split("\n");
+
+            for(var lineIndex = 1; lineIndex < lines.length - 1; lineIndex++){
+                contentFiltered += "\n";
+
+                var line = lines[lineIndex];
+
+
+                var visibleCharReached = false;
+                for(var lineCharIndex = 0; lineCharIndex < line.length; lineCharIndex++){
+                    var char = line[lineCharIndex];
+
+                    if(!visibleCharReached && char !== " "){
+                        visibleCharReached = true;
+                    }
+
+                    if(visibleCharReached || lineCharIndex > 12){
+                        contentFiltered+= char;
+                    }
+
+                }
+            }
+
+            itemNode.content = contentFiltered;
+        }
+
+        comboExamplesNode.selectedIndex = INITIAL_EXERCISE_INDEX;
+
+        switchExample();
+    }
+
+    function outputError(message) {
+        output(message, "ErrorMessage")
+    }
+
+    function outputAnswer(message) {
+        output(message, "AnswerMessage")
+    }
+
+    function output(message, messageType) {
+        var lineSpanNode = document.createElement("span");
+
+        if (messageType) {
+            lineSpanNode.className = messageType;
+        } else {
+            lineSpanNode.className = "InfoMessage";
+        }
+
+        lineSpanNode.innerHTML = message;
+        outputNode.appendChild(lineSpanNode);
+        outputNode.appendChild(document.createElement("br"));
+    }
+
+    function clearOutput() {
+        while (outputNode.hasChildNodes()) {
+            outputNode.removeChild(outputNode.lastChild);
+        }
+    }
+
+    function selectPreviousExercise() {
+        if (comboExamplesNode.selectedIndex > 0) {
+            comboExamplesNode.selectedIndex--;
+            switchExample();
+        }
+    }
+
+    function selectNextExercise() {
+        if (comboExamplesNode.selectedIndex < comboExamplesNode.length - 1) {
+            comboExamplesNode.selectedIndex++;
+            switchExample();
+        }
+    }
+
+    document.onkeydown = function onKeyPressed() {
+        var keyCode = window.event.keyCode;
+        if (keyCode == 38) {//Up
+            selectPreviousExercise();
+        } else if (keyCode == 40) {//Down
+            selectNextExercise();
+        } else if (keyCode == 13) { //Enter
+            runExample();
+        } else if (keyCode == 46) { //touche 'Suppr'
+            clearOutput();
+        }
+    }
+
+</script>
+
+<a href="http://net.tutsplus.com/tutorials/javascript-ajax/fully-understanding-the-this-keyword/">fully-understanding-the-this-keyword</a>
+
+<br/> <br/>
+
+<table id="selectExerciseNode">
+    <tr>
+        <td class="exerciseLabel">Catégorie</td>
+        <td class="exerciseTitle" id="category"></td>
+    </tr>
+    <tr>
+        <td class="exerciseLabel">Tuto</td>
+        <td class="exerciseTitle"><select id="comboExamplesNode" onchange="switchExample();"></select></td>
+    </tr>
+</table>
+
+<div class="titre">Code<input id="BtnRunExample" type="button" value="" onclick="runExample();"></div>
+
+<textarea id="content"></textarea>
+
+<div class="titre">Sortie<input id="BtnClearLog" type="button" value="" onclick="clearOutput();"></div>
+<div id="outputNode">
+
+</div>
+
+
+<script type="text/javascript">
+    var jSSrcCodeNode = document.getElementById("content");
+
+
+    editor = CodeMirror.fromTextArea(jSSrcCodeNode, {
+        lineNumbers: true,
+        matchBrackets: true,
+        continueComments: "Enter"
+    });
+
+    loadExamplesList();
+
+</script>
+
+</body>
+
+</html>
