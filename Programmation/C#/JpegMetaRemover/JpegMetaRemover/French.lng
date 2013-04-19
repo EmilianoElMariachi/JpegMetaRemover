@@ -16,7 +16,24 @@
 	
 		<element id="_checkBoxOverride">Ecraser</element>
     <element id="_checkBoxIncludeSubdirectories">Sous-répertoire(s)</element>
-    
+
+
+    <element id="Please wait.">Merci de patienter.</element>
+    <element id="Specified path &quot;{0}&quot; doesn't exist.">Le chemin spécifié "{0}" n'existe pas.</element>
+    <element id="{0} metadata(s) {1} ({2})">{0} metadonnée(s) {1} ({2})</element>
+    <element id="{0} comment(s) {1}">{0} commentaire(s) {1}</element>
+    <element id="removed">supprimé(es)</element>
+    <element id="kept">conservé(es)</element>
+    <element id="found">trouvé(es)</element>
+    <element id="unknown">???</element>
+    <element id="File overriden.">Fichier écrasé</element>
+    <element id="File saved to &quot;{0}&quot;.">Fichier sauvegardé sous "{0}".</element>
+    <element id="No file written.">Aucun fichier modifié ni créé.</element>
+    <element id="Done.">Terminé.</element>
+    <element id="UNKNOWN ACTION">ACTION INCONNUE</element>
+    <element id="WARNING : ">WARNING : </element>
+    <element id="ERROR : ">ERREUR : </element>
+    <element id="No file to process.">Aucun fichier à traiter</element>
 
 
   </language>

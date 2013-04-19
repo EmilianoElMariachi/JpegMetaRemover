@@ -22,7 +22,8 @@ namespace JpegMetaRemover
         private const string REG_VAL_LANGUAGE = "lang";
 
         private List<LocalizableControlWrapper> LocalizableControls { get; set; }
-        private LocalizationCollection LoadedLocalizations { get; set; }
+
+        private readonly LocalizationManager LocalizationManager = new LocalizationManager();
 
         public FormMain()
         {
@@ -36,26 +37,22 @@ namespace JpegMetaRemover
         private void InitializeLanguages()
         {
 
-            LoadedLocalizations = new LocalizationCollection();
+            LocalizableControls = LocalizableControlWrapper.FetchFormLocalizableControls(this);
 
-            LocalizableControls = LocalizationManager.FetchFormLocalizableControls(this);
-
-            var defaultLocalization = LocalizationManager.CreateLocalizationFromLocalizableControls(this.LocalizableControls, "English", "en");
-
-            LoadedLocalizations.Add(defaultLocalization);
+            var defaultLocalization = LocalizationManager.LoadLocalizationFromLocalizableControls(this.LocalizableControls, "English", "en");
 
             var currentDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
             var languageFiles = Directory.GetFiles(currentDir, "*.lng");
 
-            LoadedLocalizations.AddRange(LocalizationManager.LoadLocalizationsFromFiles(languageFiles));
+            LocalizationManager.LoadLocalizationsFromFiles(languageFiles);
 
-            foreach (Localization localization in this.LoadedLocalizations)
+            foreach (Localization localization in LocalizationManager.LoadedLocalizations)
             {
                 var item = _languageToolStripMenuItem.DropDownItems.Add(localization.LanguageName);
 
                 item.Tag = localization;
-                item.Click += new EventHandler(item_Click);
+                item.Click += item_Click;
             }
 
                 
@@ -65,13 +62,13 @@ namespace JpegMetaRemover
             RegistryKey regKeyApp = null;
             try
             {
-                regKeyApp = Registry.LocalMachine.OpenSubKey(REG_KEY_APP);
+                regKeyApp = Registry.CurrentUser.OpenSubKey(REG_KEY_APP);
                 if (regKeyApp != null)
                 {
                     var regkeyTowLetterLang = regKeyApp.GetValue(REG_VAL_LANGUAGE) as string;
                     if (regkeyTowLetterLang != null)
                     {
-                        var localizationFound = this.LoadedLocalizations.FindLocalizationByTwoLetterLanguageName(regkeyTowLetterLang);
+                        var localizationFound = LocalizationManager.LoadedLocalizations.FindLocalizationByTwoLetterLanguageName(regkeyTowLetterLang);
                         if (localizationFound != null)
                         { localizationToApply = localizationFound; }
                     }
@@ -84,7 +81,7 @@ namespace JpegMetaRemover
             if(localizationToApply == null)
             {
                 var currentPCTowLetterLang = Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName;
-                var localizationFound = this.LoadedLocalizations.FindLocalizationByTwoLetterLanguageName(currentPCTowLetterLang);
+                var localizationFound = LocalizationManager.LoadedLocalizations.FindLocalizationByTwoLetterLanguageName(currentPCTowLetterLang);
                 if (localizationFound != null)
                 { localizationToApply = localizationFound; }
             }
@@ -106,15 +103,21 @@ namespace JpegMetaRemover
                     languageMenuItem.Checked = (localization == languageMenuItem.Tag as Localization);
                 }
 
-                localization.ChangeLanguage(this.LocalizableControls);
+                localization.SetActiveLocalization(this.LocalizableControls);
 
                 //Sauvegarde la localization séléctionnée dans la base de registre
                 RegistryKey regKeyApp = null;
                 try
                 {
-                    regKeyApp = Registry.LocalMachine.CreateSubKey(REG_KEY_APP);
+                    regKeyApp = Registry.CurrentUser.CreateSubKey(REG_KEY_APP);
                     if (regKeyApp != null)
-                    { regKeyApp.SetValue(REG_VAL_LANGUAGE, localization.TwoLetterISOLanguageName); }
+                    {
+                        regKeyApp.SetValue(REG_VAL_LANGUAGE, localization.TwoLetterISOLanguageName);
+                    }
+                }
+                catch(Exception ex)
+                {
+                    LogException(ex);
                 }
                 finally
                 { MemHelper.DisposeSecure(regKeyApp); }
@@ -130,7 +133,6 @@ namespace JpegMetaRemover
                 ApplyLocalization(clickedMenuItem.Tag as Localization);
             }
         }
-
 
         public delegate void DelegateLogAsync(string message, MsgType msgType);
         /// <summary>
@@ -156,7 +158,7 @@ namespace JpegMetaRemover
             {
                 case MsgType.ERROR:
                     {
-                        message = "ERROR : " + message;
+                        message = LocalizationManager.ActiveLocalization.Translate("ERROR : ") + message;
                         msgColor = Color.Red;
                         break;
                     }
@@ -168,7 +170,7 @@ namespace JpegMetaRemover
                     }
                 case MsgType.WARNING:
                     {
-                        message = "WARNING : " + message;
+                        message = LocalizationManager.ActiveLocalization.Translate("WARNING : ") + message;
                         msgColor = Color.Orange;
                         break;
                     }
@@ -246,7 +248,7 @@ namespace JpegMetaRemover
         private void LogActionAboutToBeDone(string actionName)
         {
             if (actionName == null)
-            { actionName = "UNKNOWN ACTION"; }
+            { actionName = LocalizationManager.ActiveLocalization.Translate("UNKNOWN ACTION"); }
 
             this.Log(actionName, MsgType.ACTION_START);
         }
@@ -256,7 +258,7 @@ namespace JpegMetaRemover
         /// </summary>
         private void LogActionDoneSuccessfully()
         {
-            this.Log("Done." + Environment.NewLine, MsgType.ACTION_END);
+            this.Log(LocalizationManager.ActiveLocalization.Translate("Done.") + Environment.NewLine, MsgType.ACTION_END);
         }
 
         private string ActionTypeToString(ActionType actionType, bool writeOutputFile)
@@ -266,17 +268,17 @@ namespace JpegMetaRemover
                 switch (actionType)
                 {
                     case ActionType.KEEP:
-                        return "kept";
+                        return LocalizationManager.ActiveLocalization.Translate("kept");
                     case ActionType.REMOVE:
-                        return "removed";
+                        return LocalizationManager.ActiveLocalization.Translate("removed");
                     default:
-                        return "unknown";
+                        return LocalizationManager.ActiveLocalization.Translate("unknown");
                 }
 
             }
             else
             {
-                return "found";
+                return LocalizationManager.ActiveLocalization.Translate("found");
             }
         }
 
@@ -301,7 +303,7 @@ namespace JpegMetaRemover
         {
             if (_backgroundWorkerPurify.IsBusy)
             {
-                LogWarning("Please wait.");
+                LogWarning(this.LocalizationManager.ActiveLocalization.Translate("Please wait."));
             }
             else
             {
@@ -351,11 +353,17 @@ namespace JpegMetaRemover
             }
             else
             {
-                throw new Exception("Specified path \"" + inputPath + "\" doesn't exist");
+                var exMessage = LocalizationManager.ActiveLocalization.Translate("Specified path \"{0}\" doesn't exist.", inputPath);
+                throw new Exception(exMessage);
             }
 
             if(_backgroundWorkerPurify.CancellationPending)
             { return; }
+
+            if (jpegFilesToPurify.Count <= 0)
+            {
+                LogWarning(LocalizationManager.ActiveLocalization.Translate("No file to process."));
+            }
 
             var maxProgression = jpegFilesToPurify.Count * 2;
             var currentProgression = 0.0;
@@ -380,8 +388,9 @@ namespace JpegMetaRemover
 
                     jpgExifRemover.Dispose();
 
-                    LogInfo(purificationResult.NbMetadatasEncountered + " metadata(s) " + ActionTypeToString(purificationResult.ActionPerformedOnMetadatas, writeOutputFile) + " (" + purificationResult.MetaTypesEncountered + ")");
-                    LogInfo(purificationResult.NbCommentsEncountered + " comment(s) " + ActionTypeToString(purificationResult.ActionPerformedOnComments, writeOutputFile));
+                    LogInfo(LocalizationManager.ActiveLocalization.Translate("{0} metadata(s) {1} ({2})", purificationResult.NbMetadatasEncountered.ToString(), ActionTypeToString(purificationResult.ActionPerformedOnMetadatas, writeOutputFile), purificationResult.MetaTypesEncountered.ToString()));
+                    LogInfo(LocalizationManager.ActiveLocalization.Translate("{0} comment(s) {1}", purificationResult.NbCommentsEncountered.ToString(), ActionTypeToString(purificationResult.ActionPerformedOnComments, writeOutputFile)));
+
 
                     if (writeOutputFile && (purificationResult.NbMetadatasEncountered > 0 || purificationResult.NbCommentsEncountered > 0))
                     {
@@ -389,19 +398,19 @@ namespace JpegMetaRemover
                         {
                             outputFileStream = new FileStream(inputJpegFilePath, FileMode.Create);
                             outputMemoryStream.WriteTo(outputFileStream);
-                            LogInfo("File overriden.");
+                            LogInfo(LocalizationManager.ActiveLocalization.Translate("File overriden."));
                         }
                         else
                         {
                             var outputFilePath = GetFreeFilePath(inputJpegFilePath);
                             outputFileStream = new FileStream(outputFilePath, FileMode.Create);
                             outputMemoryStream.WriteTo(outputFileStream);
-                            LogInfo("File saved to " + Path.GetFileName(outputFilePath) + ".");
+                            LogInfo(LocalizationManager.ActiveLocalization.Translate("File saved to \"{0}\".", Path.GetFileName(outputFilePath)));
                         }
                     }
                     else
                     {
-                        LogInfo("No file written.");
+                        LogInfo(LocalizationManager.ActiveLocalization.Translate("No file written."));
                     }
                     _backgroundWorkerPurify.ReportProgress((int)(++currentProgression / maxProgression * 100.0));
 
@@ -443,6 +452,35 @@ namespace JpegMetaRemover
                 _backgroundWorkerPurify.CancelAsync();
             }
         }
+
+        private void OnDragEnter(object sender, DragEventArgs e)
+        {
+            try
+            {
+                if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                {
+                    e.Effect = DragDropEffects.Copy;
+                }
+            }
+            catch
+            {
+            }
+        }
+
+        private void FormMain_DragDrop(object sender, DragEventArgs e)
+        {
+            try
+            {
+                var files = e.Data.GetData(DataFormats.FileDrop) as string[];
+                if (files.Length >= 0)
+                {
+                    _textBoxInputPath.Text = files[0];
+                }
+            }
+            catch
+            {}
+        }
+
 
 
     }

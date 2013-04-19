@@ -75,7 +75,7 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this._richTextBoxLog.BackColor = System.Drawing.Color.White;
             this._richTextBoxLog.Location = new System.Drawing.Point(0, 268);
-            this._richTextBoxLog.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this._richTextBoxLog.Margin = new System.Windows.Forms.Padding(4);
             this._richTextBoxLog.Name = "_richTextBoxLog";
             this._richTextBoxLog.ReadOnly = true;
             this._richTextBoxLog.Size = new System.Drawing.Size(721, 107);
@@ -177,7 +177,7 @@
             this._panelContent.Controls.Add(this.tableLayoutPanel2);
             this._panelContent.Controls.Add(this.tableLayoutPanel3);
             this._panelContent.Location = new System.Drawing.Point(0, 33);
-            this._panelContent.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this._panelContent.Margin = new System.Windows.Forms.Padding(4);
             this._panelContent.Name = "_panelContent";
             this._panelContent.Size = new System.Drawing.Size(723, 228);
             this._panelContent.TabIndex = 7;
@@ -195,7 +195,7 @@
             this.tableLayoutPanel2.Controls.Add(this._progressBar, 0, 2);
             this.tableLayoutPanel2.Controls.Add(this._tableLayoutPanelInputPath, 0, 0);
             this.tableLayoutPanel2.Location = new System.Drawing.Point(4, 76);
-            this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(4);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 3;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -235,7 +235,7 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.tableLayoutPanel2.SetColumnSpan(this._progressBar, 2);
             this._progressBar.Location = new System.Drawing.Point(4, 110);
-            this._progressBar.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this._progressBar.Margin = new System.Windows.Forms.Padding(4);
             this._progressBar.Name = "_progressBar";
             this._progressBar.Size = new System.Drawing.Size(707, 26);
             this._progressBar.TabIndex = 7;
@@ -250,7 +250,7 @@
             this._tableLayoutPanelInputPath.Controls.Add(this._textBoxInputPath, 1, 0);
             this._tableLayoutPanelInputPath.Dock = System.Windows.Forms.DockStyle.Fill;
             this._tableLayoutPanelInputPath.Location = new System.Drawing.Point(4, 4);
-            this._tableLayoutPanelInputPath.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this._tableLayoutPanelInputPath.Margin = new System.Windows.Forms.Padding(4);
             this._tableLayoutPanelInputPath.Name = "_tableLayoutPanelInputPath";
             this._tableLayoutPanelInputPath.RowCount = 1;
             this._tableLayoutPanelInputPath.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -270,9 +270,10 @@
             // 
             // _textBoxInputPath
             // 
+            this._textBoxInputPath.AllowDrop = true;
             this._textBoxInputPath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this._textBoxInputPath.Location = new System.Drawing.Point(99, 12);
-            this._textBoxInputPath.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this._textBoxInputPath.Margin = new System.Windows.Forms.Padding(4);
             this._textBoxInputPath.Name = "_textBoxInputPath";
             this._textBoxInputPath.Size = new System.Drawing.Size(604, 22);
             this._textBoxInputPath.TabIndex = 9;
@@ -287,7 +288,7 @@
             this.tableLayoutPanel3.Controls.Add(this._groupBoxOutputParams, 1, 0);
             this.tableLayoutPanel3.Controls.Add(this._groupBoxInputParams, 0, 0);
             this.tableLayoutPanel3.Location = new System.Drawing.Point(4, 10);
-            this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(4);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 1;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -300,9 +301,9 @@
             this._groupBoxOutputParams.Controls.Add(this.tableLayoutPanel1);
             this._groupBoxOutputParams.Dock = System.Windows.Forms.DockStyle.Fill;
             this._groupBoxOutputParams.Location = new System.Drawing.Point(316, 4);
-            this._groupBoxOutputParams.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this._groupBoxOutputParams.Margin = new System.Windows.Forms.Padding(4);
             this._groupBoxOutputParams.Name = "_groupBoxOutputParams";
-            this._groupBoxOutputParams.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this._groupBoxOutputParams.Padding = new System.Windows.Forms.Padding(4);
             this._groupBoxOutputParams.Size = new System.Drawing.Size(397, 58);
             this._groupBoxOutputParams.TabIndex = 7;
             this._groupBoxOutputParams.TabStop = false;
@@ -318,7 +319,7 @@
             this.tableLayoutPanel1.Controls.Add(this._checkBoxIncludeSubdirectories, 0, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(4, 19);
-            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(4);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -329,7 +330,7 @@
             // 
             this._checkBoxOverride.AutoSize = true;
             this._checkBoxOverride.Location = new System.Drawing.Point(137, 4);
-            this._checkBoxOverride.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this._checkBoxOverride.Margin = new System.Windows.Forms.Padding(4);
             this._checkBoxOverride.Name = "_checkBoxOverride";
             this._checkBoxOverride.Size = new System.Drawing.Size(85, 21);
             this._checkBoxOverride.TabIndex = 3;
@@ -340,7 +341,7 @@
             // 
             this._checkBoxIncludeSubdirectories.AutoSize = true;
             this._checkBoxIncludeSubdirectories.Location = new System.Drawing.Point(4, 4);
-            this._checkBoxIncludeSubdirectories.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this._checkBoxIncludeSubdirectories.Margin = new System.Windows.Forms.Padding(4);
             this._checkBoxIncludeSubdirectories.Name = "_checkBoxIncludeSubdirectories";
             this._checkBoxIncludeSubdirectories.Size = new System.Drawing.Size(125, 21);
             this._checkBoxIncludeSubdirectories.TabIndex = 3;
@@ -353,9 +354,9 @@
             this._groupBoxInputParams.Controls.Add(this._tableLayoutPanelPurifyParams);
             this._groupBoxInputParams.Dock = System.Windows.Forms.DockStyle.Fill;
             this._groupBoxInputParams.Location = new System.Drawing.Point(4, 4);
-            this._groupBoxInputParams.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this._groupBoxInputParams.Margin = new System.Windows.Forms.Padding(4);
             this._groupBoxInputParams.Name = "_groupBoxInputParams";
-            this._groupBoxInputParams.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this._groupBoxInputParams.Padding = new System.Windows.Forms.Padding(4);
             this._groupBoxInputParams.Size = new System.Drawing.Size(304, 58);
             this._groupBoxInputParams.TabIndex = 6;
             this._groupBoxInputParams.TabStop = false;
@@ -371,7 +372,7 @@
             this._tableLayoutPanelPurifyParams.Controls.Add(this._checkBoxRemoveComments, 0, 0);
             this._tableLayoutPanelPurifyParams.Dock = System.Windows.Forms.DockStyle.Fill;
             this._tableLayoutPanelPurifyParams.Location = new System.Drawing.Point(4, 19);
-            this._tableLayoutPanelPurifyParams.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this._tableLayoutPanelPurifyParams.Margin = new System.Windows.Forms.Padding(4);
             this._tableLayoutPanelPurifyParams.Name = "_tableLayoutPanelPurifyParams";
             this._tableLayoutPanelPurifyParams.RowCount = 1;
             this._tableLayoutPanelPurifyParams.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -382,7 +383,7 @@
             // 
             this._checkBoxRemoveMetadatas.AutoSize = true;
             this._checkBoxRemoveMetadatas.Location = new System.Drawing.Point(151, 4);
-            this._checkBoxRemoveMetadatas.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this._checkBoxRemoveMetadatas.Margin = new System.Windows.Forms.Padding(4);
             this._checkBoxRemoveMetadatas.Name = "_checkBoxRemoveMetadatas";
             this._checkBoxRemoveMetadatas.Size = new System.Drawing.Size(141, 21);
             this._checkBoxRemoveMetadatas.TabIndex = 3;
@@ -393,7 +394,7 @@
             // 
             this._checkBoxRemoveComments.AutoSize = true;
             this._checkBoxRemoveComments.Location = new System.Drawing.Point(4, 4);
-            this._checkBoxRemoveComments.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this._checkBoxRemoveComments.Margin = new System.Windows.Forms.Padding(4);
             this._checkBoxRemoveComments.Name = "_checkBoxRemoveComments";
             this._checkBoxRemoveComments.Size = new System.Drawing.Size(139, 21);
             this._checkBoxRemoveComments.TabIndex = 3;
@@ -402,6 +403,7 @@
             // 
             // FormMain
             // 
+            this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(723, 404);
@@ -410,9 +412,11 @@
             this.Controls.Add(this._statusStrip);
             this.Controls.Add(this._menuStrip);
             this.MainMenuStrip = this._menuStrip;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FormMain";
             this.Text = "Jpeg Metadatas Remover";
+            this.DragDrop += new System.Windows.Forms.DragEventHandler(this.FormMain_DragDrop);
+            this.DragEnter += new System.Windows.Forms.DragEventHandler(this.OnDragEnter);
             this._menuStrip.ResumeLayout(false);
             this._menuStrip.PerformLayout();
             this._panelContent.ResumeLayout(false);

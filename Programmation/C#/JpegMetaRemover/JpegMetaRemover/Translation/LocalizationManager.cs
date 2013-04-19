@@ -7,82 +7,60 @@ using JpegMetaRemover.Log;
 
 namespace JpegMetaRemover.Translation
 {
-    internal static class LocalizationManager 
+    internal class LocalizationManager 
     {
+        private Localization _activeLocalization;
 
-        public static List<LocalizableControlWrapper> FetchFormLocalizableControls(Form form)
+
+        /// <summary>
+        /// La liste de localizations chargées
+        /// </summary>
+        public LocalizationCollection LoadedLocalizations { get; private set; }
+
+        /// <summary>
+        /// La localization active
+        /// </summary>
+        public Localization ActiveLocalization
         {
-            var controlWrappers = new List<LocalizableControlWrapper>();
-            FetchLocalizableControls(form.Controls, controlWrappers);
-            return controlWrappers;
-        }
-
-        private static void FetchLocalizableControls(IEnumerable controls, List<LocalizableControlWrapper> localizableControlWrappers)
-        {
-            foreach (var rawControl in controls)
-            {
-                if (rawControl is MenuStrip)
-                {
-                    var control = (MenuStrip)rawControl;
-                    localizableControlWrappers.Add(new LocalizableControlWrapper()
-                    {
-                        Name = control.Name,
-                        WrappedControl = control
-                    });
-                    FetchLocalizableControls(control.Items, localizableControlWrappers);
-                }
-                else if (rawControl is Control)
-                {
-                    var control = (Control)rawControl;
-                    localizableControlWrappers.Add(new LocalizableControlWrapper()
-                    {
-                        Name = control.Name,
-                        WrappedControl = control
-                    });
-                    FetchLocalizableControls(control.Controls, localizableControlWrappers);
-                }
-                else if (rawControl is ToolStripItem)
-                {
-                    var control = (ToolStripItem)rawControl;
-                    localizableControlWrappers.Add(new LocalizableControlWrapper()
-                    {
-                        Name = control.Name,
-                        WrappedControl = control
-                    });
-
-                    var dropDown = control as ToolStripDropDownItem;
-                    if (dropDown != null)
-                    {
-                        FetchLocalizableControls(dropDown.DropDownItems, localizableControlWrappers);
-                    }
-                }
-                else
-                {
-                    Logger.LogError(typeof(LocalizationManager), "Unsupported element of type \"" + rawControl.GetType().Name + "\" found for localization");
-                }
-            }
+            get { return _activeLocalization; }
+            internal set { _activeLocalization = value; }
         }
 
         /// <summary>
-        /// Permet de créer une localization à partir d'une liste de controls wrappés
+        /// Constructeur
+        /// </summary>
+        public LocalizationManager()
+        {
+            LoadedLocalizations = new LocalizationCollection();
+        }
+
+        /// <summary>
+        /// Permet de charger une localization à partir d'une liste de controls wrappés et ajoute
+        /// la localization à la liste 
         /// </summary>
         /// <param name="localizableControlWrappers"></param>
         /// <param name="languageName"></param>
         /// <param name="shortName"></param>
         /// <returns></returns>
-        public static Localization CreateLocalizationFromLocalizableControls(List<LocalizableControlWrapper> localizableControlWrappers, string languageName, string shortName)
+        public Localization LoadLocalizationFromLocalizableControls(List<LocalizableControlWrapper> localizableControlWrappers, string languageName, string shortName)
         {
-            var localization = new Localization {LanguageName = languageName, TwoLetterISOLanguageName = shortName};
+            var localization = new Localization(this) {LanguageName = languageName, TwoLetterISOLanguageName = shortName};
 
             foreach (var localizableControl in localizableControlWrappers)
             {
                 localization.AddTranslatedElementIfKeyNotNull(localizableControl.Name, localizableControl.Text);  
             }
+            
+            this.LoadedLocalizations.Add(localization);
 
             return localization;
         }
 
-        public static List<Localization> LoadLocalizationFromFile(string languageFile)
+        /// <summary>
+        /// Permet de charger un fichier de localization et ajoute les localization à la liste des localizations chargées
+        /// </summary>
+        /// <param name="languageFile"></param>
+        public List<Localization> LoadLocalizationsFromFile(string languageFile)
         {
             var localizations = new List<Localization>();
 
@@ -97,7 +75,7 @@ namespace JpegMetaRemover.Translation
                 var languageName = GetAttributeSecure(languageNode, "name");
                 var twoLetterISOLanguageName = GetAttributeSecure(languageNode, "twoLetterISOLanguageName");
 
-                var localization = new Localization()
+                var localization = new Localization(this)
                     {
                         LanguageName = languageName,
                         TwoLetterISOLanguageName = twoLetterISOLanguageName
@@ -112,20 +90,40 @@ namespace JpegMetaRemover.Translation
                     var id = GetAttributeSecure(elementNode, "id");
                     if (id == "")
                     {
-                        Logger.LogWarning(typeof(LocalizationManager), "Empty id found in \"" + languageFile + "\"");
+                        Logger.LogWarning(typeof (LocalizationManager), "Empty id found in \"" + languageFile + "\"");
                     }
                     else
                     {
-                        try
+                        if (localization.Elements.ContainsKey(id))
+                        {
+                            Logger.LogWarning(typeof (LocalizationManager),
+                                              "Duplicate id \"" + id + "\" found in \"" + languageFile + "\"");
+                        }
+                        else
                         {
                             localization.Elements.Add(id, elementNode.InnerText);
                         }
-                        catch
-                        {
-                            Logger.LogWarning(typeof(LocalizationManager), "Duplicate id found in \"" + languageFile + "\"");
-                        }
                     }
                 }
+            }
+
+            LoadedLocalizations.AddRange(localizations);
+
+            return localizations;
+        }
+
+        /// <summary>
+        /// Permet de charger un ensemble de localization à partir de la liste des fichiers fournis
+        /// </summary>
+        /// <param name="languageFiles"></param>
+        /// <returns></returns>
+        public List<Localization> LoadLocalizationsFromFiles(string[] languageFiles)
+        {
+            var localizations = new List<Localization>();
+
+            foreach (var languageFilePath in languageFiles)
+            {
+                localizations.AddRange(this.LoadLocalizationsFromFile(languageFilePath));
             }
 
             return localizations;
@@ -145,16 +143,6 @@ namespace JpegMetaRemover.Translation
             return "";
         }
 
-        public static List<Localization> LoadLocalizationsFromFiles(string[] languageFiles)
-        {
-            var localizations = new List<Localization>();
 
-            foreach (var languageFilePath in languageFiles)
-            {
-                localizations.AddRange(LocalizationManager.LoadLocalizationFromFile(languageFilePath));
-            }
-
-            return localizations;
-        }
     }
 }

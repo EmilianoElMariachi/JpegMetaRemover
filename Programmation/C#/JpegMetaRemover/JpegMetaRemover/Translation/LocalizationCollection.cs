@@ -8,6 +8,7 @@ namespace JpegMetaRemover.Translation
 {
     internal class LocalizationCollection : ObservableCollection<Localization>
     {
+
         public Localization FindLocalizationByTwoLetterLanguageName(string twoLetter)
         {
             Localization localizationFound = null;

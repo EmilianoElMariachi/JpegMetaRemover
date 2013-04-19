@@ -11,9 +11,11 @@ namespace JpegMetaRemover.Translation
 {
     internal class Localization
     {
+        public LocalizationManager LocalizationManager { get; private set; }
 
-        public Localization()
+        public Localization(LocalizationManager localizationManager)
         {
+            LocalizationManager = localizationManager;
             this.Elements = new Dictionary<string, string>();
             this.LanguageName = "";
             this.TwoLetterISOLanguageName = "";
@@ -45,7 +47,37 @@ namespace JpegMetaRemover.Translation
             }
         }
 
-        public void ChangeLanguage(IEnumerable<LocalizableControlWrapper> wrappedControls)
+        /// <summary>
+        /// Permet de traduire la clé.
+        /// Si aucune traduction, la clé est retournée
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="formatArgs"></param>
+        /// <returns></returns>
+        public string Translate(string key, params string[] formatArgs)
+        {
+            var translation = "";
+            if (this.Elements.ContainsKey(key))
+            {
+                translation = this.Elements[key];
+            }
+            else
+            {
+                translation = key;
+            }
+
+            if (formatArgs != null && formatArgs.Length > 0)
+            {
+                try
+                { translation = string.Format(translation, formatArgs); }
+                catch
+                { }
+            }
+
+            return translation;
+        }
+
+        public void SetActiveLocalization(IEnumerable<LocalizableControlWrapper> wrappedControls)
         {
             Thread.CurrentThread.CurrentUICulture = new CultureInfo(this.TwoLetterISOLanguageName);
 
@@ -58,6 +90,8 @@ namespace JpegMetaRemover.Translation
                     controlWrapper.Text = elementValueSecure;
                 }
             }
+
+            this.LocalizationManager.ActiveLocalization = this;
         }
 
     }
