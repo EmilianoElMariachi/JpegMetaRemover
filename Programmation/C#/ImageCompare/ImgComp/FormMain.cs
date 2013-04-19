@@ -259,7 +259,8 @@ namespace ImgComp
                     var comparedImagePath = _textBoxComparedImage.Text;
                     var pixelColorTolerance = GetPixelColorTolerance();
                     var pourcentageOfAcceptablePixels = GetPourcentageOfAcceptablePixels();
-                    _backgroundWorkerCompareImages.RunWorkerAsync(new object[] { referenceImagePath, comparedImagePath, pixelColorTolerance, pourcentageOfAcceptablePixels });
+                    var ignoreTransparentPixels = _checkBoxIgnoreTransparentPixels.Checked;
+                    _backgroundWorkerCompareImages.RunWorkerAsync(new object[] { referenceImagePath, comparedImagePath, pixelColorTolerance, pourcentageOfAcceptablePixels, ignoreTransparentPixels });
                 }
                 catch (Exception ex)
                 {
@@ -284,6 +285,7 @@ namespace ImgComp
                 var comparedImagePath = (string)args[1];
                 var pixelColorTolerance = (double)args[2];
                 var pourcentageOfAcceptablePixels = (double)args[3];
+                var ignoreTransparentPixels = (bool)args[4];
 
                 referenceImage = Image.FromFile(referenceImagePath) as Bitmap;
                 comparedImage = Image.FromFile(comparedImagePath) as Bitmap;
@@ -293,7 +295,7 @@ namespace ImgComp
 
                 var imageComparer = new ImageComparer((Bitmap)referenceImage.Clone(), (Bitmap)comparedImage.Clone());
 
-                e.Result = imageComparer.Compare(pixelColorTolerance, pourcentageOfAcceptablePixels);
+                e.Result = imageComparer.Compare(pixelColorTolerance, pourcentageOfAcceptablePixels, ignoreTransparentPixels);
             }
             catch (Exception ex)
             {
@@ -331,10 +333,12 @@ namespace ImgComp
                 if (imageComparisonResult.IsImageAccepted)
                 {
                     LogInfo("Image accepted " + percentageResult);
+                    LogInfo("Mimi is happy ;-)");
                 }
                 else
                 {
                     LogWarning("Image rejected " + percentageResult);
+                    LogWarning("Mimi is NOT happy ;-(");
                 }
 
                 LogInfo("Best match at : " + imageComparisonResult.BestMatchOffsetPoint);

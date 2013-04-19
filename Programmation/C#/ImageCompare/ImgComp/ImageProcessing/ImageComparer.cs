@@ -14,7 +14,7 @@ namespace ImgComp.ImageProcessing
             ComparedImage = comparedBitmap;
         }
 
-        public ImageComparisonResult Compare(double maxAcceptableColorDelta, double minPourcentageOfAcceptedPixels)
+        public ImageComparisonResult Compare(double maxAcceptableColorDelta, double minPourcentageOfAcceptedPixels, bool ignoreTransparentPixels)
         {
 
             var xVariance = Math.Abs(ComparedImage.Width - ReferenceImage.Width);
@@ -28,7 +28,7 @@ namespace ImgComp.ImageProcessing
                     SpecifiedMinPourcentageOfAcceptedPixels = minPourcentageOfAcceptedPixels,
                     ComparedImage = (Bitmap)this.ComparedImage.Clone(),
                     ReferenceImage = (Bitmap)ReferenceImage.Clone(),
-                    NumberOfPossiblePositions = Math.Max((this.ComparedImage.Width - this.ReferenceImage.Width) * (this.ComparedImage.Height - this.ReferenceImage.Height),0)
+                    NumberOfPossiblePositions = Math.Max((this.ComparedImage.Width - this.ReferenceImage.Width) * (this.ComparedImage.Height - this.ReferenceImage.Height), 0)
                 };
 
             for (var startX = 0; startX <= xVariance; startX++)
@@ -39,7 +39,7 @@ namespace ImgComp.ImageProcessing
                     double pourcentageOfAcceptedPixels;
                     Bitmap resultImage;
 
-                    CompareImagesStartingAt(ReferenceImage, ComparedImage, startPoint, maxAcceptableColorDelta, out pourcentageOfAcceptedPixels, out resultImage);
+                    CompareImagesStartingAt(ReferenceImage, ComparedImage, startPoint, maxAcceptableColorDelta, ignoreTransparentPixels, out pourcentageOfAcceptedPixels, out resultImage);
 
                     if (pourcentageOfAcceptedPixels >= bestComparisonResult.PourcentageOfAcceptedPixelsAtBestMatchOffset)
                     {
@@ -70,7 +70,7 @@ namespace ImgComp.ImageProcessing
         /// <param name="startOffetInComparedImage"></param>
         /// <param name="colorTolerance"></param>
         /// <returns></returns>
-        private static void CompareImagesStartingAt(Bitmap refImage, Bitmap comparedImage, Point startOffetInComparedImage, double colorTolerance, out double pourcentageOfAcceptedPixels, out Bitmap resultImage)
+        private static void CompareImagesStartingAt(Bitmap refImage, Bitmap comparedImage, Point startOffetInComparedImage, double colorTolerance, bool ignoreTransparentPixels, out double pourcentageOfAcceptedPixels, out Bitmap resultImage)
         {
             var acceptedPixels = 0;
 
@@ -79,6 +79,7 @@ namespace ImgComp.ImageProcessing
 
             resultImage = new Bitmap(numberOfPossibleWidth, numberOfPossibleHeight);
 
+            var numOfRefPixelsIgnored = 0;
 
             for (var x = 0; x < numberOfPossibleWidth; x++)
             {
@@ -87,6 +88,12 @@ namespace ImgComp.ImageProcessing
                 {
                     var refImagePixelColor = refImage.GetPixel(x, y);
                     var cmpImagePixelColor = comparedImage.GetPixel(x + startOffetInComparedImage.X, y + startOffetInComparedImage.Y);
+
+                    if (ignoreTransparentPixels && refImagePixelColor.A < byte.MaxValue)
+                    {
+                        numOfRefPixelsIgnored++;
+                        continue;
+                    }
 
                     if (IsPixelColorDeltaAcceptable(refImagePixelColor, cmpImagePixelColor, colorTolerance))
                     {
@@ -100,7 +107,7 @@ namespace ImgComp.ImageProcessing
                 }
             }
 
-            var numPixelsRefImage = refImage.Width * refImage.Height;
+            var numPixelsRefImage = (refImage.Width * refImage.Height) - numOfRefPixelsIgnored;
             pourcentageOfAcceptedPixels = (double)acceptedPixels / (double)numPixelsRefImage;
 
         }
