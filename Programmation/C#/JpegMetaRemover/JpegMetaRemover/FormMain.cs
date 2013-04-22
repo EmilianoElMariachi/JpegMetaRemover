@@ -401,7 +401,7 @@ namespace JpegMetaRemover
 
                     jpgExifRemover.Dispose();
 
-                    LogInfo(LocalizationManager.ActiveLocalization.Translate("{0} metadata(s) {1} ({2})", purificationResult.NbMetadatasEncountered.ToString(), ActionTypeToString(purificationResult.ActionPerformedOnMetadatas, writeOutputFile), purificationResult.MetaTypesEncountered.ToString()));
+                    LogInfo(LocalizationManager.ActiveLocalization.Translate("{0} metadata(s) {1} ({2})", purificationResult.NbMetadatasEncountered.ToString(), ActionTypeToString(purificationResult.MetaTypesToRemove, writeOutputFile), purificationResult.MetaTypesEncountered.ToString()));
                     LogInfo(LocalizationManager.ActiveLocalization.Translate("{0} comment(s) {1}", purificationResult.NbCommentsEncountered.ToString(), ActionTypeToString(purificationResult.ActionPerformedOnComments, writeOutputFile)));
 
 
@@ -494,7 +494,66 @@ namespace JpegMetaRemover
             { }
         }
 
+        private void _selectFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            BrowseImageFile();
+        }
 
+        private void BrowseImageFile()
+        {
+            try
+            {
+                var openFileDialog = new OpenFileDialog
+                {
+                    Title = LocalizationManager.ActiveLocalization.Translate("Select an image"),
+                    Filter = "Jpeg file (*.jpg)|*.jpg;*.jpeg| All files (*.*)|*.*"
+                };
+
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    _textBoxInputPath.Text = openFileDialog.FileName;
+                }
+            }
+            catch
+            {
+
+            }
+        }
+
+        private void _selectDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            BrowseDirectory();
+        }
+
+        private void BrowseDirectory()
+        {
+            try
+            {
+                var folderBrowserDialog = new FolderBrowserDialog();
+                if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
+                {
+                    _textBoxInputPath.Text = folderBrowserDialog.SelectedPath;
+                }
+            }
+            catch
+            {
+            }
+        }
+
+        private void _buttonBrowseImageFile_Click(object sender, EventArgs e)
+        {
+            BrowseImageFile();
+        }
+
+        private void _settingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var formSettings = new FormSettings();
+
+            if (formSettings.ShowDialog() == DialogResult.OK)
+            {
+                formSettings.GetJpegMetaTypesToRemove();
+            }
+        }
 
     }
 }

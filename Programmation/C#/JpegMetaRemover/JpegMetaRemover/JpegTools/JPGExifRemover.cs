@@ -119,7 +119,7 @@ namespace JpegMetaRemover
             outStream.WriteByte(marker);
         }
 
-        public PurificationResult Purify(ActionType metadatasAction, ActionType commentsAction, Stream outStream)
+        public PurificationResult Purify(JpegMetaTypes metadatasTypesToRemove, ActionType commentsAction, Stream outStream)
         {
 
             var jpegMetaTypes = (JpegMetaTypes[])Enum.GetValues(typeof(JpegMetaTypes));
@@ -130,7 +130,6 @@ namespace JpegMetaRemover
             if (marker != 0xD8) //SOI : Start Of Image 
             { throw new Exception("Invalid file type, SOI marker not found."); }
 
-            var writeMetadataSegmentToOutStream = (metadatasAction == ActionType.KEEP);
             var writeCommentSegmentToOutStream = (commentsAction == ActionType.KEEP);
 
             var nbMetadatasEncountered = 0;
@@ -182,6 +181,13 @@ namespace JpegMetaRemover
                 }
                 else if (marker >= 0xE0 && marker <= 0xEF)//APPn : Application-specific (example : exif)
                 {
+                    var appNumOneBased = (0x0F & marker) + 1;
+
+                    var currentMetadataType = jpegMetaTypes[appNumOneBased];
+
+                    var metadataShouldBeRemoved = (currentMetadataType & metadatasTypesToRemove) == currentMetadataType;
+                    var writeMetadataSegmentToOutStream = !metadataShouldBeRemoved;
+
                     ReadVariableLengthSegment(marker, outStream, writeMetadataSegmentToOutStream);
 
                     var appNum = 0x0F & marker;
@@ -208,7 +214,7 @@ namespace JpegMetaRemover
 
             }
 
-            return new PurificationResult(nbMetadatasEncountered, metadatasAction, metaTypesEncountered, nbCommentsEncountered, commentsAction);
+            return new PurificationResult(nbMetadatasEncountered, metadatasTypesToRemove, metaTypesEncountered, nbCommentsEncountered, commentsAction);
         }
 
     }

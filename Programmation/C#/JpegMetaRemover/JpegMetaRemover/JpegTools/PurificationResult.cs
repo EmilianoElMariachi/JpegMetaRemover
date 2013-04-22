@@ -16,7 +16,7 @@ namespace JpegMetaRemover
     {
         public int NbMetadatasEncountered { get; private set; }
 
-        public ActionType ActionPerformedOnMetadatas { get; private set; }
+        public JpegMetaTypes MetaTypesToRemove { get; private set; }
 
         public JpegMetaTypes MetaTypesEncountered { get; private set; }
 
@@ -25,10 +25,10 @@ namespace JpegMetaRemover
         public ActionType ActionPerformedOnComments { get; private set; }
 
 
-        public PurificationResult(int nbMetadatasEncountered, ActionType actionPerformedOnMetadatas, JpegMetaTypes metaTypesEncountered, int nbCommentsEncountered, ActionType actionPerformedOnComments)
+        public PurificationResult(int nbMetadatasEncountered, JpegMetaTypes metadatasTypesToRemove, JpegMetaTypes metaTypesEncountered, int nbCommentsEncountered, ActionType actionPerformedOnComments)
         {
             NbMetadatasEncountered = nbMetadatasEncountered;
-            ActionPerformedOnMetadatas = actionPerformedOnMetadatas;
+            MetaTypesToRemove = metadatasTypesToRemove;
             MetaTypesEncountered = metaTypesEncountered;
 
             NbCommentsEncountered = nbCommentsEncountered;
