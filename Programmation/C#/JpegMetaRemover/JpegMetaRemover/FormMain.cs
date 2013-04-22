@@ -55,30 +55,20 @@ namespace JpegMetaRemover
                 item.Click += item_Click;
             }
 
-                
+
             Localization localizationToApply = null;
 
             //Charge la localization depuis la base de registre si elle existe
-            RegistryKey regKeyApp = null;
-            try
+            var regkeyTowLetterLang = ReadFromRegistry(REG_VAL_LANGUAGE);
+            if (regkeyTowLetterLang != null)
             {
-                regKeyApp = Registry.CurrentUser.OpenSubKey(REG_KEY_APP);
-                if (regKeyApp != null)
-                {
-                    var regkeyTowLetterLang = regKeyApp.GetValue(REG_VAL_LANGUAGE) as string;
-                    if (regkeyTowLetterLang != null)
-                    {
-                        var localizationFound = LocalizationManager.LoadedLocalizations.FindLocalizationByTwoLetterLanguageName(regkeyTowLetterLang);
-                        if (localizationFound != null)
-                        { localizationToApply = localizationFound; }
-                    }
-                }
+                var localizationFound = LocalizationManager.LoadedLocalizations.FindLocalizationByTwoLetterLanguageName(regkeyTowLetterLang);
+                if (localizationFound != null)
+                { localizationToApply = localizationFound; }
             }
-            finally
-            { MemHelper.DisposeSecure(regKeyApp); }
 
             //Charge la localization depuis la culture du PC si elle existe
-            if(localizationToApply == null)
+            if (localizationToApply == null)
             {
                 var currentPCTowLetterLang = Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName;
                 var localizationFound = LocalizationManager.LoadedLocalizations.FindLocalizationByTwoLetterLanguageName(currentPCTowLetterLang);
@@ -94,7 +84,7 @@ namespace JpegMetaRemover
             ApplyLocalization(localizationToApply);
         }
 
-        void ApplyLocalization(Localization localization)
+        private void ApplyLocalization(Localization localization)
         {
             if (localization != null)
             {
@@ -106,26 +96,49 @@ namespace JpegMetaRemover
                 localization.SetActiveLocalization(this.LocalizableControls);
 
                 //Sauvegarde la localization séléctionnée dans la base de registre
-                RegistryKey regKeyApp = null;
-                try
-                {
-                    regKeyApp = Registry.CurrentUser.CreateSubKey(REG_KEY_APP);
-                    if (regKeyApp != null)
-                    {
-                        regKeyApp.SetValue(REG_VAL_LANGUAGE, localization.TwoLetterISOLanguageName);
-                    }
-                }
-                catch(Exception ex)
-                {
-                    LogException(ex);
-                }
-                finally
-                { MemHelper.DisposeSecure(regKeyApp); }
-
+                SaveToRegistry(REG_VAL_LANGUAGE, localization.TwoLetterISOLanguageName);
             }
         }
 
-        void item_Click(object sender, EventArgs e)
+        private string ReadFromRegistry(string valueName)
+        {
+            string value = null;
+
+            //Charge la localization depuis la base de registre si elle existe
+            RegistryKey regKeyApp = null;
+            try
+            {
+                regKeyApp = Registry.CurrentUser.OpenSubKey(REG_KEY_APP);
+                if (regKeyApp != null)
+                { value = regKeyApp.GetValue(valueName) as string; }
+            }
+            catch
+            { }
+            finally
+            { MemHelper.DisposeSecure(regKeyApp); }
+
+            return value;
+        }
+
+        private void SaveToRegistry(string valueName, string value)
+        {
+            //Charge la localization depuis la base de registre si elle existe
+            RegistryKey regKeyApp = null;
+            try
+            {
+                regKeyApp = Registry.CurrentUser.CreateSubKey(REG_KEY_APP);
+                if (regKeyApp != null)
+                {
+                    regKeyApp.SetValue(valueName, value);
+                }
+            }
+            catch
+            { }
+            finally
+            { MemHelper.DisposeSecure(regKeyApp); }
+        }
+
+        private void item_Click(object sender, EventArgs e)
         {
             var clickedMenuItem = sender as ToolStripMenuItem;
             if (clickedMenuItem != null)
@@ -357,7 +370,7 @@ namespace JpegMetaRemover
                 throw new Exception(exMessage);
             }
 
-            if(_backgroundWorkerPurify.CancellationPending)
+            if (_backgroundWorkerPurify.CancellationPending)
             { return; }
 
             if (jpegFilesToPurify.Count <= 0)
@@ -478,7 +491,7 @@ namespace JpegMetaRemover
                 }
             }
             catch
-            {}
+            { }
         }
 
 
