@@ -42,6 +42,7 @@
             this._labelColorTolerancePerPixel = new System.Windows.Forms.Label();
             this._textBoxColorTolerancePerPixel = new System.Windows.Forms.TextBox();
             this._groupBoxParameters = new System.Windows.Forms.GroupBox();
+            this._checkBoxIgnoreTransparentPixels = new System.Windows.Forms.CheckBox();
             this._flowLayoutPanelColorCompare = new System.Windows.Forms.FlowLayoutPanel();
             this._labelColor2 = new System.Windows.Forms.Label();
             this._labelColor1 = new System.Windows.Forms.Label();
@@ -52,7 +53,7 @@
             this._buttonCompare = new System.Windows.Forms.Button();
             this._backgroundWorkerCompareImages = new System.ComponentModel.BackgroundWorker();
             this._colorDialog = new System.Windows.Forms.ColorDialog();
-            this._checkBoxIgnoreTransparentPixels = new System.Windows.Forms.CheckBox();
+            this._printScreenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this._trackBarColorTolerance)).BeginInit();
             this._menuStrip.SuspendLayout();
             this._groupBoxParameters.SuspendLayout();
@@ -146,7 +147,8 @@
             // _editToolStripMenuItem
             // 
             this._editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this._compareToolStripMenuItem});
+            this._compareToolStripMenuItem,
+            this._printScreenToolStripMenuItem});
             this._editToolStripMenuItem.Name = "_editToolStripMenuItem";
             this._editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
             this._editToolStripMenuItem.Text = "Edit";
@@ -155,7 +157,7 @@
             // 
             this._compareToolStripMenuItem.Name = "_compareToolStripMenuItem";
             this._compareToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.C)));
-            this._compareToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this._compareToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
             this._compareToolStripMenuItem.Text = "Compare";
             this._compareToolStripMenuItem.Click += new System.EventHandler(this._compareToolStripMenuItem_Click);
             // 
@@ -196,6 +198,16 @@
             this._groupBoxParameters.TabIndex = 7;
             this._groupBoxParameters.TabStop = false;
             this._groupBoxParameters.Text = "Tolerances Specification";
+            // 
+            // _checkBoxIgnoreTransparentPixels
+            // 
+            this._checkBoxIgnoreTransparentPixels.AutoSize = true;
+            this._checkBoxIgnoreTransparentPixels.Location = new System.Drawing.Point(19, 109);
+            this._checkBoxIgnoreTransparentPixels.Name = "_checkBoxIgnoreTransparentPixels";
+            this._checkBoxIgnoreTransparentPixels.Size = new System.Drawing.Size(141, 17);
+            this._checkBoxIgnoreTransparentPixels.TabIndex = 9;
+            this._checkBoxIgnoreTransparentPixels.Text = "Ignore transparent pixels";
+            this._checkBoxIgnoreTransparentPixels.UseVisualStyleBackColor = true;
             // 
             // _flowLayoutPanelColorCompare
             // 
@@ -294,15 +306,13 @@
             this._backgroundWorkerCompareImages.DoWork += new System.ComponentModel.DoWorkEventHandler(this._backgroundWorkerCompareImages_DoWork);
             this._backgroundWorkerCompareImages.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this._backgroundWorkerCompareImages_RunWorkerCompleted);
             // 
-            // _checkBoxIgnoreTransparentPixels
+            // _printScreenToolStripMenuItem
             // 
-            this._checkBoxIgnoreTransparentPixels.AutoSize = true;
-            this._checkBoxIgnoreTransparentPixels.Location = new System.Drawing.Point(19, 109);
-            this._checkBoxIgnoreTransparentPixels.Name = "_checkBoxIgnoreTransparentPixels";
-            this._checkBoxIgnoreTransparentPixels.Size = new System.Drawing.Size(141, 17);
-            this._checkBoxIgnoreTransparentPixels.TabIndex = 9;
-            this._checkBoxIgnoreTransparentPixels.Text = "Ignore transparent pixels";
-            this._checkBoxIgnoreTransparentPixels.UseVisualStyleBackColor = true;
+            this._printScreenToolStripMenuItem.Name = "_printScreenToolStripMenuItem";
+            this._printScreenToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.P)));
+            this._printScreenToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this._printScreenToolStripMenuItem.Text = "Print screen ...";
+            this._printScreenToolStripMenuItem.Click += new System.EventHandler(this._printScreenToolStripMenuItem_Click);
             // 
             // FormMain
             // 
@@ -359,6 +369,7 @@
         private System.Windows.Forms.Label _labelColor2;
         private System.Windows.Forms.FlowLayoutPanel _flowLayoutPanelColorCompare;
         private System.Windows.Forms.CheckBox _checkBoxIgnoreTransparentPixels;
+        private System.Windows.Forms.ToolStripMenuItem _printScreenToolStripMenuItem;
     }
 }
 

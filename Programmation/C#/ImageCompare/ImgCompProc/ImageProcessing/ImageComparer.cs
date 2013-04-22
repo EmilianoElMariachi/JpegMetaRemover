@@ -1,21 +1,66 @@
 ﻿using System;
 using System.Drawing;
 
-namespace ImgComp.ImageProcessing
+namespace ImgCompProc.ImageProcessing
 {
+
+    /// <summary>
+    /// Classe principale permettant de réaliser des comparaisons d'image
+    /// </summary>
     public class ImageComparer
     {
+
+        /// <summary>
+        /// Représente l'image de référence 
+        /// </summary>
         public Bitmap ReferenceImage { get; set; }
+
+        /// <summary>
+        /// Représente l'image comparée
+        /// </summary>
         public Bitmap ComparedImage { get; set; }
 
-        public ImageComparer(Bitmap referenceBitmap, Bitmap comparedBitmap)
+        /// <summary>
+        /// Objet recensant tous les paramètres de comparaison d'images
+        /// </summary>
+        public ComparisonSpecifications ComparisonSpecifications { get; set; }
+
+        /// <summary>
+        /// Initialise un comparateur ou les éléments comparés devront être défini ultérieurement 
+        /// </summary>
+        public ImageComparer()
+        {
+            this.ReferenceImage = null;
+            this.ComparedImage = null;
+            this.ComparisonSpecifications = null;
+        }
+
+        /// <summary>
+        /// Initialise un comparateur avec l'ensemble des éléments nécéssaires à une comparaison d'image
+        /// </summary>
+        /// <param name="referenceBitmap"></param>
+        /// <param name="comparedBitmap"></param>
+        public ImageComparer(Bitmap referenceBitmap, Bitmap comparedBitmap, ComparisonSpecifications comparisonSpecifications)
         {
             ReferenceImage = referenceBitmap;
             ComparedImage = comparedBitmap;
+            ComparisonSpecifications = comparisonSpecifications;
         }
 
-        public ImageComparisonResult Compare(double maxAcceptableColorDelta, double minPourcentageOfAcceptedPixels, bool ignoreTransparentPixels)
+        /// <summary>
+        /// Permet de comparer deux images
+        /// </summary>
+        public ImageComparisonResult Compare()
         {
+
+            if (ReferenceImage == null)
+            { throw new ArgumentNullException("Can't compare images if reference image is null"); }
+
+            if (ComparedImage == null)
+            { throw new ArgumentNullException("Can't compare images if compared image is null"); }
+
+            if(this.ComparisonSpecifications == null)
+            { throw new ArgumentNullException("Can't compare images if comparison specification is null"); }
 
             var xVariance = Math.Abs(ComparedImage.Width - ReferenceImage.Width);
             var yVariance = Math.Abs(ComparedImage.Height - ReferenceImage.Height);
@@ -24,8 +69,7 @@ namespace ImgComp.ImageProcessing
                 {
                     BestMatchOffsetPoint = new Point(-1, -1),
                     PourcentageOfAcceptedPixelsAtBestMatchOffset = -1,
-                    SpecifiedMaxAcceptableColorDelta = maxAcceptableColorDelta,
-                    SpecifiedMinPourcentageOfAcceptedPixels = minPourcentageOfAcceptedPixels,
+                    SpecificationsUsed = ComparisonSpecifications,
                     ComparedImage = (Bitmap)this.ComparedImage.Clone(),
                     ReferenceImage = (Bitmap)ReferenceImage.Clone(),
                     NumberOfPossiblePositions = Math.Max((this.ComparedImage.Width - this.ReferenceImage.Width) * (this.ComparedImage.Height - this.ReferenceImage.Height), 0)
@@ -39,7 +83,7 @@ namespace ImgComp.ImageProcessing
                     double pourcentageOfAcceptedPixels;
                     Bitmap resultImage;
 
-                    CompareImagesStartingAt(ReferenceImage, ComparedImage, startPoint, maxAcceptableColorDelta, ignoreTransparentPixels, out pourcentageOfAcceptedPixels, out resultImage);
+                    CompareImagesStartingAt(ReferenceImage, ComparedImage, startPoint, this.ComparisonSpecifications.MaxAcceptableColorDelta, this.ComparisonSpecifications.IgnoreTransparentPixels, out pourcentageOfAcceptedPixels, out resultImage);
 
                     if (pourcentageOfAcceptedPixels >= bestComparisonResult.PourcentageOfAcceptedPixelsAtBestMatchOffset)
                     {
@@ -51,7 +95,7 @@ namespace ImgComp.ImageProcessing
 
                         bestComparisonResult.ResultImage = resultImage;
 
-                        if (bestComparisonResult.IsImageAccepted)
+                        if (pourcentageOfAcceptedPixels >= this.ComparisonSpecifications.MinPourcentageOfAcceptedPixels)
                         { bestComparisonResult.NumberOfAcceptedPosition++; }
                     }
                 }

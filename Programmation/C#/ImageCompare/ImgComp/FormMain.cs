@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Globalization;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using GenericLogger;
-using ImgComp.ImageProcessing;
+using ImgCompProc.ImageProcessing;
 
 namespace ImgComp
 {
@@ -277,15 +273,17 @@ namespace ImgComp
 
             try
             {
-
-
                 var args = e.Argument as object[];
 
                 var referenceImagePath = (string)args[0];
                 var comparedImagePath = (string)args[1];
-                var pixelColorTolerance = (double)args[2];
-                var pourcentageOfAcceptablePixels = (double)args[3];
-                var ignoreTransparentPixels = (bool)args[4];
+
+                var comparisonSpecifications = new ComparisonSpecifications()
+                    {
+                        MaxAcceptableColorDelta = (double) args[2],
+                        IgnoreTransparentPixels = (bool) args[4],
+                        MinPourcentageOfAcceptedPixels = (double) args[3]
+                    };
 
                 referenceImage = Image.FromFile(referenceImagePath) as Bitmap;
                 comparedImage = Image.FromFile(comparedImagePath) as Bitmap;
@@ -293,9 +291,9 @@ namespace ImgComp
                 LogActionAboutToBeDone("Comparing \"" + referenceImagePath + "\" with \"" + comparedImagePath +
                                        "\". Please wait");
 
-                var imageComparer = new ImageComparer((Bitmap)referenceImage.Clone(), (Bitmap)comparedImage.Clone());
+                var imageComparer = new ImageComparer((Bitmap)referenceImage.Clone(), (Bitmap)comparedImage.Clone(), comparisonSpecifications);
 
-                e.Result = imageComparer.Compare(pixelColorTolerance, pourcentageOfAcceptablePixels, ignoreTransparentPixels);
+                e.Result = imageComparer.Compare();
             }
             catch (Exception ex)
             {
@@ -328,7 +326,7 @@ namespace ImgComp
             {
                 var imageComparisonResult = e.Result as ImageComparisonResult;
 
-                var percentageResult = "(" + imageComparisonResult.PourcentageOfAcceptedPixelsAtBestMatchOffset + "/" + imageComparisonResult.SpecifiedMinPourcentageOfAcceptedPixels + ")";
+                var percentageResult = "(" + imageComparisonResult.PourcentageOfAcceptedPixelsAtBestMatchOffset + "/" + imageComparisonResult.SpecificationsUsed.MinPourcentageOfAcceptedPixels + ")";
 
                 if (imageComparisonResult.IsImageAccepted)
                 {
@@ -343,7 +341,7 @@ namespace ImgComp
 
                 LogInfo("Best match at : " + imageComparisonResult.BestMatchOffsetPoint);
                 LogInfo("Number of accepted positions : " + imageComparisonResult.NumberOfAcceptedPosition + "/" + imageComparisonResult.NumberOfPossiblePositions);
-                LogInfo("Max Acceptable Color Delta : " + imageComparisonResult.SpecifiedMaxAcceptableColorDelta);
+                LogInfo("Max Acceptable Color Delta : " + imageComparisonResult.SpecificationsUsed.MaxAcceptableColorDelta);
 
                 var formResult = new FormResult();
 
@@ -431,6 +429,11 @@ namespace ImgComp
                 _flowLayoutPanelColorCompare.BackColor = Color.Red;
             }
 
+        }
+
+        private void _printScreenToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new FormScreenPrinter().ShowDialog();
         }
     }
 }

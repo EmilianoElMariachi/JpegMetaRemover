@@ -49,7 +49,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ImageProcessing\ComparisonResult.cs" />
     <Compile Include="FormMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -62,7 +61,12 @@
     <Compile Include="FormResult.Designer.cs">
       <DependentUpon>FormResult.cs</DependentUpon>
     </Compile>
-    <Compile Include="ImageProcessing\ImageComparer.cs" />
+    <Compile Include="FormScreenPrinter.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormScreenPrinter.Designer.cs">
+      <DependentUpon>FormScreenPrinter.cs</DependentUpon>
+    </Compile>
     <Compile Include="Logger.cs" />
     <Compile Include="MsgType.cs" />
     <Compile Include="DisplayedBitmap.cs" />
@@ -73,6 +77,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormResult.resx">
       <DependentUpon>FormResult.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormScreenPrinter.resx">
+      <DependentUpon>FormScreenPrinter.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -103,6 +110,12 @@
     <Content Include="TestResources\WidgetOracleTextField.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ImgCompProc\ImgCompProc.csproj">
+      <Project>{DB17FED2-C2DE-4DDB-AE0E-4A62B20D9E14}</Project>
+      <Name>ImgCompProc</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

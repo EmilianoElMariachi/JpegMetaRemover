@@ -162,6 +162,37 @@
          */
     }
 
+
+
+</script>
+
+<a href="http://net.tutsplus.com/tutorials/javascript-ajax/fully-understanding-the-this-keyword/">fully-understanding-the-this-keyword</a>
+
+<br/> <br/>
+
+<table id="selectExerciseNode">
+    <tr>
+        <td class="exerciseLabel">Catégorie</td>
+        <td class="exerciseTitle" id="category"></td>
+    </tr>
+    <tr>
+        <td class="exerciseLabel">Tuto</td>
+        <td class="exerciseTitle"><select id="comboExamplesNode" onchange="switchExample();"></select></td>
+    </tr>
+</table>
+
+<div class="titre">Code<input id="BtnRunExample" type="button" value="" onclick="runExample();"></div>
+
+<textarea id="content" onkeyup="alert('d')"></textarea>
+
+<div class="titre">Sortie<input id="BtnClearLog" type="button" value="" onclick="clearOutput();"></div>
+<div id="outputNode">
+
+</div>
+
+
+<script type="text/javascript">
+
     function switchExample() {
         if (comboExamplesNode.selectedIndex < 0) {
             return;
@@ -300,36 +331,7 @@
         }
     }
 
-</script>
-
-<a href="http://net.tutsplus.com/tutorials/javascript-ajax/fully-understanding-the-this-keyword/">fully-understanding-the-this-keyword</a>
-
-<br/> <br/>
-
-<table id="selectExerciseNode">
-    <tr>
-        <td class="exerciseLabel">Catégorie</td>
-        <td class="exerciseTitle" id="category"></td>
-    </tr>
-    <tr>
-        <td class="exerciseLabel">Tuto</td>
-        <td class="exerciseTitle"><select id="comboExamplesNode" onchange="switchExample();"></select></td>
-    </tr>
-</table>
-
-<div class="titre">Code<input id="BtnRunExample" type="button" value="" onclick="runExample();"></div>
-
-<textarea id="content" onkeyup="alert('d')"></textarea>
-
-<div class="titre">Sortie<input id="BtnClearLog" type="button" value="" onclick="clearOutput();"></div>
-<div id="outputNode">
-
-</div>
-
-
-<script type="text/javascript">
     var jSSrcCodeNode = document.getElementById("content");
-
 
     editor = CodeMirror.fromTextArea(jSSrcCodeNode, {
         lineNumbers: true,

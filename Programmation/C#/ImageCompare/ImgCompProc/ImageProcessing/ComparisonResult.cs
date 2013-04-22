@@ -1,7 +1,11 @@
 ﻿using System.Drawing;
 
-namespace ImgComp.ImageProcessing
+namespace ImgCompProc.ImageProcessing
 {
+
+    /// <summary>
+    /// Classe contenant les informations résultants d'une comparaison d'images
+    /// </summary>
     public class ImageComparisonResult
     {
 
@@ -41,21 +45,25 @@ namespace ImgComp.ImageProcessing
         public double PourcentageOfAcceptedPixelsAtBestMatchOffset { get; internal set; }
 
         /// <summary>
-        /// Représente le pourcentage de pixels acceptés, selon la tolérance de couleur spécifiée
+        /// Rappel de la spécification ayant permi d'obtenir ce résultat
         /// </summary>
-        public double SpecifiedMinPourcentageOfAcceptedPixels { get; internal set; }
-
-        /// <summary>
-        /// Tolérance de delta de couleur spécifié pour accepter un pixel
-        /// </summary>
-        public double SpecifiedMaxAcceptableColorDelta { get; internal set; }
+        public ComparisonSpecifications SpecificationsUsed { get; internal set; }
 
         /// <summary>
         /// Indique si l'image a été acceptée selon les tolérances spécifiées
         /// </summary>
         public bool IsImageAccepted
         {
-            get { return this.PourcentageOfAcceptedPixelsAtBestMatchOffset >= this.SpecifiedMinPourcentageOfAcceptedPixels; }
+            get
+            {
+                var isNbPositionsAccepted = NumberOfAcceptedPosition <=
+                                          this.SpecificationsUsed.MaxNumberOfAcceptedPositions && NumberOfAcceptedPosition >= 1;
+
+                var isToleranceAccepted = this.PourcentageOfAcceptedPixelsAtBestMatchOffset >=
+                                           this.SpecificationsUsed.MinPourcentageOfAcceptedPixels;
+
+                return isNbPositionsAccepted && isToleranceAccepted;
+            }
         }
 
     }
