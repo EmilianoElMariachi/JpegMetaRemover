@@ -365,6 +365,7 @@
             this._checkBoxOverride.TabIndex = 3;
             this._checkBoxOverride.Text = "Override";
             this._checkBoxOverride.UseVisualStyleBackColor = true;
+            this._checkBoxOverride.CheckedChanged += new System.EventHandler(this._checkBoxOverride_CheckedChanged);
             // 
             // _checkBoxIncludeSubdirectories
             // 
@@ -376,6 +377,7 @@
             this._checkBoxIncludeSubdirectories.TabIndex = 3;
             this._checkBoxIncludeSubdirectories.Text = "Sub directories";
             this._checkBoxIncludeSubdirectories.UseVisualStyleBackColor = true;
+            this._checkBoxIncludeSubdirectories.CheckedChanged += new System.EventHandler(this._checkBoxIncludeSubdirectories_CheckedChanged);
             // 
             // _groupBoxInputParams
             // 
@@ -418,6 +420,7 @@
             this._checkBoxRemoveMetadatas.TabIndex = 3;
             this._checkBoxRemoveMetadatas.Text = "Delete metadatas";
             this._checkBoxRemoveMetadatas.UseVisualStyleBackColor = true;
+            this._checkBoxRemoveMetadatas.CheckedChanged += new System.EventHandler(this._checkBoxRemoveMetadatas_CheckedChanged);
             // 
             // _checkBoxRemoveComments
             // 
@@ -429,6 +432,7 @@
             this._checkBoxRemoveComments.TabIndex = 3;
             this._checkBoxRemoveComments.Text = "Delete comments";
             this._checkBoxRemoveComments.UseVisualStyleBackColor = true;
+            this._checkBoxRemoveComments.CheckedChanged += new System.EventHandler(this._checkBoxRemoveComments_CheckedChanged);
             // 
             // FormMain
             // 

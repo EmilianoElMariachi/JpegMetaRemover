@@ -27,6 +27,15 @@ namespace JpegMetaRemover
             InitializeComponent();
 
             InitializeLanguages();
+
+            _checkBoxIncludeSubdirectories.Checked = SettingsManager.IncludeSubdirectories;
+
+            _checkBoxOverride.Checked = SettingsManager.OverrideOriginalFile;
+
+            _checkBoxRemoveMetadatas.Checked = SettingsManager.RemoveMetadatas;
+
+            _checkBoxRemoveComments.Checked = SettingsManager.RemoveComments;
+
         }
 
         private void InitializeLanguages()
@@ -493,6 +502,26 @@ namespace JpegMetaRemover
             {
                 SettingsManager.MetaTypesToRemove = formSettings.GetJpegMetaTypesToRemove();
             }
+        }
+
+        private void _checkBoxIncludeSubdirectories_CheckedChanged(object sender, EventArgs e)
+        {
+            SettingsManager.IncludeSubdirectories = _checkBoxIncludeSubdirectories.Checked;
+        }
+
+        private void _checkBoxOverride_CheckedChanged(object sender, EventArgs e)
+        {
+            SettingsManager.OverrideOriginalFile = _checkBoxOverride.Checked;
+        }
+
+        private void _checkBoxRemoveMetadatas_CheckedChanged(object sender, EventArgs e)
+        {
+            SettingsManager.RemoveMetadatas = _checkBoxRemoveMetadatas.Checked;
+        }
+
+        private void _checkBoxRemoveComments_CheckedChanged(object sender, EventArgs e)
+        {
+            SettingsManager.RemoveComments = _checkBoxRemoveComments.Checked;
         }
 
     }

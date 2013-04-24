@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using JpegMetaRemover.Tools;
 using Microsoft.Win32;
 
@@ -13,7 +14,11 @@ namespace JpegMetaRemover
 
         internal const string REG_VAL_LANGUAGE = "Language";
         internal const string REG_VAL_META_TYPES_TO_REMOVE = "MetaTypesToRemove";
-
+        internal const string REG_VAL_INCLUDE_SUB_DIRECTORIES = "IncludeSubDirectories";
+        internal const string REG_VAL_OVERRIDE_ORIGINAL_FILE = "OverrideOriginalFile";
+        internal const string REG_VAL_REMOVE_METADATAS = "RemoveMetaDatas";
+        internal const string REG_VAL_REMOVE_COMMENTS = "RemoveComments";
+        
 
         private static JpegMetaTypes _metaTypesToRemove;
 
@@ -34,48 +39,91 @@ namespace JpegMetaRemover
             set
             {
                 _twoLetterISOLanguageName = value;
-                SaveLocalization();
+                SaveToRegistry(REG_VAL_LANGUAGE, value);
+            }
+        }
+
+        private static bool _includeSubdirectories;
+
+        public static bool IncludeSubdirectories
+        {
+            get { return _includeSubdirectories; }
+            set
+            {
+                _includeSubdirectories = value;
+                SaveToRegistry(REG_VAL_INCLUDE_SUB_DIRECTORIES, value.ToString());
+            }
+        }
+
+        private static bool _overrideOriginalFile;
+
+        public static bool OverrideOriginalFile
+        {
+            get { return _overrideOriginalFile; }
+            set
+            {
+                _overrideOriginalFile = value;
+                SaveToRegistry(REG_VAL_OVERRIDE_ORIGINAL_FILE, value.ToString());
+            }
+        }
+
+        private static bool _removeMetadatas;
+
+        public static bool RemoveMetadatas
+        {
+            get { return _removeMetadatas; }
+            set
+            {
+                _removeMetadatas = value;
+                SaveToRegistry(REG_VAL_REMOVE_METADATAS, value.ToString());
+            }
+        }
+
+        private static bool _removeComments;
+
+        public static bool RemoveComments
+        {
+            get { return _removeComments; }
+            set 
+            { 
+                _removeComments = value;
+                SaveToRegistry(REG_VAL_REMOVE_COMMENTS, value.ToString());
             }
         }
 
         static SettingsManager()
         {
-            TwoLetterISOLanguageName = ReadFromRegistry(REG_VAL_LANGUAGE);
+            _twoLetterISOLanguageName = ReadFromRegistry<string>(REG_VAL_LANGUAGE, null);
 
-            var metaTypesToRemoveAsString = ReadFromRegistry(REG_VAL_META_TYPES_TO_REMOVE);
+
+            _metaTypesToRemove = GetDefaultMetaTypesToRemove();
+            var metaTypesToRemoveAsString = ReadFromRegistry<string>(REG_VAL_META_TYPES_TO_REMOVE, null);
             if (metaTypesToRemoveAsString != null)
-            {
-                JpegMetaTypes jpegMetaTypesToRemoveFromRegistry;
-                if (JpegMetaTypes.TryParse(metaTypesToRemoveAsString, out jpegMetaTypesToRemoveFromRegistry))
-                {
-                    MetaTypesToRemove = jpegMetaTypesToRemoveFromRegistry;
-                }
-                else
-                {
-                    SetDefaultMetaTypesToRemove();
-                }
-            }
-            else
-            {
-                SetDefaultMetaTypesToRemove();
-            }
+            { Enum.TryParse(metaTypesToRemoveAsString, out _metaTypesToRemove); }
 
+
+            _includeSubdirectories = false;
+            bool.TryParse(ReadFromRegistry<string>(REG_VAL_INCLUDE_SUB_DIRECTORIES, null), out _includeSubdirectories);
+
+            _overrideOriginalFile = false;
+            bool.TryParse(ReadFromRegistry<string>(REG_VAL_OVERRIDE_ORIGINAL_FILE, null), out _overrideOriginalFile);
+
+            _removeMetadatas = true;
+            bool.TryParse(ReadFromRegistry<string>(REG_VAL_REMOVE_METADATAS, null), out _removeMetadatas);     
+            
+            _removeComments = true;
+            bool.TryParse(ReadFromRegistry<string>(REG_VAL_REMOVE_COMMENTS, null), out _removeComments);
+            
         }
 
-        private static void SetDefaultMetaTypesToRemove()
+        private static JpegMetaTypes GetDefaultMetaTypesToRemove()
         {
+            var defaultMetaTypes = JpegMetaTypes.NONE;
             foreach (JpegMetaTypes metaType in Enum.GetValues(typeof(JpegMetaTypes)))
             {
-                MetaTypesToRemove = MetaTypesToRemove | metaType;
+                defaultMetaTypes = defaultMetaTypes | metaType;
             }
-        }
-
-        private static void SaveLocalization()
-        {
-            if (TwoLetterISOLanguageName != null)
-            {
-                SaveToRegistry(REG_VAL_LANGUAGE, TwoLetterISOLanguageName);
-            }
+            return defaultMetaTypes;
         }
 
         private static void SaveMetaTypesToRemove()
@@ -83,9 +131,9 @@ namespace JpegMetaRemover
             SaveToRegistry(REG_VAL_META_TYPES_TO_REMOVE, MetaTypesToRemove.ToString());
         }
 
-        private static string ReadFromRegistry(string valueName)
+        private static TRegValType ReadFromRegistry<TRegValType>(string valueName, TRegValType defaultValue)
         {
-            string value = null;
+            TRegValType value = defaultValue;
 
             //Charge la localization depuis la base de registre si elle existe
             RegistryKey regKeyApp = null;
@@ -93,7 +141,7 @@ namespace JpegMetaRemover
             {
                 regKeyApp = Registry.CurrentUser.OpenSubKey(REG_KEY_APP);
                 if (regKeyApp != null)
-                { value = regKeyApp.GetValue(valueName) as string; }
+                { value = (TRegValType)regKeyApp.GetValue(valueName); }
             }
             catch
             { }
@@ -103,7 +151,7 @@ namespace JpegMetaRemover
             return value;
         }
 
-        private static void SaveToRegistry(string valueName, string value)
+        private static void SaveToRegistry(string valueName, object value)
         {
             //Charge la localization depuis la base de registre si elle existe
             RegistryKey regKeyApp = null;

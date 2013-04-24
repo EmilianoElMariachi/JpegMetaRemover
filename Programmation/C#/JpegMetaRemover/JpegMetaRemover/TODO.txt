@@ -1,3 +1,1 @@
-_ Sauvegarder les options de traitement dans la base de registre
-
 _ Revoir le système de localisation (utiliser les propriétés de l'automation plutot que la propriété text)
