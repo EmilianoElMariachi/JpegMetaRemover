@@ -37,7 +37,7 @@ namespace JpegMetaRemover.Translation
 
         public string GetTranslatedElementOrNullIfNotFound(string key)
         {
-            if (this.Elements.ContainsKey(key))
+            if (key != null && this.Elements.ContainsKey(key))
             {
                 return this.Elements[key];
             }
@@ -84,7 +84,7 @@ namespace JpegMetaRemover.Translation
             foreach (var controlWrapper in wrappedControls)
             {
 
-                var elementValueSecure = GetTranslatedElementOrNullIfNotFound(controlWrapper.Name);
+                var elementValueSecure = GetTranslatedElementOrNullIfNotFound(controlWrapper.AccessibleName);
                 if (elementValueSecure != null)
                 {
                     controlWrapper.Text = elementValueSecure;

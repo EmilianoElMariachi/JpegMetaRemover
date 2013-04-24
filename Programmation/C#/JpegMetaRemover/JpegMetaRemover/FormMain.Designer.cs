@@ -31,7 +31,7 @@
             this._richTextBoxLog = new System.Windows.Forms.RichTextBox();
             this._statusStrip = new System.Windows.Forms.StatusStrip();
             this._menuStrip = new System.Windows.Forms.MenuStrip();
-            this._fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuItemFile = new System.Windows.Forms.ToolStripMenuItem();
             this._selectFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this._selectDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this._exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -96,7 +96,7 @@
             // _menuStrip
             // 
             this._menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this._fileToolStripMenuItem,
+            this.MenuItemFile,
             this._editToolStripMenuItem,
             this._aboutToolStripMenuItem});
             this._menuStrip.Location = new System.Drawing.Point(0, 0);
@@ -106,18 +106,20 @@
             this._menuStrip.TabIndex = 5;
             this._menuStrip.Text = "menuStrip1";
             // 
-            // _fileToolStripMenuItem
+            // MenuItemFile
             // 
-            this._fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.MenuItemFile.AccessibleName = "MenuItemFile";
+            this.MenuItemFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this._selectFileToolStripMenuItem,
             this._selectDirectoryToolStripMenuItem,
             this._exitToolStripMenuItem});
-            this._fileToolStripMenuItem.Name = "_fileToolStripMenuItem";
-            this._fileToolStripMenuItem.Size = new System.Drawing.Size(44, 24);
-            this._fileToolStripMenuItem.Text = "File";
+            this.MenuItemFile.Name = "MenuItemFile";
+            this.MenuItemFile.Size = new System.Drawing.Size(44, 24);
+            this.MenuItemFile.Text = "File";
             // 
             // _selectFileToolStripMenuItem
             // 
+            this._selectFileToolStripMenuItem.AccessibleName = "MenuItemSelectImage";
             this._selectFileToolStripMenuItem.Name = "_selectFileToolStripMenuItem";
             this._selectFileToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
             this._selectFileToolStripMenuItem.Size = new System.Drawing.Size(263, 24);
@@ -126,6 +128,7 @@
             // 
             // _selectDirectoryToolStripMenuItem
             // 
+            this._selectDirectoryToolStripMenuItem.AccessibleName = "MenuItemSelectFolder";
             this._selectDirectoryToolStripMenuItem.Name = "_selectDirectoryToolStripMenuItem";
             this._selectDirectoryToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
                         | System.Windows.Forms.Keys.O)));
@@ -135,6 +138,7 @@
             // 
             // _exitToolStripMenuItem
             // 
+            this._exitToolStripMenuItem.AccessibleName = "MenuItemExitApp";
             this._exitToolStripMenuItem.Name = "_exitToolStripMenuItem";
             this._exitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
             this._exitToolStripMenuItem.Size = new System.Drawing.Size(263, 24);
@@ -142,6 +146,7 @@
             // 
             // _editToolStripMenuItem
             // 
+            this._editToolStripMenuItem.AccessibleName = "MenuItemEdit";
             this._editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this._runToolStripMenuItem,
             this._settingsToolStripMenuItem,
@@ -152,23 +157,26 @@
             // 
             // _runToolStripMenuItem
             // 
+            this._runToolStripMenuItem.AccessibleName = "MenuItemRun";
             this._runToolStripMenuItem.Name = "_runToolStripMenuItem";
             this._runToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
-            this._runToolStripMenuItem.Size = new System.Drawing.Size(144, 24);
+            this._runToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
             this._runToolStripMenuItem.Text = "Run";
             this._runToolStripMenuItem.Click += new System.EventHandler(this._runToolStripMenuItem_Click);
             // 
             // _settingsToolStripMenuItem
             // 
+            this._settingsToolStripMenuItem.AccessibleName = "MenuItemSettings";
             this._settingsToolStripMenuItem.Name = "_settingsToolStripMenuItem";
-            this._settingsToolStripMenuItem.Size = new System.Drawing.Size(144, 24);
+            this._settingsToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
             this._settingsToolStripMenuItem.Text = "Settings ...";
             this._settingsToolStripMenuItem.Click += new System.EventHandler(this._settingsToolStripMenuItem_Click);
             // 
             // _languageToolStripMenuItem
             // 
+            this._languageToolStripMenuItem.AccessibleName = "MenuItemLanguage";
             this._languageToolStripMenuItem.Name = "_languageToolStripMenuItem";
-            this._languageToolStripMenuItem.Size = new System.Drawing.Size(144, 24);
+            this._languageToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
             this._languageToolStripMenuItem.Text = "Language";
             // 
             // _aboutToolStripMenuItem
@@ -277,6 +285,7 @@
             // 
             // _labelInputPath
             // 
+            this._labelInputPath.AccessibleName = "LabelInputPath";
             this._labelInputPath.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this._labelInputPath.AutoSize = true;
             this._labelInputPath.Location = new System.Drawing.Point(4, 14);
@@ -326,14 +335,15 @@
             // 
             // _groupBoxOutputParams
             // 
+            this._groupBoxOutputParams.AccessibleName = "GroupBoxOutputParameters";
             this._groupBoxOutputParams.AutoSize = true;
             this._groupBoxOutputParams.Controls.Add(this.tableLayoutPanel1);
             this._groupBoxOutputParams.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._groupBoxOutputParams.Location = new System.Drawing.Point(324, 4);
+            this._groupBoxOutputParams.Location = new System.Drawing.Point(236, 4);
             this._groupBoxOutputParams.Margin = new System.Windows.Forms.Padding(4);
             this._groupBoxOutputParams.Name = "_groupBoxOutputParams";
             this._groupBoxOutputParams.Padding = new System.Windows.Forms.Padding(4);
-            this._groupBoxOutputParams.Size = new System.Drawing.Size(400, 66);
+            this._groupBoxOutputParams.Size = new System.Drawing.Size(488, 66);
             this._groupBoxOutputParams.TabIndex = 7;
             this._groupBoxOutputParams.TabStop = false;
             this._groupBoxOutputParams.Text = "Output parameters";
@@ -352,35 +362,38 @@
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(392, 43);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(480, 43);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // _checkBoxOverride
             // 
+            this._checkBoxOverride.AccessibleName = "CheckBoxOverrideOriginalFile";
             this._checkBoxOverride.AutoSize = true;
-            this._checkBoxOverride.Location = new System.Drawing.Point(137, 4);
+            this._checkBoxOverride.Location = new System.Drawing.Point(184, 4);
             this._checkBoxOverride.Margin = new System.Windows.Forms.Padding(4);
             this._checkBoxOverride.Name = "_checkBoxOverride";
-            this._checkBoxOverride.Size = new System.Drawing.Size(85, 21);
+            this._checkBoxOverride.Size = new System.Drawing.Size(157, 21);
             this._checkBoxOverride.TabIndex = 3;
-            this._checkBoxOverride.Text = "Override";
+            this._checkBoxOverride.Text = "Override original file";
             this._checkBoxOverride.UseVisualStyleBackColor = true;
             this._checkBoxOverride.CheckedChanged += new System.EventHandler(this._checkBoxOverride_CheckedChanged);
             // 
             // _checkBoxIncludeSubdirectories
             // 
+            this._checkBoxIncludeSubdirectories.AccessibleName = "CheckBoxSearchSubdirectories";
             this._checkBoxIncludeSubdirectories.AutoSize = true;
             this._checkBoxIncludeSubdirectories.Location = new System.Drawing.Point(4, 4);
             this._checkBoxIncludeSubdirectories.Margin = new System.Windows.Forms.Padding(4);
             this._checkBoxIncludeSubdirectories.Name = "_checkBoxIncludeSubdirectories";
-            this._checkBoxIncludeSubdirectories.Size = new System.Drawing.Size(125, 21);
+            this._checkBoxIncludeSubdirectories.Size = new System.Drawing.Size(172, 21);
             this._checkBoxIncludeSubdirectories.TabIndex = 3;
-            this._checkBoxIncludeSubdirectories.Text = "Sub directories";
+            this._checkBoxIncludeSubdirectories.Text = "Search sub directories";
             this._checkBoxIncludeSubdirectories.UseVisualStyleBackColor = true;
             this._checkBoxIncludeSubdirectories.CheckedChanged += new System.EventHandler(this._checkBoxIncludeSubdirectories_CheckedChanged);
             // 
             // _groupBoxInputParams
             // 
+            this._groupBoxInputParams.AccessibleName = "GroupBoxElementsToRemove";
             this._groupBoxInputParams.AutoSize = true;
             this._groupBoxInputParams.Controls.Add(this._tableLayoutPanelPurifyParams);
             this._groupBoxInputParams.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -388,7 +401,7 @@
             this._groupBoxInputParams.Margin = new System.Windows.Forms.Padding(5);
             this._groupBoxInputParams.Name = "_groupBoxInputParams";
             this._groupBoxInputParams.Padding = new System.Windows.Forms.Padding(5);
-            this._groupBoxInputParams.Size = new System.Drawing.Size(310, 64);
+            this._groupBoxInputParams.Size = new System.Drawing.Size(222, 64);
             this._groupBoxInputParams.TabIndex = 6;
             this._groupBoxInputParams.TabStop = false;
             this._groupBoxInputParams.Text = "Elements to remove";
@@ -407,30 +420,32 @@
             this._tableLayoutPanelPurifyParams.Name = "_tableLayoutPanelPurifyParams";
             this._tableLayoutPanelPurifyParams.RowCount = 1;
             this._tableLayoutPanelPurifyParams.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this._tableLayoutPanelPurifyParams.Size = new System.Drawing.Size(300, 39);
+            this._tableLayoutPanelPurifyParams.Size = new System.Drawing.Size(212, 39);
             this._tableLayoutPanelPurifyParams.TabIndex = 1;
             // 
             // _checkBoxRemoveMetadatas
             // 
+            this._checkBoxRemoveMetadatas.AccessibleName = "CheckBoxRemoveMetadatas";
             this._checkBoxRemoveMetadatas.AutoSize = true;
-            this._checkBoxRemoveMetadatas.Location = new System.Drawing.Point(154, 5);
+            this._checkBoxRemoveMetadatas.Location = new System.Drawing.Point(111, 5);
             this._checkBoxRemoveMetadatas.Margin = new System.Windows.Forms.Padding(5);
             this._checkBoxRemoveMetadatas.Name = "_checkBoxRemoveMetadatas";
-            this._checkBoxRemoveMetadatas.Size = new System.Drawing.Size(141, 21);
+            this._checkBoxRemoveMetadatas.Size = new System.Drawing.Size(96, 21);
             this._checkBoxRemoveMetadatas.TabIndex = 3;
-            this._checkBoxRemoveMetadatas.Text = "Delete metadatas";
+            this._checkBoxRemoveMetadatas.Text = "Metadatas";
             this._checkBoxRemoveMetadatas.UseVisualStyleBackColor = true;
             this._checkBoxRemoveMetadatas.CheckedChanged += new System.EventHandler(this._checkBoxRemoveMetadatas_CheckedChanged);
             // 
             // _checkBoxRemoveComments
             // 
+            this._checkBoxRemoveComments.AccessibleName = "CheckBoxRemoveComments";
             this._checkBoxRemoveComments.AutoSize = true;
             this._checkBoxRemoveComments.Location = new System.Drawing.Point(5, 5);
             this._checkBoxRemoveComments.Margin = new System.Windows.Forms.Padding(5);
             this._checkBoxRemoveComments.Name = "_checkBoxRemoveComments";
-            this._checkBoxRemoveComments.Size = new System.Drawing.Size(139, 21);
+            this._checkBoxRemoveComments.Size = new System.Drawing.Size(96, 21);
             this._checkBoxRemoveComments.TabIndex = 3;
-            this._checkBoxRemoveComments.Text = "Delete comments";
+            this._checkBoxRemoveComments.Text = "Comments";
             this._checkBoxRemoveComments.UseVisualStyleBackColor = true;
             this._checkBoxRemoveComments.CheckedChanged += new System.EventHandler(this._checkBoxRemoveComments_CheckedChanged);
             // 
@@ -477,7 +492,7 @@
         private System.Windows.Forms.RichTextBox _richTextBoxLog;
         private System.Windows.Forms.StatusStrip _statusStrip;
         private System.Windows.Forms.MenuStrip _menuStrip;
-        private System.Windows.Forms.ToolStripMenuItem _fileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem MenuItemFile;
         private System.Windows.Forms.ToolStripMenuItem _selectFileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem _selectDirectoryToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem _exitToolStripMenuItem;

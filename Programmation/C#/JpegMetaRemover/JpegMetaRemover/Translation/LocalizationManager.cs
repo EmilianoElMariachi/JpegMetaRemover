@@ -48,7 +48,7 @@ namespace JpegMetaRemover.Translation
 
             foreach (var localizableControl in localizableControlWrappers)
             {
-                localization.AddTranslatedElementIfKeyNotNull(localizableControl.Name, localizableControl.Text);  
+                localization.AddTranslatedElementIfKeyNotNull(localizableControl.AccessibleName, localizableControl.Text);  
             }
             
             this.LoadedLocalizations.Add(localization);

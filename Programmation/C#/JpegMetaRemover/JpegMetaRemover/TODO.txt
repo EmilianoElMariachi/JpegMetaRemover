@@ -1,1 +1,3 @@
-_ Revoir le système de localisation (utiliser les propriétés de l'automation plutot que la propriété text)
+_ Voir comment inclure les localizations dans la classe de settings
+
+_ Ne serait-il pas mieux d'utiliser la localization par défaut à l'aide d'un dictionnaire embarqué dans les resources?

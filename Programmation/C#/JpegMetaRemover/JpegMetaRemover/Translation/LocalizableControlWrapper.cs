@@ -15,7 +15,7 @@ namespace JpegMetaRemover.Translation
 
         private PropertyInfo TextMember { get; set; }
 
-        public string Name { get; set; }
+        public string AccessibleName { get; set; }
 
         public object WrappedControl
         {
@@ -41,23 +41,23 @@ namespace JpegMetaRemover.Translation
             set { this.TextMember.SetValue(this.WrappedControl, value, null); }
         }
 
-        public static List<LocalizableControlWrapper> FetchFormLocalizableControls(Form form)
+        public static LocalizableControlWrapperCollection FetchFormLocalizableControls(Form form)
         {
-            var controlWrappers = new List<LocalizableControlWrapper>();
+            var controlWrappers = new LocalizableControlWrapperCollection();
             FetchLocalizableControls(form.Controls, controlWrappers);
             return controlWrappers;
         }
 
-        private static void FetchLocalizableControls(IEnumerable controls, List<LocalizableControlWrapper> localizableControlWrappers)
+        private static void FetchLocalizableControls(IEnumerable controls, LocalizableControlWrapperCollection localizableControlWrappers)
         {
             foreach (var rawControl in controls)
             {
                 if (rawControl is MenuStrip)
                 {
                     var control = (MenuStrip)rawControl;
-                    localizableControlWrappers.Add(new LocalizableControlWrapper()
+                    localizableControlWrappers.AddIfLocalizable(new LocalizableControlWrapper()
                     {
-                        Name = control.Name,
+                        AccessibleName = control.AccessibleName,
                         WrappedControl = control
                     });
                     FetchLocalizableControls(control.Items, localizableControlWrappers);
@@ -65,9 +65,9 @@ namespace JpegMetaRemover.Translation
                 else if (rawControl is Control)
                 {
                     var control = (Control)rawControl;
-                    localizableControlWrappers.Add(new LocalizableControlWrapper()
+                    localizableControlWrappers.AddIfLocalizable(new LocalizableControlWrapper()
                     {
-                        Name = control.Name,
+                        AccessibleName = control.AccessibleName,
                         WrappedControl = control
                     });
                     FetchLocalizableControls(control.Controls, localizableControlWrappers);
@@ -75,9 +75,9 @@ namespace JpegMetaRemover.Translation
                 else if (rawControl is ToolStripItem)
                 {
                     var control = (ToolStripItem)rawControl;
-                    localizableControlWrappers.Add(new LocalizableControlWrapper()
+                    localizableControlWrappers.AddIfLocalizable(new LocalizableControlWrapper()
                     {
-                        Name = control.Name,
+                        AccessibleName = control.AccessibleName,
                         WrappedControl = control
                     });
 

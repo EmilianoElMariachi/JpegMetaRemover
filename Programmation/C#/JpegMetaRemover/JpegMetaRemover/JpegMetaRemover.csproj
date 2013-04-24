@@ -85,6 +85,7 @@
     <Compile Include="Log\MsgType.cs" />
     <Compile Include="SettingsManager.cs" />
     <Compile Include="Tools\MemHelper.cs" />
+    <Compile Include="Translation\LocalizableControlCollection.cs" />
     <Compile Include="Translation\LocalizableControlWrapper.cs" />
     <Compile Include="Translation\Localization.cs" />
     <Compile Include="Translation\LocalizationCollection.cs" />
