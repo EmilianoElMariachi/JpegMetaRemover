@@ -20,12 +20,11 @@
 
     <element id="Please wait.">Merci de patienter.</element>
     <element id="Specified path &quot;{0}&quot; doesn't exist.">Le chemin spécifié "{0}" n'existe pas.</element>
-    <element id="{0} metadata(s) {1} ({2})">{0} metadonnée(s) {1} ({2})</element>
-    <element id="{0} comment(s) {1}">{0} commentaire(s) {1}</element>
-    <element id="removed">supprimé(es)</element>
-    <element id="kept">conservé(es)</element>
-    <element id="found">trouvé(es)</element>
-    <element id="unknown">???</element>
+    <element id="{0} metadata(s) found ({1})">{0} metadonnée(s) trouvée(s) ({1})</element>
+    <element id="{0} metadata(s) removed ({1})">{0} metadonnée(s) supprimée(s) ({1})</element>
+    <element id="{0} comment(s) found">{0} commentaire(s) trouvé(s)</element>
+    <element id="{0} comment(s) removed">{0} commentaire(s) supprimé(s)</element>
+    
     <element id="File overriden.">Fichier écrasé</element>
     <element id="File saved to &quot;{0}&quot;.">Fichier sauvegardé sous "{0}".</element>
     <element id="No file written.">Aucun fichier modifié ni créé.</element>

@@ -83,6 +83,7 @@
     <Compile Include="JpegTools\JPGExifRemover.cs" />
     <Compile Include="Log\Logger.cs" />
     <Compile Include="Log\MsgType.cs" />
+    <Compile Include="SettingsManager.cs" />
     <Compile Include="Tools\MemHelper.cs" />
     <Compile Include="Translation\LocalizableControlWrapper.cs" />
     <Compile Include="Translation\Localization.cs" />
@@ -149,6 +150,15 @@
     <None Include="Resources\Stop.png" />
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <Content Include="TestResources\flower.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestResources\google.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TODO.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

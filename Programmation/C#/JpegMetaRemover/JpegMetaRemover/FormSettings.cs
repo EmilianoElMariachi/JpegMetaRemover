@@ -22,6 +22,7 @@ namespace JpegMetaRemover
                 {
                     var item = _listViewMetadatasToRemove.Items.Add(value.ToString() + " (APP" + appIndex++.ToString() + ")");
                     item.Tag = value;
+                    item.Checked = ((value & SettingsManager.MetaTypesToRemove) == value);
                 }
             }
 

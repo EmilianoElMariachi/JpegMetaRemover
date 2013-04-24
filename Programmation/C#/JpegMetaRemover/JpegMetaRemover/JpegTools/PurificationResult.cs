@@ -1,39 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.IO;
 
-namespace JpegMetaRemover
+namespace JpegMetaRemover.JpegTools
 {
-
-    public enum ActionType
-    {
-        REMOVE,
-        KEEP,
-    }
 
     public class PurificationResult
     {
-        public int NbMetadatasEncountered { get; private set; }
+        public string OriginalFilePath { get; internal set; }
 
-        public JpegMetaTypes MetaTypesToRemove { get; private set; }
+        public int NbMetasFound { get; internal set; }
 
-        public JpegMetaTypes MetaTypesEncountered { get; private set; }
+        public int NbMetasRemoved { get; internal set; }
 
-        public int NbCommentsEncountered { get; private set; }
+        public JpegMetaTypes MetaTypesToRemove { get; internal set; }
 
-        public ActionType ActionPerformedOnComments { get; private set; }
+        public JpegMetaTypes MetaTypesFound { get; internal set; }
 
+        public JpegMetaTypes MetaTypesRemoved { get; internal set; }
 
-        public PurificationResult(int nbMetadatasEncountered, JpegMetaTypes metadatasTypesToRemove, JpegMetaTypes metaTypesEncountered, int nbCommentsEncountered, ActionType actionPerformedOnComments)
-        {
-            NbMetadatasEncountered = nbMetadatasEncountered;
-            MetaTypesToRemove = metadatasTypesToRemove;
-            MetaTypesEncountered = metaTypesEncountered;
+        public int NbCommentsFound { get; internal set; }
 
-            NbCommentsEncountered = nbCommentsEncountered;
-            ActionPerformedOnComments = actionPerformedOnComments;
-        }
+        public int NbCommentsRemoved { get; internal set; }
+
+        public MemoryStream ResultStream { get; internal set; }
+
+        public bool ResultStreamDiffersFromOriginal { get; internal set; }
 
     }
 }
