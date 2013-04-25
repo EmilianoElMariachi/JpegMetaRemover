@@ -112,24 +112,13 @@ namespace JpegMetaRemover
             }
         }
 
-        public delegate void DelegateLogAsync(string message, MsgType msgType);
         /// <summary>
         /// Permet de logguer un message
         /// </summary>
         private void Log(string message, MsgType msgType)
         {
-            //Test si l'appel du log est fait depuis un Thread
-            if (this.InvokeRequired == true)
-            {
-                this.Invoke(new DelegateLogAsync(this.Log), message, msgType);
-                return;
-            }
-
-            //Vérifie qu'il y ait bien un message a afficher
-            if (message == null)
-            { return; }
-
             var msgColor = Color.Black;
+            var fontStyle = FontStyle.Regular;
 
             //associe une couleur à un type de message
             switch (msgType)
@@ -155,7 +144,6 @@ namespace JpegMetaRemover
                 case MsgType.ACTION_START:
                     {
 
-                        message = "===> " + message + " <===";
                         msgColor = Color.Green;
                         break;
                     }
@@ -166,17 +154,30 @@ namespace JpegMetaRemover
                     }
             }
 
-            //Place le curseur à la fin
-            _richTextBoxLog.SelectionStart = _richTextBoxLog.Text.Length + 10;
+            Log(message, msgColor, fontStyle);
+        }
 
-            //Associe la couleur sélectionnée
+        public delegate void DelegateLogAsync(string message, Color msgColor, FontStyle fontStyle);
+
+        private void Log(string message, Color msgColor, FontStyle fontStyle)
+        {
+            //Test si l'appel du log est fait depuis un Thread
+            if (this.InvokeRequired == true)
+            {
+                this.Invoke(new DelegateLogAsync(this.Log), message, msgColor, fontStyle);
+                return;
+            }
+
+            //Vérifie qu'il y ait bien un message a affichers
+            if (message == null)
+            { return; }
+
+
+            _richTextBoxLog.SelectionStart = _richTextBoxLog.Text.Length;
+            _richTextBoxLog.SelectionFont = new Font(_richTextBoxLog.Font, fontStyle);
             _richTextBoxLog.SelectionColor = msgColor;
 
-            //Affiche le message et passe à la ligne
             _richTextBoxLog.AppendText(message + Environment.NewLine);
-
-            //le richTexBox scroll automatiquement 
-            //des que les messages sortent de la zone visible
             _richTextBoxLog.ScrollToCaret();
         }
 
@@ -300,6 +301,10 @@ namespace JpegMetaRemover
             var overrideInputFile = (bool)args[3];
             var includeSubdirectories = (bool)args[4];
 
+            Log(">>> " + inputPath + " <<<" + Environment.NewLine, Color.Purple, FontStyle.Bold);
+
+            var dateStart = DateTime.Now;
+
             var jpegFilesToPurify = new List<string>();
 
             if (Directory.Exists(inputPath))
@@ -331,7 +336,10 @@ namespace JpegMetaRemover
             foreach (var inputJpegFilePath in jpegFilesToPurify)
             {
                 if (_backgroundWorkerPurify.CancellationPending)
-                { return; }
+                {
+                    LogWarning(_localizationManager.ActiveLocalization.Translate("Operation Cancelled..."));
+                    return;
+                }
 
                 JPGExifRemover jpgExifRemover = null;
                 FileStream outputFileStream = null;
@@ -377,6 +385,7 @@ namespace JpegMetaRemover
 
 
                     LogActionDoneSuccessfully();
+
                 }
                 catch (Exception ex)
                 {
@@ -391,6 +400,11 @@ namespace JpegMetaRemover
                 }
             }
 
+            var dateEnd = DateTime.Now;
+
+            var ellapsedTime = dateEnd - dateStart;
+
+            Log(_localizationManager.ActiveLocalization.Translate("Execution time : {0} (s)", ellapsedTime.TotalSeconds.ToString()) + Environment.NewLine, Color.Purple, FontStyle.Bold);
 
         }
 
@@ -522,6 +536,16 @@ namespace JpegMetaRemover
         private void _checkBoxRemoveComments_CheckedChanged(object sender, EventArgs e)
         {
             SettingsManager.RemoveComments = _checkBoxRemoveComments.Checked;
+        }
+
+        private void clearToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _richTextBoxLog.Clear();
+        }
+
+        private void copyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _richTextBoxLog.Copy();
         }
 
     }

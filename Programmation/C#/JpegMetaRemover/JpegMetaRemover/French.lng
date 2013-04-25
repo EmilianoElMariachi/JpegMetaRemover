@@ -21,6 +21,10 @@
 
     <element id="LabelInputPath">Fichier ou dossier</element>
 
+    <element id="ClearLog">Effacer</element>
+    <element id="CopyLog">Copier</element>
+
+
     <element id="Please wait.">Merci de patienter.</element>
     <element id="Specified path &quot;{0}&quot; doesn't exist.">Le chemin spécifié "{0}" n'existe pas.</element>
     <element id="{0} metadata(s) found ({1})">{0} metadonnée(s) trouvée(s) ({1})</element>
@@ -33,9 +37,12 @@
     <element id="No file written.">Aucun fichier modifié ni créé.</element>
     <element id="Done.">Terminé.</element>
     <element id="UNKNOWN ACTION">ACTION INCONNUE</element>
-    <element id="WARNING : ">WARNING : </element>
+    <element id="WARNING : ">ATTENTION : </element>
     <element id="ERROR : ">ERREUR : </element>
     <element id="No file to process.">Aucun fichier à traiter</element>
+    <element id="Operation Cancelled...">Traitement interrompu...</element>
+    <element id="Execution time : {0} (s)">Temps d'exécution : {0} (s)</element>
+    
 
 
   </language>

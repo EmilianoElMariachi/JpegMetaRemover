@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this._richTextBoxLog = new System.Windows.Forms.RichTextBox();
             this._statusStrip = new System.Windows.Forms.StatusStrip();
             this._menuStrip = new System.Windows.Forms.MenuStrip();
@@ -59,6 +60,9 @@
             this._tableLayoutPanelPurifyParams = new System.Windows.Forms.TableLayoutPanel();
             this._checkBoxRemoveMetadatas = new System.Windows.Forms.CheckBox();
             this._checkBoxRemoveComments = new System.Windows.Forms.CheckBox();
+            this._contextMenuStripLog = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.clearToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this._menuStrip.SuspendLayout();
             this._panelContent.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -68,6 +72,7 @@
             this.tableLayoutPanel1.SuspendLayout();
             this._groupBoxInputParams.SuspendLayout();
             this._tableLayoutPanelPurifyParams.SuspendLayout();
+            this._contextMenuStripLog.SuspendLayout();
             this.SuspendLayout();
             // 
             // _richTextBoxLog
@@ -76,6 +81,7 @@
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this._richTextBoxLog.BackColor = System.Drawing.Color.White;
+            this._richTextBoxLog.ContextMenuStrip = this._contextMenuStripLog;
             this._richTextBoxLog.Location = new System.Drawing.Point(0, 278);
             this._richTextBoxLog.Margin = new System.Windows.Forms.Padding(4);
             this._richTextBoxLog.Name = "_richTextBoxLog";
@@ -449,6 +455,30 @@
             this._checkBoxRemoveComments.UseVisualStyleBackColor = true;
             this._checkBoxRemoveComments.CheckedChanged += new System.EventHandler(this._checkBoxRemoveComments_CheckedChanged);
             // 
+            // _contextMenuStripLog
+            // 
+            this._contextMenuStripLog.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.clearToolStripMenuItem,
+            this.copyToolStripMenuItem});
+            this._contextMenuStripLog.Name = "_contextMenuStripLog";
+            this._contextMenuStripLog.Size = new System.Drawing.Size(153, 74);
+            // 
+            // clearToolStripMenuItem
+            // 
+            this.clearToolStripMenuItem.AccessibleName = "ClearLog";
+            this.clearToolStripMenuItem.Name = "clearToolStripMenuItem";
+            this.clearToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
+            this.clearToolStripMenuItem.Text = "Clear";
+            this.clearToolStripMenuItem.Click += new System.EventHandler(this.clearToolStripMenuItem_Click);
+            // 
+            // copyToolStripMenuItem
+            // 
+            this.copyToolStripMenuItem.AccessibleName = "CopyLog";
+            this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
+            this.copyToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
+            this.copyToolStripMenuItem.Text = "Copy";
+            this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
+            // 
             // FormMain
             // 
             this.AllowDrop = true;
@@ -482,6 +512,7 @@
             this._groupBoxInputParams.PerformLayout();
             this._tableLayoutPanelPurifyParams.ResumeLayout(false);
             this._tableLayoutPanelPurifyParams.PerformLayout();
+            this._contextMenuStripLog.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -520,6 +551,9 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
         private System.Windows.Forms.ToolStripMenuItem _settingsToolStripMenuItem;
         private System.Windows.Forms.Button _buttonBrowseImageFile;
+        private System.Windows.Forms.ContextMenuStrip _contextMenuStripLog;
+        private System.Windows.Forms.ToolStripMenuItem clearToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem copyToolStripMenuItem;
     }
 }
 

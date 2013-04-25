@@ -65,12 +65,18 @@ namespace JpegMetaRemover.Translation
                 else if (rawControl is Control)
                 {
                     var control = (Control)rawControl;
+
                     localizableControlWrappers.AddIfLocalizable(new LocalizableControlWrapper()
                     {
                         AccessibleName = control.AccessibleName,
                         WrappedControl = control
                     });
                     FetchLocalizableControls(control.Controls, localizableControlWrappers);
+
+                    if (control.ContextMenuStrip != null)
+                    {
+                        FetchLocalizableControls(control.ContextMenuStrip.Items, localizableControlWrappers);
+                    }
                 }
                 else if (rawControl is ToolStripItem)
                 {
