@@ -41,64 +41,6 @@ namespace JpegMetaRemover.Translation
             set { this.TextMember.SetValue(this.WrappedControl, value, null); }
         }
 
-        public static LocalizableControlWrapperCollection FetchFormLocalizableControls(Form form)
-        {
-            var controlWrappers = new LocalizableControlWrapperCollection();
-            FetchLocalizableControls(form.Controls, controlWrappers);
-            return controlWrappers;
-        }
-
-        private static void FetchLocalizableControls(IEnumerable controls, LocalizableControlWrapperCollection localizableControlWrappers)
-        {
-            foreach (var rawControl in controls)
-            {
-                if (rawControl is MenuStrip)
-                {
-                    var control = (MenuStrip)rawControl;
-                    localizableControlWrappers.AddIfLocalizable(new LocalizableControlWrapper()
-                    {
-                        AccessibleName = control.AccessibleName,
-                        WrappedControl = control
-                    });
-                    FetchLocalizableControls(control.Items, localizableControlWrappers);
-                }
-                else if (rawControl is Control)
-                {
-                    var control = (Control)rawControl;
-
-                    localizableControlWrappers.AddIfLocalizable(new LocalizableControlWrapper()
-                    {
-                        AccessibleName = control.AccessibleName,
-                        WrappedControl = control
-                    });
-                    FetchLocalizableControls(control.Controls, localizableControlWrappers);
-
-                    if (control.ContextMenuStrip != null)
-                    {
-                        FetchLocalizableControls(control.ContextMenuStrip.Items, localizableControlWrappers);
-                    }
-                }
-                else if (rawControl is ToolStripItem)
-                {
-                    var control = (ToolStripItem)rawControl;
-                    localizableControlWrappers.AddIfLocalizable(new LocalizableControlWrapper()
-                    {
-                        AccessibleName = control.AccessibleName,
-                        WrappedControl = control
-                    });
-
-                    var dropDown = control as ToolStripDropDownItem;
-                    if (dropDown != null)
-                    {
-                        FetchLocalizableControls(dropDown.DropDownItems, localizableControlWrappers);
-                    }
-                }
-                else
-                {
-                    Logger.LogError(typeof(LocalizationManager), "Unsupported element of type \"" + rawControl.GetType().Name + "\" found for localization");
-                }
-            }
-        }
 
     }
 

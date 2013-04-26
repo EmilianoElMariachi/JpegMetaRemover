@@ -16,15 +16,24 @@ namespace JpegMetaRemover
     public partial class FormMain : Form
     {
 
-        private LocalizableControlWrapperCollection LocalizableControls { get; set; }
+        private LocalizableControlWrapperCollection LocalizableControls
+        {
+            get { return _localizableControls; }
+        }
 
         private readonly LocalizationManager _localizationManager = new LocalizationManager();
+        private LocalizableControlWrapperCollection _localizableControls;
+
+        private FormSettings _formSettings = new FormSettings();
 
         public FormMain()
         {
-            Logger.OnLog += (sender, message, type) => { this.Log(message, type); };
 
             InitializeComponent();
+
+            Logger.OnLog += (sender, message, type) => { this.Log(message, type); };
+
+            _localizableControls = new LocalizableControlWrapperCollection();
 
             InitializeLanguages();
 
@@ -36,12 +45,17 @@ namespace JpegMetaRemover
 
             _checkBoxRemoveComments.Checked = SettingsManager.RemoveComments;
 
+            _textBoxInputPath.Text = SettingsManager.LastInputPath;
+
         }
 
         private void InitializeLanguages()
         {
 
-            LocalizableControls = LocalizableControlWrapper.FetchFormLocalizableControls(this);
+            LocalizableControls.UpdateListFromForm(this);
+
+            LocalizableControls.UpdateListFromForm(_formSettings);
+
 
             var defaultLocalization = _localizationManager.LoadLocalizationFromLocalizableControls(this.LocalizableControls, "English", "en");
 
@@ -331,8 +345,16 @@ namespace JpegMetaRemover
                 LogWarning(_localizationManager.ActiveLocalization.Translate("No file to process."));
             }
 
+
             var maxProgression = jpegFilesToPurify.Count * 2;
             var currentProgression = 0.0;
+
+            var updateProgression = new Action(delegate()
+            {
+                var pourcentageValue = (int)Math.Round(++currentProgression / maxProgression * 100.0);
+                _backgroundWorkerPurify.ReportProgress(pourcentageValue);
+            });
+
             foreach (var inputJpegFilePath in jpegFilesToPurify)
             {
                 if (_backgroundWorkerPurify.CancellationPending)
@@ -351,11 +373,11 @@ namespace JpegMetaRemover
 
                     purificationResult = jpgExifRemover.Purify(jpegMetaTypesToRemove, commentsAction);
 
-                    _backgroundWorkerPurify.ReportProgress((int)(++currentProgression / maxProgression * 100.0));
+                    updateProgression();
 
                     jpgExifRemover.Dispose();
 
-                    LogInfo(_localizationManager.ActiveLocalization.Translate("{0} metadata(s) found ({1})", purificationResult.NbMetasFound.ToString() , purificationResult.MetaTypesFound.ToString()));
+                    LogInfo(_localizationManager.ActiveLocalization.Translate("{0} metadata(s) found ({1})", purificationResult.NbMetasFound.ToString(), purificationResult.MetaTypesFound.ToString()));
                     LogInfo(_localizationManager.ActiveLocalization.Translate("{0} metadata(s) removed ({1})", purificationResult.NbMetasRemoved.ToString(), purificationResult.MetaTypesRemoved.ToString()));
                     LogInfo(_localizationManager.ActiveLocalization.Translate("{0} comment(s) found", purificationResult.NbCommentsFound.ToString()));
                     LogInfo(_localizationManager.ActiveLocalization.Translate("{0} comment(s) removed", purificationResult.NbCommentsRemoved.ToString()));
@@ -381,8 +403,8 @@ namespace JpegMetaRemover
                     {
                         LogInfo(_localizationManager.ActiveLocalization.Translate("No file written."));
                     }
-                    _backgroundWorkerPurify.ReportProgress((int)(++currentProgression / maxProgression * 100.0));
 
+                    updateProgression();
 
                     LogActionDoneSuccessfully();
 
@@ -398,13 +420,13 @@ namespace JpegMetaRemover
                     { MemHelper.DisposeSecure(purificationResult.ResultStream); }
                     MemHelper.DisposeSecure(outputFileStream);
                 }
-            }
+            }//End for each file
 
             var dateEnd = DateTime.Now;
 
             var ellapsedTime = dateEnd - dateStart;
 
-            Log(_localizationManager.ActiveLocalization.Translate("Execution time : {0} (s)", ellapsedTime.TotalSeconds.ToString()) + Environment.NewLine, Color.Purple, FontStyle.Bold);
+            Log(_localizationManager.ActiveLocalization.Translate("Total : {0} file(s) in {1} (s)", jpegFilesToPurify.Count.ToString(), ellapsedTime.TotalSeconds.ToString()) + Environment.NewLine, Color.Purple, FontStyle.Bold);
 
         }
 
@@ -413,12 +435,17 @@ namespace JpegMetaRemover
             if (e.Error != null)
             { this.LogException(e.Error); }
 
+            _progressBar.Value = _progressBar.Maximum;
+
+            Thread.Sleep(300);
+
             _progressBar.Value = _progressBar.Minimum;
         }
 
         private void _backgroundWorkerPurify_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
         {
             _progressBar.Value = e.ProgressPercentage;
+
         }
 
         private void _buttonCancel_Click(object sender, EventArgs e)
@@ -510,12 +537,7 @@ namespace JpegMetaRemover
 
         private void _settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var formSettings = new FormSettings();
-
-            if (formSettings.ShowDialog() == DialogResult.OK)
-            {
-                SettingsManager.MetaTypesToRemove = formSettings.GetJpegMetaTypesToRemove();
-            }
+            _formSettings.ShowDialog(this);
         }
 
         private void _checkBoxIncludeSubdirectories_CheckedChanged(object sender, EventArgs e)
@@ -546,6 +568,11 @@ namespace JpegMetaRemover
         private void copyToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _richTextBoxLog.Copy();
+        }
+
+        private void FormMain_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            SettingsManager.LastInputPath = _textBoxInputPath.Text;
         }
 
     }

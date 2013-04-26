@@ -29,7 +29,11 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             this._richTextBoxLog = new System.Windows.Forms.RichTextBox();
+            this._contextMenuStripLog = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.clearToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this._statusStrip = new System.Windows.Forms.StatusStrip();
             this._menuStrip = new System.Windows.Forms.MenuStrip();
             this.MenuItemFile = new System.Windows.Forms.ToolStripMenuItem();
@@ -60,9 +64,7 @@
             this._tableLayoutPanelPurifyParams = new System.Windows.Forms.TableLayoutPanel();
             this._checkBoxRemoveMetadatas = new System.Windows.Forms.CheckBox();
             this._checkBoxRemoveComments = new System.Windows.Forms.CheckBox();
-            this._contextMenuStripLog = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.clearToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this._contextMenuStripLog.SuspendLayout();
             this._menuStrip.SuspendLayout();
             this._panelContent.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -72,7 +74,6 @@
             this.tableLayoutPanel1.SuspendLayout();
             this._groupBoxInputParams.SuspendLayout();
             this._tableLayoutPanelPurifyParams.SuspendLayout();
-            this._contextMenuStripLog.SuspendLayout();
             this.SuspendLayout();
             // 
             // _richTextBoxLog
@@ -82,21 +83,45 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this._richTextBoxLog.BackColor = System.Drawing.Color.White;
             this._richTextBoxLog.ContextMenuStrip = this._contextMenuStripLog;
-            this._richTextBoxLog.Location = new System.Drawing.Point(0, 278);
+            this._richTextBoxLog.Location = new System.Drawing.Point(0, 257);
             this._richTextBoxLog.Margin = new System.Windows.Forms.Padding(4);
             this._richTextBoxLog.Name = "_richTextBoxLog";
             this._richTextBoxLog.ReadOnly = true;
-            this._richTextBoxLog.Size = new System.Drawing.Size(730, 100);
+            this._richTextBoxLog.Size = new System.Drawing.Size(604, 157);
             this._richTextBoxLog.TabIndex = 0;
             this._richTextBoxLog.Text = "";
             this._richTextBoxLog.WordWrap = false;
             // 
+            // _contextMenuStripLog
+            // 
+            this._contextMenuStripLog.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.clearToolStripMenuItem,
+            this.copyToolStripMenuItem});
+            this._contextMenuStripLog.Name = "_contextMenuStripLog";
+            this._contextMenuStripLog.Size = new System.Drawing.Size(113, 52);
+            // 
+            // clearToolStripMenuItem
+            // 
+            this.clearToolStripMenuItem.AccessibleName = "ClearLog";
+            this.clearToolStripMenuItem.Name = "clearToolStripMenuItem";
+            this.clearToolStripMenuItem.Size = new System.Drawing.Size(112, 24);
+            this.clearToolStripMenuItem.Text = "Clear";
+            this.clearToolStripMenuItem.Click += new System.EventHandler(this.clearToolStripMenuItem_Click);
+            // 
+            // copyToolStripMenuItem
+            // 
+            this.copyToolStripMenuItem.AccessibleName = "CopyLog";
+            this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
+            this.copyToolStripMenuItem.Size = new System.Drawing.Size(112, 24);
+            this.copyToolStripMenuItem.Text = "Copy";
+            this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
+            // 
             // _statusStrip
             // 
-            this._statusStrip.Location = new System.Drawing.Point(0, 385);
+            this._statusStrip.Location = new System.Drawing.Point(0, 421);
             this._statusStrip.Name = "_statusStrip";
             this._statusStrip.Padding = new System.Windows.Forms.Padding(1, 0, 19, 0);
-            this._statusStrip.Size = new System.Drawing.Size(732, 22);
+            this._statusStrip.Size = new System.Drawing.Size(606, 22);
             this._statusStrip.TabIndex = 4;
             // 
             // _menuStrip
@@ -108,7 +133,7 @@
             this._menuStrip.Location = new System.Drawing.Point(0, 0);
             this._menuStrip.Name = "_menuStrip";
             this._menuStrip.Padding = new System.Windows.Forms.Padding(8, 2, 0, 2);
-            this._menuStrip.Size = new System.Drawing.Size(732, 28);
+            this._menuStrip.Size = new System.Drawing.Size(606, 28);
             this._menuStrip.TabIndex = 5;
             this._menuStrip.Text = "menuStrip1";
             // 
@@ -166,7 +191,7 @@
             this._runToolStripMenuItem.AccessibleName = "MenuItemRun";
             this._runToolStripMenuItem.Name = "_runToolStripMenuItem";
             this._runToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
-            this._runToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
+            this._runToolStripMenuItem.Size = new System.Drawing.Size(176, 24);
             this._runToolStripMenuItem.Text = "Run";
             this._runToolStripMenuItem.Click += new System.EventHandler(this._runToolStripMenuItem_Click);
             // 
@@ -174,7 +199,8 @@
             // 
             this._settingsToolStripMenuItem.AccessibleName = "MenuItemSettings";
             this._settingsToolStripMenuItem.Name = "_settingsToolStripMenuItem";
-            this._settingsToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
+            this._settingsToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F10;
+            this._settingsToolStripMenuItem.Size = new System.Drawing.Size(176, 24);
             this._settingsToolStripMenuItem.Text = "Settings ...";
             this._settingsToolStripMenuItem.Click += new System.EventHandler(this._settingsToolStripMenuItem_Click);
             // 
@@ -182,7 +208,7 @@
             // 
             this._languageToolStripMenuItem.AccessibleName = "MenuItemLanguage";
             this._languageToolStripMenuItem.Name = "_languageToolStripMenuItem";
-            this._languageToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
+            this._languageToolStripMenuItem.Size = new System.Drawing.Size(176, 24);
             this._languageToolStripMenuItem.Text = "Language";
             // 
             // _aboutToolStripMenuItem
@@ -209,7 +235,7 @@
             this._panelContent.Location = new System.Drawing.Point(0, 33);
             this._panelContent.Margin = new System.Windows.Forms.Padding(4);
             this._panelContent.Name = "_panelContent";
-            this._panelContent.Size = new System.Drawing.Size(732, 237);
+            this._panelContent.Size = new System.Drawing.Size(606, 224);
             this._panelContent.TabIndex = 7;
             // 
             // tableLayoutPanel2
@@ -224,14 +250,14 @@
             this.tableLayoutPanel2.Controls.Add(this._buttonCancel, 1, 1);
             this.tableLayoutPanel2.Controls.Add(this._progressBar, 0, 2);
             this.tableLayoutPanel2.Controls.Add(this._tableLayoutPanelInputPath, 0, 0);
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 88);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 80);
             this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(4);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 3;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(730, 144);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(604, 140);
             this.tableLayoutPanel2.TabIndex = 0;
             // 
             // _buttonRun
@@ -239,7 +265,7 @@
             this._buttonRun.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this._buttonRun.BackgroundImage = global::JpegMetaRemover.Properties.Resources.Play;
             this._buttonRun.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this._buttonRun.Location = new System.Drawing.Point(219, 58);
+            this._buttonRun.Location = new System.Drawing.Point(156, 58);
             this._buttonRun.Margin = new System.Windows.Forms.Padding(4, 4, 13, 4);
             this._buttonRun.Name = "_buttonRun";
             this._buttonRun.Size = new System.Drawing.Size(133, 44);
@@ -251,7 +277,7 @@
             // 
             this._buttonCancel.BackgroundImage = global::JpegMetaRemover.Properties.Resources.Stop;
             this._buttonCancel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this._buttonCancel.Location = new System.Drawing.Point(378, 58);
+            this._buttonCancel.Location = new System.Drawing.Point(315, 58);
             this._buttonCancel.Margin = new System.Windows.Forms.Padding(13, 4, 4, 4);
             this._buttonCancel.Name = "_buttonCancel";
             this._buttonCancel.Size = new System.Drawing.Size(133, 44);
@@ -261,13 +287,13 @@
             // 
             // _progressBar
             // 
-            this._progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
             this.tableLayoutPanel2.SetColumnSpan(this._progressBar, 2);
+            this._progressBar.Dock = System.Windows.Forms.DockStyle.Fill;
             this._progressBar.Location = new System.Drawing.Point(4, 110);
             this._progressBar.Margin = new System.Windows.Forms.Padding(4);
             this._progressBar.Name = "_progressBar";
-            this._progressBar.Size = new System.Drawing.Size(722, 26);
+            this._progressBar.Size = new System.Drawing.Size(596, 26);
+            this._progressBar.Step = 1;
             this._progressBar.TabIndex = 7;
             // 
             // _tableLayoutPanelInputPath
@@ -286,7 +312,7 @@
             this._tableLayoutPanelInputPath.Name = "_tableLayoutPanelInputPath";
             this._tableLayoutPanelInputPath.RowCount = 1;
             this._tableLayoutPanelInputPath.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this._tableLayoutPanelInputPath.Size = new System.Drawing.Size(722, 46);
+            this._tableLayoutPanelInputPath.Size = new System.Drawing.Size(596, 46);
             this._tableLayoutPanelInputPath.TabIndex = 8;
             // 
             // _labelInputPath
@@ -307,14 +333,14 @@
             this._textBoxInputPath.Location = new System.Drawing.Point(100, 12);
             this._textBoxInputPath.Margin = new System.Windows.Forms.Padding(5);
             this._textBoxInputPath.Name = "_textBoxInputPath";
-            this._textBoxInputPath.Size = new System.Drawing.Size(560, 22);
+            this._textBoxInputPath.Size = new System.Drawing.Size(434, 22);
             this._textBoxInputPath.TabIndex = 9;
             this._textBoxInputPath.Text = "TestResources";
             // 
             // _buttonBrowseImageFile
             // 
             this._buttonBrowseImageFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this._buttonBrowseImageFile.Location = new System.Drawing.Point(669, 6);
+            this._buttonBrowseImageFile.Location = new System.Drawing.Point(543, 6);
             this._buttonBrowseImageFile.Margin = new System.Windows.Forms.Padding(4);
             this._buttonBrowseImageFile.Name = "_buttonBrowseImageFile";
             this._buttonBrowseImageFile.Size = new System.Drawing.Size(49, 34);
@@ -336,7 +362,7 @@
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 1;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(728, 74);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(593, 66);
             this.tableLayoutPanel3.TabIndex = 9;
             // 
             // _groupBoxOutputParams
@@ -349,7 +375,7 @@
             this._groupBoxOutputParams.Margin = new System.Windows.Forms.Padding(4);
             this._groupBoxOutputParams.Name = "_groupBoxOutputParams";
             this._groupBoxOutputParams.Padding = new System.Windows.Forms.Padding(4);
-            this._groupBoxOutputParams.Size = new System.Drawing.Size(488, 66);
+            this._groupBoxOutputParams.Size = new System.Drawing.Size(353, 58);
             this._groupBoxOutputParams.TabIndex = 7;
             this._groupBoxOutputParams.TabStop = false;
             this._groupBoxOutputParams.Text = "Output parameters";
@@ -368,7 +394,7 @@
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(480, 43);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(345, 35);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // _checkBoxOverride
@@ -407,7 +433,7 @@
             this._groupBoxInputParams.Margin = new System.Windows.Forms.Padding(5);
             this._groupBoxInputParams.Name = "_groupBoxInputParams";
             this._groupBoxInputParams.Padding = new System.Windows.Forms.Padding(5);
-            this._groupBoxInputParams.Size = new System.Drawing.Size(222, 64);
+            this._groupBoxInputParams.Size = new System.Drawing.Size(222, 56);
             this._groupBoxInputParams.TabIndex = 6;
             this._groupBoxInputParams.TabStop = false;
             this._groupBoxInputParams.Text = "Elements to remove";
@@ -426,7 +452,7 @@
             this._tableLayoutPanelPurifyParams.Name = "_tableLayoutPanelPurifyParams";
             this._tableLayoutPanelPurifyParams.RowCount = 1;
             this._tableLayoutPanelPurifyParams.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this._tableLayoutPanelPurifyParams.Size = new System.Drawing.Size(212, 39);
+            this._tableLayoutPanelPurifyParams.Size = new System.Drawing.Size(212, 31);
             this._tableLayoutPanelPurifyParams.TabIndex = 1;
             // 
             // _checkBoxRemoveMetadatas
@@ -455,46 +481,25 @@
             this._checkBoxRemoveComments.UseVisualStyleBackColor = true;
             this._checkBoxRemoveComments.CheckedChanged += new System.EventHandler(this._checkBoxRemoveComments_CheckedChanged);
             // 
-            // _contextMenuStripLog
-            // 
-            this._contextMenuStripLog.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.clearToolStripMenuItem,
-            this.copyToolStripMenuItem});
-            this._contextMenuStripLog.Name = "_contextMenuStripLog";
-            this._contextMenuStripLog.Size = new System.Drawing.Size(153, 74);
-            // 
-            // clearToolStripMenuItem
-            // 
-            this.clearToolStripMenuItem.AccessibleName = "ClearLog";
-            this.clearToolStripMenuItem.Name = "clearToolStripMenuItem";
-            this.clearToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
-            this.clearToolStripMenuItem.Text = "Clear";
-            this.clearToolStripMenuItem.Click += new System.EventHandler(this.clearToolStripMenuItem_Click);
-            // 
-            // copyToolStripMenuItem
-            // 
-            this.copyToolStripMenuItem.AccessibleName = "CopyLog";
-            this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
-            this.copyToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
-            this.copyToolStripMenuItem.Text = "Copy";
-            this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
-            // 
             // FormMain
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(732, 407);
+            this.ClientSize = new System.Drawing.Size(606, 443);
             this.Controls.Add(this._panelContent);
             this.Controls.Add(this._richTextBoxLog);
             this.Controls.Add(this._statusStrip);
             this.Controls.Add(this._menuStrip);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this._menuStrip;
             this.Margin = new System.Windows.Forms.Padding(5);
             this.Name = "FormMain";
             this.Text = "Jpeg Metadatas Remover";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormMain_FormClosed);
             this.DragDrop += new System.Windows.Forms.DragEventHandler(this.FormMain_DragDrop);
             this.DragEnter += new System.Windows.Forms.DragEventHandler(this.OnDragEnter);
+            this._contextMenuStripLog.ResumeLayout(false);
             this._menuStrip.ResumeLayout(false);
             this._menuStrip.PerformLayout();
             this._panelContent.ResumeLayout(false);
@@ -512,7 +517,6 @@
             this._groupBoxInputParams.PerformLayout();
             this._tableLayoutPanelPurifyParams.ResumeLayout(false);
             this._tableLayoutPanelPurifyParams.PerformLayout();
-            this._contextMenuStripLog.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 

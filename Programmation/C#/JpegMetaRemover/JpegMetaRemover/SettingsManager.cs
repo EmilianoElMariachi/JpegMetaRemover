@@ -18,7 +18,7 @@ namespace JpegMetaRemover
         internal const string REG_VAL_OVERRIDE_ORIGINAL_FILE = "OverrideOriginalFile";
         internal const string REG_VAL_REMOVE_METADATAS = "RemoveMetaDatas";
         internal const string REG_VAL_REMOVE_COMMENTS = "RemoveComments";
-        
+        internal const string REG_VAL_LAST_INPUT_PATH = "LastInputPath";
 
         private static JpegMetaTypes _metaTypesToRemove;
 
@@ -28,7 +28,7 @@ namespace JpegMetaRemover
             set
             {
                 _metaTypesToRemove = value;
-                SaveMetaTypesToRemove();
+                TrySaveToRegistry(REG_VAL_META_TYPES_TO_REMOVE, MetaTypesToRemove.ToString());
             }
         }
         private static string _twoLetterISOLanguageName;
@@ -39,7 +39,7 @@ namespace JpegMetaRemover
             set
             {
                 _twoLetterISOLanguageName = value;
-                SaveToRegistry(REG_VAL_LANGUAGE, value);
+                TrySaveToRegistry(REG_VAL_LANGUAGE, value);
             }
         }
 
@@ -51,7 +51,7 @@ namespace JpegMetaRemover
             set
             {
                 _includeSubdirectories = value;
-                SaveToRegistry(REG_VAL_INCLUDE_SUB_DIRECTORIES, value.ToString());
+                TrySaveToRegistry(REG_VAL_INCLUDE_SUB_DIRECTORIES, value.ToString());
             }
         }
 
@@ -63,7 +63,7 @@ namespace JpegMetaRemover
             set
             {
                 _overrideOriginalFile = value;
-                SaveToRegistry(REG_VAL_OVERRIDE_ORIGINAL_FILE, value.ToString());
+                TrySaveToRegistry(REG_VAL_OVERRIDE_ORIGINAL_FILE, value.ToString());
             }
         }
 
@@ -75,7 +75,7 @@ namespace JpegMetaRemover
             set
             {
                 _removeMetadatas = value;
-                SaveToRegistry(REG_VAL_REMOVE_METADATAS, value.ToString());
+                TrySaveToRegistry(REG_VAL_REMOVE_METADATAS, value.ToString());
             }
         }
 
@@ -84,36 +84,61 @@ namespace JpegMetaRemover
         public static bool RemoveComments
         {
             get { return _removeComments; }
-            set 
-            { 
+            set
+            {
                 _removeComments = value;
-                SaveToRegistry(REG_VAL_REMOVE_COMMENTS, value.ToString());
+                TrySaveToRegistry(REG_VAL_REMOVE_COMMENTS, value.ToString());
             }
         }
 
+        private static string _lastInputPath;
+
+        public static string LastInputPath
+        {
+            get { return _lastInputPath; }
+            set
+            {
+                _lastInputPath = value;
+                TrySaveToRegistry(REG_VAL_LAST_INPUT_PATH, value);
+            }
+        }
+
+        public static bool CleanUpSavedSettingsOnClose { get; set; }
+
         static SettingsManager()
         {
-            _twoLetterISOLanguageName = ReadFromRegistry<string>(REG_VAL_LANGUAGE, null);
+            _twoLetterISOLanguageName = TryReadFromRegistry<string>(REG_VAL_LANGUAGE, null);
 
 
             _metaTypesToRemove = GetDefaultMetaTypesToRemove();
-            var metaTypesToRemoveAsString = ReadFromRegistry<string>(REG_VAL_META_TYPES_TO_REMOVE, null);
+            var metaTypesToRemoveAsString = TryReadFromRegistry<string>(REG_VAL_META_TYPES_TO_REMOVE, null);
             if (metaTypesToRemoveAsString != null)
             { Enum.TryParse(metaTypesToRemoveAsString, out _metaTypesToRemove); }
 
 
             _includeSubdirectories = false;
-            bool.TryParse(ReadFromRegistry<string>(REG_VAL_INCLUDE_SUB_DIRECTORIES, null), out _includeSubdirectories);
+            bool.TryParse(TryReadFromRegistry<string>(REG_VAL_INCLUDE_SUB_DIRECTORIES, null), out _includeSubdirectories);
 
             _overrideOriginalFile = false;
-            bool.TryParse(ReadFromRegistry<string>(REG_VAL_OVERRIDE_ORIGINAL_FILE, null), out _overrideOriginalFile);
+            bool.TryParse(TryReadFromRegistry<string>(REG_VAL_OVERRIDE_ORIGINAL_FILE, null), out _overrideOriginalFile);
 
             _removeMetadatas = true;
-            bool.TryParse(ReadFromRegistry<string>(REG_VAL_REMOVE_METADATAS, null), out _removeMetadatas);     
-            
+            bool.TryParse(TryReadFromRegistry<string>(REG_VAL_REMOVE_METADATAS, null), out _removeMetadatas);
+
             _removeComments = true;
-            bool.TryParse(ReadFromRegistry<string>(REG_VAL_REMOVE_COMMENTS, null), out _removeComments);
-            
+            bool.TryParse(TryReadFromRegistry<string>(REG_VAL_REMOVE_COMMENTS, null), out _removeComments);
+
+            LastInputPath = TryReadFromRegistry<string>(REG_VAL_LAST_INPUT_PATH, "");
+
+            CleanUpSavedSettingsOnClose = false;
+
+            AppDomain.CurrentDomain.ProcessExit += new EventHandler(CurrentDomain_ProcessExit);
+        }
+
+        static void CurrentDomain_ProcessExit(object sender, EventArgs e)
+        {
+            if (CleanUpSavedSettingsOnClose)
+            { CleanRegistry(); }
         }
 
         private static JpegMetaTypes GetDefaultMetaTypesToRemove()
@@ -126,12 +151,7 @@ namespace JpegMetaRemover
             return defaultMetaTypes;
         }
 
-        private static void SaveMetaTypesToRemove()
-        {
-            SaveToRegistry(REG_VAL_META_TYPES_TO_REMOVE, MetaTypesToRemove.ToString());
-        }
-
-        private static TRegValType ReadFromRegistry<TRegValType>(string valueName, TRegValType defaultValue)
+        private static TRegValType TryReadFromRegistry<TRegValType>(string valueName, TRegValType defaultValue)
         {
             TRegValType value = defaultValue;
 
@@ -151,7 +171,7 @@ namespace JpegMetaRemover
             return value;
         }
 
-        private static void SaveToRegistry(string valueName, object value)
+        private static void TrySaveToRegistry(string valueName, object value)
         {
             //Charge la localization depuis la base de registre si elle existe
             RegistryKey regKeyApp = null;
@@ -169,5 +189,12 @@ namespace JpegMetaRemover
             { MemHelper.DisposeSecure(regKeyApp); }
         }
 
+        public static void CleanRegistry()
+        {
+            try
+            { Registry.CurrentUser.DeleteSubKeyTree(REG_KEY_APP); }
+            catch
+            { }
+        }
     }
 }

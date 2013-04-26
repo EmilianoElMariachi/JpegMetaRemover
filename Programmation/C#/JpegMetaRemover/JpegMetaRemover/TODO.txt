@@ -1,6 +1,6 @@
-_ Sauvegarder le chemin saisi
+_ Faire une barre de progression Custom
 
-_ AJouter un bouton pour effacer les clés de registres
+_ Faire la fenêtre "A propos"
 
 _ Inverser les messages dans le log.
 

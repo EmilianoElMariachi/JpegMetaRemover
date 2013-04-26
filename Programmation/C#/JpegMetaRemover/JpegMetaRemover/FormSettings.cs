@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace JpegMetaRemover
@@ -22,18 +16,44 @@ namespace JpegMetaRemover
                 {
                     var item = _listViewMetadatasToRemove.Items.Add(value.ToString() + " (APP" + appIndex++.ToString() + ")");
                     item.Tag = value;
-                    item.Checked = ((value & SettingsManager.MetaTypesToRemove) == value);
                 }
             }
 
         }
 
+        public new DialogResult ShowDialog()
+        {
+            this.UpdateFromSettings();
+            return base.ShowDialog();
+        }
+
+        public new DialogResult ShowDialog(IWin32Window owner)
+        {
+            this.UpdateFromSettings();
+            return base.ShowDialog(owner);
+        }
+
+        public void UpdateFromSettings()
+        {
+            foreach (ListViewItem item in _listViewMetadatasToRemove.Items)
+            {
+                var itemMeta = (JpegMetaTypes) item.Tag;
+                item.Checked = (SettingsManager.MetaTypesToRemove & itemMeta) == itemMeta;
+            }
+
+            _checkBoxCleanSavedSettingsOnClose.Checked = SettingsManager.CleanUpSavedSettingsOnClose;            
+        }
+
         private void _buttonSaveSettings_Click(object sender, EventArgs e)
         {
             this.DialogResult = DialogResult.OK;
+
+            SettingsManager.MetaTypesToRemove = this.GetJpegMetaTypesToRemove();
+            SettingsManager.CleanUpSavedSettingsOnClose = _checkBoxCleanSavedSettingsOnClose.Checked;
+
         }
 
-        public JpegMetaTypes GetJpegMetaTypesToRemove()
+        private JpegMetaTypes GetJpegMetaTypesToRemove()
         {
             var jpegMetaTypesToRemove = JpegMetaTypes.NONE;
 
@@ -46,6 +66,33 @@ namespace JpegMetaRemover
             }
 
             return jpegMetaTypesToRemove;
+        }
+
+        private void FormSettings_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason != CloseReason.FormOwnerClosing)
+            {
+                e.Cancel = true;
+                this.Hide();
+            }
+        }
+
+        private void _selectAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SetAllMetaTypesToGivenCheckedState(true);
+        }
+
+        private void _deselectAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SetAllMetaTypesToGivenCheckedState(false);
+        }
+
+        private void SetAllMetaTypesToGivenCheckedState(bool isChecked)
+        {
+            foreach (ListViewItem item in _listViewMetadatasToRemove.Items)
+            {
+                item.Checked = isChecked;
+            }
         }
 
     }

@@ -23,7 +23,18 @@
 
     <element id="ClearLog">Effacer</element>
     <element id="CopyLog">Copier</element>
+    
+    
+    <element id="FormSettings">Paramètres</element>
+    <element id="GroupBoxSettingsMetaTypesToRemove">Types de métadonnées à supprimer</element>
+    <element id="GroupBoxSaveSettings">Sauvegarde des paramètres</element>
+    <element id="CheckBoxCleanSavedSettings">Supprimer les paramètres sauvegardés à la fermeture</element>
+    <element id="ButtonSettingsSave">Sauvegarder</element>
+    <element id="ButtonSettingsCancel">Annuler</element>
+    <element id="SettingsContextMenuItemSelectAll">Sélectionner tout</element>
+    <element id="SettingsContextMenuItemDeselectAll">Désélectionner tout</element>
 
+    
 
     <element id="Please wait.">Merci de patienter.</element>
     <element id="Specified path &quot;{0}&quot; doesn't exist.">Le chemin spécifié "{0}" n'existe pas.</element>
@@ -41,7 +52,7 @@
     <element id="ERROR : ">ERREUR : </element>
     <element id="No file to process.">Aucun fichier à traiter</element>
     <element id="Operation Cancelled...">Traitement interrompu...</element>
-    <element id="Execution time : {0} (s)">Temps d'exécution : {0} (s)</element>
+    <element id="Total : {0} file(s) in {1} (s)">Total : {0} fichier(s) en {1} (s)</element>
     
 
 
