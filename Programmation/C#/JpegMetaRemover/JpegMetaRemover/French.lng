@@ -34,8 +34,6 @@
     <element id="SettingsContextMenuItemSelectAll">Sélectionner tout</element>
     <element id="SettingsContextMenuItemDeselectAll">Désélectionner tout</element>
 
-    
-
     <element id="Please wait.">Merci de patienter.</element>
     <element id="Specified path &quot;{0}&quot; doesn't exist.">Le chemin spécifié "{0}" n'existe pas.</element>
     <element id="{0} metadata(s) found ({1})">{0} metadonnée(s) trouvée(s) ({1})</element>

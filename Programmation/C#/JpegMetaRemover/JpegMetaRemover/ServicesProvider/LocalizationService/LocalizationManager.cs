@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
+﻿using System.Collections.Generic;
 using System.Xml;
-using System.Collections;
 using JpegMetaRemover.Log;
 
-namespace JpegMetaRemover.Translation
+namespace JpegMetaRemover.ServicesProvider.LocalizationService
 {
     internal class LocalizationManager 
     {

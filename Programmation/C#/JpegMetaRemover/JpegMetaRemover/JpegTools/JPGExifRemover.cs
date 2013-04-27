@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
-using JpegMetaRemover.JpegTools;
 
-namespace JpegMetaRemover
+namespace JpegMetaRemover.JpegTools
 {
     public enum CommentsActionType
     {

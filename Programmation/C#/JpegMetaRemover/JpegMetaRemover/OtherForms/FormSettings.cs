@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Windows.Forms;
+using JpegMetaRemover.JpegTools;
+using JpegMetaRemover.ServicesProvider;
 
-namespace JpegMetaRemover
+namespace JpegMetaRemover.OtherForms
 {
     public partial class FormSettings : Form
     {
@@ -38,18 +40,18 @@ namespace JpegMetaRemover
             foreach (ListViewItem item in _listViewMetadatasToRemove.Items)
             {
                 var itemMeta = (JpegMetaTypes) item.Tag;
-                item.Checked = (SettingsManager.MetaTypesToRemove & itemMeta) == itemMeta;
+                item.Checked = (Services.SettingsManager.MetaTypesToRemove & itemMeta) == itemMeta;
             }
 
-            _checkBoxCleanSavedSettingsOnClose.Checked = SettingsManager.CleanUpSavedSettingsOnClose;            
+            _checkBoxCleanSavedSettingsOnClose.Checked = Services.SettingsManager.CleanUpSavedSettingsOnClose;            
         }
 
         private void _buttonSaveSettings_Click(object sender, EventArgs e)
         {
             this.DialogResult = DialogResult.OK;
 
-            SettingsManager.MetaTypesToRemove = this.GetJpegMetaTypesToRemove();
-            SettingsManager.CleanUpSavedSettingsOnClose = _checkBoxCleanSavedSettingsOnClose.Checked;
+            Services.SettingsManager.MetaTypesToRemove = this.GetJpegMetaTypesToRemove();
+            Services.SettingsManager.CleanUpSavedSettingsOnClose = _checkBoxCleanSavedSettingsOnClose.Checked;
 
         }
 

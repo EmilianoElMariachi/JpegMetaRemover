@@ -1,4 +1,4 @@
-﻿namespace JpegMetaRemover
+﻿namespace JpegMetaRemover.OtherForms
 {
     partial class FormSettings
     {
@@ -49,18 +49,17 @@
             // 
             // _listViewMetadatasToRemove
             // 
-            this._listViewMetadatasToRemove.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this._listViewMetadatasToRemove.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this._listViewMetadatasToRemove.CheckBoxes = true;
             this._listViewMetadatasToRemove.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this._columnHeader});
             this._listViewMetadatasToRemove.ContextMenuStrip = this._contextMenuStripMetaTypesToRemove;
             this._listViewMetadatasToRemove.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
-            this._listViewMetadatasToRemove.Location = new System.Drawing.Point(7, 22);
-            this._listViewMetadatasToRemove.Margin = new System.Windows.Forms.Padding(4);
+            this._listViewMetadatasToRemove.Location = new System.Drawing.Point(5, 18);
             this._listViewMetadatasToRemove.Name = "_listViewMetadatasToRemove";
-            this._listViewMetadatasToRemove.Size = new System.Drawing.Size(392, 235);
+            this._listViewMetadatasToRemove.Size = new System.Drawing.Size(277, 190);
             this._listViewMetadatasToRemove.TabIndex = 0;
             this._listViewMetadatasToRemove.UseCompatibleStateImageBehavior = false;
             this._listViewMetadatasToRemove.View = System.Windows.Forms.View.Details;
@@ -68,7 +67,7 @@
             // _columnHeader
             // 
             this._columnHeader.Text = "Metadatas Types";
-            this._columnHeader.Width = 345;
+            this._columnHeader.Width = 200;
             // 
             // _contextMenuStripMetaTypesToRemove
             // 
@@ -76,13 +75,13 @@
             this._selectAllToolStripMenuItem,
             this._deselectAllToolStripMenuItem});
             this._contextMenuStripMetaTypesToRemove.Name = "_contextMenuStripMetaTypesToRemove";
-            this._contextMenuStripMetaTypesToRemove.Size = new System.Drawing.Size(158, 52);
+            this._contextMenuStripMetaTypesToRemove.Size = new System.Drawing.Size(138, 48);
             // 
             // _selectAllToolStripMenuItem
             // 
             this._selectAllToolStripMenuItem.AccessibleName = "SettingsContextMenuItemSelectAll";
             this._selectAllToolStripMenuItem.Name = "_selectAllToolStripMenuItem";
-            this._selectAllToolStripMenuItem.Size = new System.Drawing.Size(157, 24);
+            this._selectAllToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
             this._selectAllToolStripMenuItem.Text = "Select All";
             this._selectAllToolStripMenuItem.Click += new System.EventHandler(this._selectAllToolStripMenuItem_Click);
             // 
@@ -90,20 +89,22 @@
             // 
             this._deselectAllToolStripMenuItem.AccessibleName = "SettingsContextMenuItemDeselectAll";
             this._deselectAllToolStripMenuItem.Name = "_deselectAllToolStripMenuItem";
-            this._deselectAllToolStripMenuItem.Size = new System.Drawing.Size(157, 24);
+            this._deselectAllToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
             this._deselectAllToolStripMenuItem.Text = "Deselect All";
             this._deselectAllToolStripMenuItem.Click += new System.EventHandler(this._deselectAllToolStripMenuItem_Click);
             // 
             // _groupBoxMetadatasToRemove
             // 
             this._groupBoxMetadatasToRemove.AccessibleName = "GroupBoxSettingsMetaTypesToRemove";
-            this._groupBoxMetadatasToRemove.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this._groupBoxMetadatasToRemove.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this._groupBoxMetadatasToRemove.Controls.Add(this._listViewMetadatasToRemove);
-            this._groupBoxMetadatasToRemove.Location = new System.Drawing.Point(12, 12);
+            this._groupBoxMetadatasToRemove.Location = new System.Drawing.Point(9, 10);
+            this._groupBoxMetadatasToRemove.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this._groupBoxMetadatasToRemove.Name = "_groupBoxMetadatasToRemove";
-            this._groupBoxMetadatasToRemove.Size = new System.Drawing.Size(406, 264);
+            this._groupBoxMetadatasToRemove.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this._groupBoxMetadatasToRemove.Size = new System.Drawing.Size(286, 212);
             this._groupBoxMetadatasToRemove.TabIndex = 1;
             this._groupBoxMetadatasToRemove.TabStop = false;
             this._groupBoxMetadatasToRemove.Text = "Metadata types to remove";
@@ -113,10 +114,10 @@
             this._buttonSaveSettings.AccessibleName = "ButtonSettingsSave";
             this._buttonSaveSettings.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this._buttonSaveSettings.AutoSize = true;
-            this._buttonSaveSettings.Location = new System.Drawing.Point(230, 10);
-            this._buttonSaveSettings.Margin = new System.Windows.Forms.Padding(15, 3, 3, 3);
+            this._buttonSaveSettings.Location = new System.Drawing.Point(163, 7);
+            this._buttonSaveSettings.Margin = new System.Windows.Forms.Padding(11, 2, 2, 2);
             this._buttonSaveSettings.Name = "_buttonSaveSettings";
-            this._buttonSaveSettings.Size = new System.Drawing.Size(124, 27);
+            this._buttonSaveSettings.Size = new System.Drawing.Size(89, 23);
             this._buttonSaveSettings.TabIndex = 2;
             this._buttonSaveSettings.Text = "Save";
             this._buttonSaveSettings.UseVisualStyleBackColor = true;
@@ -128,10 +129,10 @@
             this._buttonCancel.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this._buttonCancel.AutoSize = true;
             this._buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this._buttonCancel.Location = new System.Drawing.Point(76, 10);
-            this._buttonCancel.Margin = new System.Windows.Forms.Padding(3, 3, 15, 3);
+            this._buttonCancel.Location = new System.Drawing.Point(52, 7);
+            this._buttonCancel.Margin = new System.Windows.Forms.Padding(2, 2, 11, 2);
             this._buttonCancel.Name = "_buttonCancel";
-            this._buttonCancel.Size = new System.Drawing.Size(124, 27);
+            this._buttonCancel.Size = new System.Drawing.Size(89, 23);
             this._buttonCancel.TabIndex = 2;
             this._buttonCancel.Text = "Cancel";
             this._buttonCancel.UseVisualStyleBackColor = true;
@@ -139,12 +140,14 @@
             // _groupBoxClearSavedSettings
             // 
             this._groupBoxClearSavedSettings.AccessibleName = "GroupBoxSaveSettings";
-            this._groupBoxClearSavedSettings.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this._groupBoxClearSavedSettings.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this._groupBoxClearSavedSettings.Controls.Add(this._checkBoxCleanSavedSettingsOnClose);
-            this._groupBoxClearSavedSettings.Location = new System.Drawing.Point(12, 282);
+            this._groupBoxClearSavedSettings.Location = new System.Drawing.Point(9, 227);
+            this._groupBoxClearSavedSettings.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this._groupBoxClearSavedSettings.Name = "_groupBoxClearSavedSettings";
-            this._groupBoxClearSavedSettings.Size = new System.Drawing.Size(406, 52);
+            this._groupBoxClearSavedSettings.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this._groupBoxClearSavedSettings.Size = new System.Drawing.Size(286, 42);
             this._groupBoxClearSavedSettings.TabIndex = 3;
             this._groupBoxClearSavedSettings.TabStop = false;
             this._groupBoxClearSavedSettings.Text = "Saved settings";
@@ -153,9 +156,10 @@
             // 
             this._checkBoxCleanSavedSettingsOnClose.AccessibleName = "CheckBoxCleanSavedSettings";
             this._checkBoxCleanSavedSettingsOnClose.AutoSize = true;
-            this._checkBoxCleanSavedSettingsOnClose.Location = new System.Drawing.Point(7, 21);
+            this._checkBoxCleanSavedSettingsOnClose.Location = new System.Drawing.Point(5, 17);
+            this._checkBoxCleanSavedSettingsOnClose.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this._checkBoxCleanSavedSettingsOnClose.Name = "_checkBoxCleanSavedSettingsOnClose";
-            this._checkBoxCleanSavedSettingsOnClose.Size = new System.Drawing.Size(218, 21);
+            this._checkBoxCleanSavedSettingsOnClose.Size = new System.Drawing.Size(167, 17);
             this._checkBoxCleanSavedSettingsOnClose.TabIndex = 0;
             this._checkBoxCleanSavedSettingsOnClose.Text = "Clean saved settings on close";
             this._checkBoxCleanSavedSettingsOnClose.UseVisualStyleBackColor = true;
@@ -168,27 +172,27 @@
             this.tableLayoutPanel1.Controls.Add(this._buttonCancel, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this._buttonSaveSettings, 1, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 340);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 274);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(430, 47);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(304, 38);
             this.tableLayoutPanel1.TabIndex = 5;
             // 
             // FormSettings
             // 
             this.AcceptButton = this._buttonSaveSettings;
             this.AccessibleName = "FormSettings";
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this._buttonCancel;
-            this.ClientSize = new System.Drawing.Size(430, 387);
+            this.ClientSize = new System.Drawing.Size(304, 312);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this._groupBoxClearSavedSettings);
             this.Controls.Add(this._groupBoxMetadatasToRemove);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(4);
-            this.MinimumSize = new System.Drawing.Size(300, 300);
+            this.MinimumSize = new System.Drawing.Size(320, 350);
             this.Name = "FormSettings";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Settings";

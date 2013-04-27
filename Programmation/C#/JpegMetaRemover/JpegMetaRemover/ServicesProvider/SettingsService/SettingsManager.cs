@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Globalization;
+using JpegMetaRemover.JpegTools;
 using JpegMetaRemover.Tools;
 using Microsoft.Win32;
 
-namespace JpegMetaRemover
+namespace JpegMetaRemover.ServicesProvider.SettingsService
 {
-    internal static class SettingsManager
+    internal class SettingsManager
     {
         internal const string EDITOR_NAME = "Emignatik";
         internal const string APP_NAME = "JpegMetaRemover";
@@ -20,9 +20,10 @@ namespace JpegMetaRemover
         internal const string REG_VAL_REMOVE_COMMENTS = "RemoveComments";
         internal const string REG_VAL_LAST_INPUT_PATH = "LastInputPath";
 
-        private static JpegMetaTypes _metaTypesToRemove;
 
-        public static JpegMetaTypes MetaTypesToRemove
+        private JpegMetaTypes _metaTypesToRemove;
+
+        public JpegMetaTypes MetaTypesToRemove
         {
             get { return _metaTypesToRemove; }
             set
@@ -31,9 +32,9 @@ namespace JpegMetaRemover
                 TrySaveToRegistry(REG_VAL_META_TYPES_TO_REMOVE, MetaTypesToRemove.ToString());
             }
         }
-        private static string _twoLetterISOLanguageName;
+        private string _twoLetterISOLanguageName;
 
-        public static string TwoLetterISOLanguageName
+        public string TwoLetterISOLanguageName
         {
             get { return _twoLetterISOLanguageName; }
             set
@@ -43,9 +44,9 @@ namespace JpegMetaRemover
             }
         }
 
-        private static bool _includeSubdirectories;
+        private bool _includeSubdirectories;
 
-        public static bool IncludeSubdirectories
+        public bool IncludeSubdirectories
         {
             get { return _includeSubdirectories; }
             set
@@ -55,9 +56,9 @@ namespace JpegMetaRemover
             }
         }
 
-        private static bool _overrideOriginalFile;
+        private bool _overrideOriginalFile;
 
-        public static bool OverrideOriginalFile
+        public bool OverrideOriginalFile
         {
             get { return _overrideOriginalFile; }
             set
@@ -67,9 +68,9 @@ namespace JpegMetaRemover
             }
         }
 
-        private static bool _removeMetadatas;
+        private bool _removeMetadatas;
 
-        public static bool RemoveMetadatas
+        public bool RemoveMetadatas
         {
             get { return _removeMetadatas; }
             set
@@ -79,9 +80,9 @@ namespace JpegMetaRemover
             }
         }
 
-        private static bool _removeComments;
+        private bool _removeComments;
 
-        public static bool RemoveComments
+        public bool RemoveComments
         {
             get { return _removeComments; }
             set
@@ -91,9 +92,9 @@ namespace JpegMetaRemover
             }
         }
 
-        private static string _lastInputPath;
+        private string _lastInputPath;
 
-        public static string LastInputPath
+        public string LastInputPath
         {
             get { return _lastInputPath; }
             set
@@ -103,9 +104,9 @@ namespace JpegMetaRemover
             }
         }
 
-        public static bool CleanUpSavedSettingsOnClose { get; set; }
+        public bool CleanUpSavedSettingsOnClose { get; set; }
 
-        static SettingsManager()
+        internal SettingsManager()
         {
             _twoLetterISOLanguageName = TryReadFromRegistry<string>(REG_VAL_LANGUAGE, null);
 
@@ -135,7 +136,7 @@ namespace JpegMetaRemover
             AppDomain.CurrentDomain.ProcessExit += new EventHandler(CurrentDomain_ProcessExit);
         }
 
-        static void CurrentDomain_ProcessExit(object sender, EventArgs e)
+        private void CurrentDomain_ProcessExit(object sender, EventArgs e)
         {
             if (CleanUpSavedSettingsOnClose)
             { CleanRegistry(); }

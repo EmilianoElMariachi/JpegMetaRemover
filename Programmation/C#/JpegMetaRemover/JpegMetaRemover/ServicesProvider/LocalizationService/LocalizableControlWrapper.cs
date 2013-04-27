@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Windows.Forms;
-using JpegMetaRemover.Log;
+﻿using System.Reflection;
 
-namespace JpegMetaRemover.Translation
+namespace JpegMetaRemover.ServicesProvider.LocalizationService
 {
     internal class LocalizableControlWrapper
     {
