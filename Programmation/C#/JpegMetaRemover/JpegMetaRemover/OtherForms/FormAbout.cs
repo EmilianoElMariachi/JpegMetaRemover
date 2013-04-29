@@ -104,7 +104,7 @@ namespace JpegMetaRemover.OtherForms
         private void _ucAnimatedText_Click(object sender, EventArgs e)
         {
             try
-            { Process.Start("http://www.emignatik.com/JpegMetaRemover"); }
+            { Process.Start("http://www.emignatik.com/Soft/JpegMetaRemover"); }
             catch
             { }
         }

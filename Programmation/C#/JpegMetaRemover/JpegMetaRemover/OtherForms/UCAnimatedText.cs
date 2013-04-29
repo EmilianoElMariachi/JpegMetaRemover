@@ -28,7 +28,7 @@ namespace JpegMetaRemover.OtherForms
             }
         }
 
-        private List<Color> _colors;
+        private readonly List<Color> _colors;
         private int _colorIndex = 0;
 
         public UCAnimatedText()
@@ -37,7 +37,7 @@ namespace JpegMetaRemover.OtherForms
 
             if (this.DesignMode == false)
             {
-                _colors = GetHSVWheel(200);
+                _colors = GetHSBWheel(200);
             }
         }
 
@@ -82,12 +82,12 @@ namespace JpegMetaRemover.OtherForms
                     _colorIndex = 0;
                 }
 
-                _color = _colors[_colorIndex];// Color.FromArgb(_alpha, r, g, b);
+                _color = _colors[_colorIndex];
                 this.Invalidate();
             }
         }
 
-        public List<Color> GetHSVWheel(int precision)
+        public List<Color> GetHSBWheel(int precision)
         {
             var increaseStep = 360.0 / precision;
 
