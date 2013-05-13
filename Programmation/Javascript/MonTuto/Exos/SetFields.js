@@ -1,17 +1,7 @@
 var EXERCISES = EXERCISES || [];
 
 EXERCISES.push(
-    {
-        category: "Les champs",
-        name: "Affecter un champ sur une variable de type 'dictionnaire'",
-
-        content: function () {
-            var variableX = {};
-            variableX.Champ1 = "Hello";
-            output(variableX.Champ1);
-        }
-    },
-//========================================================================================//
+    //========================================================================================//
     {
         category: "Les champs",
         name: "Affecter un champ sur une variable non déclarée",
@@ -22,7 +12,7 @@ EXERCISES.push(
             output(variableX.Champ1);
         }
     },
-//========================================================================================//
+    //========================================================================================//
     {
         category: "Les champs",
         name: "Affecter un champ sur une variable de type 'fonction'",
@@ -35,7 +25,7 @@ EXERCISES.push(
             output(variableX.Champ1);
         }
     },
-//========================================================================================//
+    //========================================================================================//
     {
         category: "Les champs",
         name: "Affecter un champ sur une variable de type 'nombre'",
@@ -46,7 +36,7 @@ EXERCISES.push(
             output(variableX.Champ1);
         }
     },
-//========================================================================================//
+    //========================================================================================//
     {
         category: "Les champs",
         name: "Affecter un champ sur une variable de type 'class'",

@@ -5,6 +5,19 @@
     <meta http-equiv="x-ua-compatible" content="IE=8">
     <title>Welcome to Emiliano's Tutorials</title>
 
+    <script type="text/javascript" src="lib/codemirror.js"></script>
+    <script type="text/javascript" src="lib/mode/javascript.js"></script>
+
+    <script type="text/JavaScript" src="./Exos/Introduction.js"></script>
+    <script type="text/JavaScript" src="./Exos/TheVariables.js"></script>
+    <script type="text/JavaScript" src="./Exos/TheClasses.js"></script>
+    <script type="text/JavaScript" src="./Exos/TheDictionaries.js"></script>
+
+    <script type="text/JavaScript" src="./Exos/TheOperators.js"></script>
+
+    <script type="text/JavaScript" src="./Exos/TheKeywordThis.js"></script>
+    <script type="text/JavaScript" src="./Exos/SetFields.js"></script>
+
     <style type="text/css">
 
         body {
@@ -92,17 +105,6 @@
 
     <link rel="stylesheet" href="lib/codemirror.css">
 
-    <style type="text/css"></style>
-    <script type="text/javascript" src="lib/codemirror.js"></script>
-    <script type="text/javascript" src="lib/mode/javascript.js"></script>
-
-    <script type="text/JavaScript" src="./Exos/Introduction.js"></script>
-    <script type="text/JavaScript" src="./Exos/LesVariables.js"></script>
-    <script type="text/JavaScript" src="./Exos/LeMotCléThis.js"></script>
-    <script type="text/JavaScript" src="./Exos/AffecterDesChamps.js"></script>
-    <script type="text/JavaScript" src="./Exos/LesClasses.js"></script>
-
-
 </head>
 
 <body>
@@ -163,7 +165,6 @@
     }
 
 
-
 </script>
 
 <a href="http://net.tutsplus.com/tutorials/javascript-ajax/fully-understanding-the-this-keyword/">fully-understanding-the-this-keyword</a>
@@ -194,6 +195,8 @@
 <script type="text/javascript">
 
     function switchExample() {
+
+        console.log(arguments.callee.caller.toString())
         if (comboExamplesNode.selectedIndex < 0) {
             return;
         }
@@ -248,7 +251,10 @@
             var lines = contentTmp.split("\n");
 
             for (var lineIndex = 1; lineIndex < lines.length - 1; lineIndex++) {
-                contentFiltered += "\n";
+
+                if (lineIndex > 1) {
+                    contentFiltered += "\n";
+                }
 
                 var line = lines[lineIndex];
 
@@ -305,16 +311,20 @@
     }
 
     function selectPreviousExercise() {
-        if (comboExamplesNode.selectedIndex > 0) {
-            comboExamplesNode.selectedIndex--;
-            switchExample();
+        if (document.activeElement !== comboExamplesNode) {
+            if (comboExamplesNode.selectedIndex > 0) {
+                comboExamplesNode.selectedIndex--;
+                switchExample();
+            }
         }
     }
 
     function selectNextExercise() {
-        if (comboExamplesNode.selectedIndex < comboExamplesNode.length - 1) {
-            comboExamplesNode.selectedIndex++;
-            switchExample();
+        if (document.activeElement !== comboExamplesNode) {
+            if (comboExamplesNode.selectedIndex < comboExamplesNode.length - 1) {
+                comboExamplesNode.selectedIndex++;
+                switchExample();
+            }
         }
     }
 

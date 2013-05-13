@@ -1,19 +1,19 @@
 var EXERCISES = EXERCISES || [];
 
+this.category = "Introduction";
 EXERCISES.push(
     {
-        category: "Introduction",
-
+        category: this.category,
         name: "De quoi s'agit-il?",
 
         content: function () {
             //  Ce tutoriel a pour but de vous présenter quelques notions élémentaires
             //sur le langage Javascript.
             //
-            //  Ce tutoriel est composé d un ensemble d&apos;exercices ludiques au cours desquels
+            //  Ce tutoriel est composé d un ensemble d'exercices ludiques au cours desquels
             //vous devrez trouver la sortie produite par le code.
             //
-            //  Pour cela, analysez le code, et repérer la/les lignes comportant l&apos;appel à la
+            //  Pour cela, analysez le code, et repérer la/les lignes comportant l'appel à la
             //fonction [output(x)]
             //
             //  Vous êtes prêts???
@@ -28,11 +28,9 @@ EXERCISES.push(
             outputAnswer("Pour plus d'information, consultez la documentation sur l'objet Date <a href='http://www.w3schools.com/jsref/jsref_obj_date.asp' target='_blank'>ici</a>");
         }
     },
-
     //========================================================================================//
-
     {
-        category: "Introduction",
+        category: this.category,
         name: "La console",
 
         content: function () {

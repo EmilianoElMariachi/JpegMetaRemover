@@ -1,8 +1,21 @@
 var EXERCISES = EXERCISES || [];
 
-
 this.category = "Les variables et leur portée";
 EXERCISES.push(
+    {
+        category: this.category,
+        name: "Comment déclarer une variable?",
+        content: function () {
+            var aVariable = "Hello world!";
+
+            output(aVariable);
+        },
+
+        answer: function () {
+            //outputAnswer("");
+        }
+    },
+    //========================================================================================//
     {
         category: this.category,
         name: "Affichons une variable initialisée à l'exterieur d'une fonction",
@@ -94,6 +107,22 @@ EXERCISES.push(
             func1();
 
             output(msg);
+        },
+
+        answer: function () {
+            //outputAnswer("");
+        }
+    },
+    //========================================================================================//
+    {
+        category: this.category,
+        name: "Comment effacer une variable",
+        content: function () {
+            var a = "This is it!";
+
+            delete a;
+
+            output(a);
         },
 
         answer: function () {
