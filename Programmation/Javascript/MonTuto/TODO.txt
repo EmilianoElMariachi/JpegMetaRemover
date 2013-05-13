@@ -1,2 +1,4 @@
 Les closures
-expliquer l'objet Window
+Changer le context d'appel
+Le prototype
+Expliquer l'objet Window

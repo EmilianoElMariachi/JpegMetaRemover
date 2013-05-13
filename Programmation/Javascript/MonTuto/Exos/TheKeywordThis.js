@@ -1,8 +1,10 @@
 var EXERCISES = EXERCISES || [];
 
+this.category = "Le mot clé 'this'";
+
 EXERCISES.push(
     {
-        category: "Le mot clé 'this'",
+        category: this.category,
         name: "Qu'est-ce que 'this' dans une fonction de dictionnaire (partie 1)",
         content: function () {
 
@@ -36,7 +38,7 @@ EXERCISES.push(
     },
     //========================================================================================//
     {
-        category: "Le mot clé 'this'",
+        category: this.category,
         name: "Qu'est-ce que 'this' dans une fonction de dictionnaire (partie 2)",
         content: function () {
 
@@ -68,7 +70,7 @@ EXERCISES.push(
     },
     //========================================================================================//
     {
-        category: "Le mot clé 'this'",
+        category: this.category,
         name: "Imbriquons les fonctions",
         content: function () {
 
@@ -104,7 +106,7 @@ EXERCISES.push(
     },
     //========================================================================================//
     {
-        category: "Le mot clé 'this'",
+        category: this.category,
         name: "Imbriquons les instances",
         content: function () {
 

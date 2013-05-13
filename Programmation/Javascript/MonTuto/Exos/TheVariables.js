@@ -118,15 +118,20 @@ EXERCISES.push(
         category: this.category,
         name: "Comment effacer une variable",
         content: function () {
-            var a = "This is it!";
 
-            delete a;
+            var a = "I'm var a!";
+            var b = "I'm var b!";
+
+            a = undefined;
+            delete b;
 
             output(a);
+
+            output(b);
         },
 
         answer: function () {
-            //outputAnswer("");
+            outputAnswer("Undefined est donc bien une valeur!");
         }
     }
 );
