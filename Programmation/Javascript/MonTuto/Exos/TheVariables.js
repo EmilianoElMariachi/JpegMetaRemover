@@ -10,9 +10,26 @@ EXERCISES.push(
 
             output(aVariable);
         },
-
         answer: function () {
-            //outputAnswer("");
+            outputAnswer("Bon, on le savait déjà, on préfixe les variables avec le mot clé 'var'");
+        }
+    },
+    //========================================================================================//
+    {
+        category: this.category,
+        name: "var ou pas var, ça change quoi?",
+        content: function () {
+            var var1 = "Hello world 1";
+            var2 = "Hello world 2";
+
+            output(var1);
+            output(var2);
+
+            output(this.var1);
+            output(this.var2);
+        },
+        answer: function () {
+            outputAnswer("Oups! Mais c'est grave ça! Oublier le mot clé 'var', et la variable se retrouve immédiatement dans le contexte de l'objet 'window'");
         }
     },
     //========================================================================================//
@@ -52,7 +69,7 @@ EXERCISES.push(
         },
 
         answer: function () {
-            outputAnswer("Quoi??? Mais pourquoi j'ai 'undefined' bordel???");
+            outputAnswer("Quoi??? Mais pourquoi j'ai 'undefined' bordel??? Difficile à dire...");
         }
     },
     //========================================================================================//

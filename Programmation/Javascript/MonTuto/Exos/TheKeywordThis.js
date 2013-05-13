@@ -5,23 +5,37 @@ this.category = "Le mot clé 'this'";
 EXERCISES.push(
     {
         category: this.category,
+        name: "Qui est 'this' par défaut?",
+        content: function () {
+
+            output(this);
+
+            function f1(){
+                output(this);
+            }
+
+            f1();
+        },
+        answer: function () {
+            outputAnswer("Par défaut le mot clé 'this' représente l'objet 'window'");
+        }
+    },
+    //========================================================================================//
+    {
+        category: this.category,
         name: "Qu'est-ce que 'this' dans une fonction de dictionnaire (partie 1)",
         content: function () {
 
-            //Soit la variable message dans le contexte de l&apos;objet window
             var message = 'Coucou';
 
-            //Soit un message dans un dictionnaire
             var dict = {
                 message: 'Hello'
             };
 
-            //Soit une fonction affichant la propriété message du contexte courant
             var outputMessage = function () {
                 output(this.message);
             };
 
-            //Donnons au dictionnaire la possibilité d&apos;afficher le message
             dict.outputMessage = outputMessage;
 
             //Appel 1:
@@ -31,9 +45,8 @@ EXERCISES.push(
             outputMessage();
 
         },
-
         answer: function () {
-            outputAnswer("Quoi??? Mais pourquoi j'ai 'undefined' sur le deuxième appel???");
+            outputAnswer("Normalement, vous devriez être en mesure de dire pourquoi le 2ème appel affiche 'undefined'");
         }
     },
     //========================================================================================//
@@ -65,8 +78,11 @@ EXERCISES.push(
             var f = dict.fieldFunction;
 
             output(f().name);
-
+        },
+        answer: function () {
+            //outputAnswer("");
         }
+
     },
     //========================================================================================//
     {
@@ -102,6 +118,9 @@ EXERCISES.push(
             }//func1
 
             output(window.Msg);
+        },
+        answer: function () {
+            //outputAnswer("");
         }
     },
     //========================================================================================//
@@ -138,6 +157,22 @@ EXERCISES.push(
             }//func1
 
             output(window.Msg);
+        },
+        answer: function () {
+            outputAnswer("Par défaut, il existe un contexte par instance créée.");
+        }
+    },
+    //========================================================================================//
+    {
+        category: this.category,
+        name: "Changeons le context d'appel (méthode call)",
+        content: function () {
+            function Class1(){
+
+            }
+        },
+        answer: function () {
+            //outputAnswer("");
         }
     }
 );

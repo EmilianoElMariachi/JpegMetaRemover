@@ -9,6 +9,7 @@
     <script type="text/javascript" src="lib/mode/javascript.js"></script>
 
     <script type="text/JavaScript" src="./Exos/Introduction.js"></script>
+    <script type="text/JavaScript" src="./Exos/TheFunctions.js"></script>
     <script type="text/JavaScript" src="./Exos/TheVariables.js"></script>
     <script type="text/JavaScript" src="./Exos/TheClasses.js"></script>
     <script type="text/JavaScript" src="./Exos/TheDictionaries.js"></script>
@@ -16,7 +17,7 @@
     <script type="text/JavaScript" src="./Exos/TheOperators.js"></script>
 
     <script type="text/JavaScript" src="./Exos/TheKeywordThis.js"></script>
-    <script type="text/JavaScript" src="./Exos/SetFields.js"></script>
+    <script type="text/JavaScript" src="Exos/TheFields.js"></script>
 
     <style type="text/css">
 
@@ -111,59 +112,7 @@
 
 <script>
 
-    //TODO:
-    //Ajouter un topic sur la reflexion
-
-    var INITIAL_EXERCISE_INDEX = 1;
-
-    //
-    //var variableX = "Bonjour";
-    //variableX.Champ1 = "Hello";
-    //alert("variableX=" + variableX + "\nvariableX.Champ1=" + variableX.Champ1);
-    //
-    //var variableX = [5, 10];
-    //variableX.Champ1 = "Hello";
-    //alert("variableX=" + variableX + "\nvariableX.Champ1=" + variableX.Champ1);
-
-
-    function z() {
-
-        var methodeA
-        var ClassA = function (membreA) {
-            this.membreA = membreA;
-
-            methodeA = function (arg1) {
-
-                alert("Arg1 méthode A=" + arg1 + "\nMembre A=" + this.membreA);
-                this.membreA = arg1;
-            }
-        }
-    }
-
-    function exemple2() {
-
-
-        var classA1 = new ClassA("instance1");
-
-        alert(methodeA);
-        /*
-         var variable1 = {};
-         variable1.membreA = "coucou";
-
-
-         var classA1 = new ClassA("instance1");
-         var classA2 = new ClassA("instance2");
-
-
-         var variable2 = {};
-         classA1.methodeA.call(variable2,"TTTT");
-         alert(variable2.membreA);
-
-
-         classA1.methodeA();
-         */
-    }
-
+    var INITIAL_EXERCISE_INDEX = 0;
 
 </script>
 
@@ -211,7 +160,24 @@
         clearOutput();
     }
 
+    function restoreWindowFields(){
+        for(var field in window){
+            if(!(field in window.backupFields)){
+                delete window[field];
+            }
+        }
+    }
+
+    function backupWindowFields(){
+        window.backupFields = [];
+
+        for(var field in window){
+            window.backupFields.push(field);
+        }
+    }
+
     function runExample() {
+
         if (comboExamplesNode.selectedIndex < 0) {
             return;
         }

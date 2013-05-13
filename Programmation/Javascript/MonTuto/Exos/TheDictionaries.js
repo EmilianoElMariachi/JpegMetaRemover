@@ -26,7 +26,7 @@ EXERCISES.push(
 
         },
         answer: function () {
-            outputAnswer("Un dictionnaire est un objet où chaque champs être de n'importe quel type.");
+            outputAnswer("Un dictionnaire est un objet où chaque champs peut être de n'importe quel type.");
         }
     },
     //========================================================================================//
