@@ -15,9 +15,7 @@
     <script type="text/JavaScript" src="./Exos/TheDictionaries.js"></script>
 
     <script type="text/JavaScript" src="./Exos/TheOperators.js"></script>
-
     <script type="text/JavaScript" src="./Exos/TheKeywordThis.js"></script>
-    <script type="text/JavaScript" src="Exos/TheFields.js"></script>
 
     <style type="text/css">
 
@@ -116,7 +114,11 @@
 
 </script>
 
+<!--Mes références
+
 <a href="http://net.tutsplus.com/tutorials/javascript-ajax/fully-understanding-the-this-keyword/">fully-understanding-the-this-keyword</a>
+
+-->
 
 <br/> <br/>
 
@@ -160,19 +162,29 @@
         clearOutput();
     }
 
-    function restoreWindowFields(){
-        for(var field in window){
-            if(!(field in window.backupFields)){
-                delete window[field];
+    function restoreWindowFields() {
+        var fieldsToDelete = [];
+        for (var field in window) {
+            if (!(field in window.backupFields)) {
+                fieldsToDelete.push(field);
+            }
+        }
+
+        for(var i = 0; i < fieldsToDelete.length; i++){
+            var fieldToDelete = fieldsToDelete[i];
+            try {
+                delete window[fieldsToDelete];
+            } catch(e) {
+                window[fieldsToDelete] = undefined;
             }
         }
     }
 
-    function backupWindowFields(){
+    function backupWindowFields() {
         window.backupFields = [];
 
-        for(var field in window){
-            window.backupFields.push(field);
+        for (var field in window) {
+            window.backupFields[field] = null;
         }
     }
 
@@ -182,9 +194,12 @@
             return;
         }
 
+
         var selectedExercise = comboExamplesNode.children[comboExamplesNode.selectedIndex].exercise;
 
         try {
+            backupWindowFields();
+
             eval(editor.getValue());
         }
         catch (ex) {
@@ -197,6 +212,7 @@
 
         }
 
+        restoreWindowFields();
     }
 
     function loadExamplesList() {

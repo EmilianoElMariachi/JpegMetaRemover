@@ -10,10 +10,10 @@ EXERCISES.push(
             var myDict = {
                 field1: 1,
 
-                "I'am field 2" : "hello",
+                "I'am field 2": "hello",
 
                 field3: {
-                    subField1:"coucou",
+                    subField1: "coucou",
 
                     subField2: new String("bye!")
                 }
@@ -51,7 +51,30 @@ EXERCISES.push(
         answer: function () {
             //outputAnswer("");
         }
-    } ,
+    },
+    //========================================================================================//
+    {
+        category: this.category,
+        name: "Comment tester si un champs existe",
+
+        content: function () {
+            var myDict = {
+                field1: "coucou",
+                "field 2": undefined
+            };
+
+
+            output("Solution 1");
+            output("field1" in myDict);
+            output("field 2" in myDict);
+            output("field3" in myDict);
+
+            output("Solution 2");
+            output(myDict.hasOwnProperty("field1"));
+            output(myDict.hasOwnProperty("field 2"));
+            output(myDict.hasOwnProperty("field3"));
+        }
+    },
     //========================================================================================//
     {
         category: this.category,
@@ -68,7 +91,7 @@ EXERCISES.push(
         answer: function () {
             //outputAnswer("");
         }
-    }   ,
+    },
     //========================================================================================//
     {
         category: this.category,
@@ -76,13 +99,17 @@ EXERCISES.push(
 
         content: function () {
             var myDict = {};
-            myDict.Champ1 = "Hello";
-            myDict["What a long long field name"] = "!";
+            myDict.Field1 = "Hello";
+            myDict.Field2 = undefined;
 
-            delete myDict.Champ1;
+            output("Field1" in myDict);
+            output("Field2" in myDict);
 
-            output(myDict.Champ1);
-            output(myDict["What a long long field name"]);
+            delete myDict.Field1;
+            delete myDict.Field2;
+
+            output("Field1" in myDict);
+            output("Field2" in myDict);
         },
         answer: function () {
             //outputAnswer("");

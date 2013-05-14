@@ -29,7 +29,11 @@ EXERCISES.push(
             output(this.var2);
         },
         answer: function () {
-            outputAnswer("Oups! Mais c'est grave ça! Oublier le mot clé 'var', et la variable se retrouve immédiatement dans le contexte de l'objet 'window'");
+            outputAnswer("Oups! Mais c'est grave ça!");
+            outputAnswer("");
+            outputAnswer("Si on oublie le mot clé 'var', la variable se retrouve immédiatement dans le contexte de l'objet 'window' ET NON DE L'OBJET COURANT.");
+            outputAnswer("");
+            outputAnswer("Aussi, il est important de noter que 'var1' se trouve dans le scope de l'objet window.");
         }
     },
     //========================================================================================//

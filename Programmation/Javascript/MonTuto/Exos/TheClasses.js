@@ -27,17 +27,13 @@ EXERCISES.push(
         name: "Le constructeur",
         content: function () {
             function ClassA(arg1, arg2) {//Un constructeur avec 2 arguments
-
-                this.display = function () {
-                    output(arg1 + arg2);
-                }
+                output(arg1 + arg2);
             }
 
             var classA = new ClassA(3, 2);
-            classA.display();
         },
         answer: function () {
-            outputAnswer("Tiens, comment se fait-il que la fonction 'display' connaisse arg1 et arg2 ? Et bien voilà une belle closure.");
+            outputAnswer("En Javascript, étant donné que les arguments sont facultatifs, cela peut revenir à avoir plusieurs constructeurs");
         }
     },
     //========================================================================================//
@@ -47,7 +43,7 @@ EXERCISES.push(
 
         content: function () {
 
-            //Nous devrions d'abord jeter un oeil à la section sur le mot clé this!
+            //NOUS DEVRIONS D'ABORD JETER UN OEIL À LA SECTION SUR LE MOT CLÉ THIS! ET REVENIR ICI APRES
             var ClassPhone = function () {
 
                 this.lastCalledNumber = null;   //Un membre publique

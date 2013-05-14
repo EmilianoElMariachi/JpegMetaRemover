@@ -165,7 +165,7 @@ EXERCISES.push(
     //========================================================================================//
     {
         category: this.category,
-        name: "Changeons le context d'appel (méthode call)",
+        name: "Changeons le contexte d'appel (méthode call)",
         content: function () {
             function Class1(){
 
