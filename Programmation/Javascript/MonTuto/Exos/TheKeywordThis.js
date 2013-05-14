@@ -10,7 +10,7 @@ EXERCISES.push(
 
             output(this);
 
-            function f1(){
+            function f1() {
                 output(this);
             }
 
@@ -167,9 +167,48 @@ EXERCISES.push(
         category: this.category,
         name: "Changeons le contexte d'appel (méthode call)",
         content: function () {
-            function Class1(){
 
+            this.type = "Window";
+
+            function ClassA() {
+
+                this.type = "ClassA";
+
+                this.displayType = function (begin, end) {
+                    output(begin + this.type + end);
+                }
             }
+
+            var classA = new ClassA();
+            classA.displayType("I am a ", " object");
+            classA.displayType.call(this, "I am a ", " object");
+            classA.displayType.call({type: "CustomContext"}, "I am a ", " object");
+        },
+        answer: function () {
+            //outputAnswer("");
+        }
+    },
+    //========================================================================================//
+    {
+        category: this.category,
+        name: "Changeons le contexte d'appel (méthode apply)",
+        content: function () {
+
+            this.type = "Window";
+
+            function ClassA() {
+
+                this.type = "ClassA";
+
+                this.displayType = function (begin, end) {
+                    output(begin + this.type + end);
+                }
+            }
+
+            var classA = new ClassA();
+            classA.displayType("I am a ", " object");
+            classA.displayType.apply(this, ["I am a ", " object"]);
+            classA.displayType.apply({type: "CustomContext"}, ["I am a ", " object"]);
         },
         answer: function () {
             //outputAnswer("");

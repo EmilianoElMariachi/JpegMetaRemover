@@ -1,7 +1,5 @@
     A FINIR:
 
-- Ajouter un topo sur le changement de context d'appel (dans TheKeywordThis)
-
 - Ajouter un topo sur les arguments variables (dans TheFunctions)
 
 
