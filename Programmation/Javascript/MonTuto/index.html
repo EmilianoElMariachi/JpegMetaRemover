@@ -215,13 +215,20 @@
         restoreWindowFields();
     }
 
+    function padOnTwoDigits(number) {
+
+        return (number < 10 ? '0' : '') + number
+
+    }
+
+
     function loadExamplesList() {
 
         for (var i = 0; i < EXERCISES.length; i++) {
 
             var itemNode = document.createElement("option");
 
-            itemNode.appendChild(document.createTextNode(EXERCISES[i].name));
+            itemNode.appendChild(document.createTextNode(padOnTwoDigits(i) + " - " + EXERCISES[i].name));
 
             itemNode.exercise = EXERCISES[i];
             comboExamplesNode.appendChild(itemNode);

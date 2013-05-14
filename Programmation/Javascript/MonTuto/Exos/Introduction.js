@@ -20,12 +20,15 @@ EXERCISES.push(
             //  alors allons-y... Commençons par un exemple simple...
             //
             //  Quelle sera la sortie pour le code suivant:
-            output("Retenez cette date; le " + new Date(1980, 03, 09).toLocaleDateString() + ".");
+            output(new Date(1980, 03, 09).toLocaleDateString());
         },
 
         answer: function () {
-            outputAnswer("Non non, ce n'est pas une erreur... Je suis bien né en Avril et pas en Mars...");
+            outputAnswer("Non non, ce n'est pas une erreur... le mois est en base zéro, il s'agit bien du mois d'Avril et non du mois de Mars...");
             outputAnswer("Pour plus d'information, consultez la documentation sur l'objet Date <a href='http://www.w3schools.com/jsref/jsref_obj_date.asp' target='_blank'>ici</a>");
+            outputAnswer("");
+            outputAnswer("Ah, et puis vous pouvez toujours retenir cette date, c'est mon anniv ;-)");
+
         }
     },
     //========================================================================================//
