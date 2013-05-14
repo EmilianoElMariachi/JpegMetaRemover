@@ -41,5 +41,32 @@ EXERCISES.push(
         answer: function () {
 //            outputAnswer("");
         }
+    },
+    //========================================================================================//
+    {
+        category: this.category,
+        name: "Les fonctions à nombre d'arguments variable (optionnels)",
+        content: function () {
+            function function1(arg1, arg2, arg3) {
+
+                for(var i = 0; i < arguments.length ; i++){
+                    output(arguments[i]);
+                }
+
+                output(arg1);
+                output(arg2);
+                output(arg3);
+
+                output(arguments[arguments.length + 124]);
+            }
+
+            function1("un", "deux");
+        },
+        answer: function () {
+            outputAnswer("La variable 'arguments' est une variable clé.");
+            outputAnswer("Cette variable est un tableau contenant les arguments dans l'ordre d'appel.");
+            outputAnswer("");
+            outputAnswer("On notera qu'accéder à un élément non existant du tableau ne jette pas d'exception...");
+        }
     }
 );

@@ -1,12 +1,12 @@
-    A FINIR:
-
-- Ajouter un topo sur les arguments variables (dans TheFunctions)
+A FINIR         :
 
 
-    PROCHAIN TUTO:
 
-- Expliquer l'objet Window et les frames
-- Les closures
-- Le prototype
-- Les évènements
-- Ajouter un topic sur la reflexion?
+PROCHAIN TUTO   :
+
+    - Expliquer l'objet Window et les frames
+    - Les closures
+    - Le prototype
+    - Les évènements
+    - Les fuites mémoire ???
+    - Ajouter un topic sur la reflexion ???
