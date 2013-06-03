@@ -1,3 +1,0 @@
-void playSoundCloseYourEyes();
-
-void initSound();
