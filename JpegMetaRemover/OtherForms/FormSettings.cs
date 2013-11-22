@@ -21,6 +21,7 @@ namespace JpegMetaRemover.OtherForms
                 }
             }
 
+            _checkBoxCleanOnDragAndDrop.Checked = Services.SettingsManager.CleanOnDragAndDrop;
         }
 
         public new DialogResult ShowDialog()
@@ -52,7 +53,7 @@ namespace JpegMetaRemover.OtherForms
 
             Services.SettingsManager.MetaTypesToRemove = this.GetJpegMetaTypesToRemove();
             Services.SettingsManager.CleanUpSavedSettingsOnClose = _checkBoxCleanSavedSettingsOnClose.Checked;
-
+            Services.SettingsManager.CleanOnDragAndDrop = _checkBoxCleanOnDragAndDrop.Checked;
         }
 
         private JpegMetaTypes GetJpegMetaTypesToRemove()

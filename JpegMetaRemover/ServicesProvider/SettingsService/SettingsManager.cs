@@ -16,6 +16,8 @@ namespace JpegMetaRemover.ServicesProvider.SettingsService
         internal const string REG_VAL_META_TYPES_TO_REMOVE = "MetaTypesToRemove";
         internal const string REG_VAL_INCLUDE_SUB_DIRECTORIES = "IncludeSubDirectories";
         internal const string REG_VAL_OVERRIDE_ORIGINAL_FILE = "OverrideOriginalFile";
+        internal const string REG_VAL_CLEAN_ON_DRAG_AND_DROP = "CleanOnDragAndDrop";
+
         internal const string REG_VAL_REMOVE_METADATAS = "RemoveMetaDatas";
         internal const string REG_VAL_REMOVE_COMMENTS = "RemoveComments";
         internal const string REG_VAL_LAST_INPUT_PATH = "LastInputPath";
@@ -93,6 +95,7 @@ namespace JpegMetaRemover.ServicesProvider.SettingsService
         }
 
         private string _lastInputPath;
+        private bool _cleanOnDragAndDrop;
 
         public string LastInputPath
         {
@@ -105,6 +108,19 @@ namespace JpegMetaRemover.ServicesProvider.SettingsService
         }
 
         public bool CleanUpSavedSettingsOnClose { get; set; }
+
+        /// <summary>
+        /// Indique si l'image doit être nettoyée au moment d'un drag & drop
+        /// </summary>
+        public bool CleanOnDragAndDrop
+        {
+            get { return _cleanOnDragAndDrop; }
+            set
+            {
+                TrySaveToRegistry(REG_VAL_CLEAN_ON_DRAG_AND_DROP, value);
+                _cleanOnDragAndDrop = value;
+            }
+        }
 
         internal SettingsManager()
         {
@@ -128,6 +144,9 @@ namespace JpegMetaRemover.ServicesProvider.SettingsService
 
             _removeComments = true;
             bool.TryParse(TryReadFromRegistry<string>(REG_VAL_REMOVE_COMMENTS, null), out _removeComments);
+
+            _cleanOnDragAndDrop = false;
+            bool.TryParse(TryReadFromRegistry<string>(REG_VAL_CLEAN_ON_DRAG_AND_DROP, null), out _cleanOnDragAndDrop);
 
             LastInputPath = TryReadFromRegistry<string>(REG_VAL_LAST_INPUT_PATH, "");
 

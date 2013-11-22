@@ -48,7 +48,7 @@
             this._backgroundWorkerPurify = new System.ComponentModel.BackgroundWorker();
             this._panelContent = new System.Windows.Forms.Panel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-            this._progressBar = new System.Windows.Forms.ProgressBar();
+            this._buttonRun = new System.Windows.Forms.Button();
             this._tableLayoutPanelInputPath = new System.Windows.Forms.TableLayoutPanel();
             this._labelInputPath = new System.Windows.Forms.Label();
             this._textBoxInputPath = new System.Windows.Forms.TextBox();
@@ -62,8 +62,7 @@
             this._tableLayoutPanelPurifyParams = new System.Windows.Forms.TableLayoutPanel();
             this._checkBoxRemoveMetadatas = new System.Windows.Forms.CheckBox();
             this._checkBoxRemoveComments = new System.Windows.Forms.CheckBox();
-            this._buttonRun = new System.Windows.Forms.Button();
-            this._buttonCancel = new System.Windows.Forms.Button();
+            this._progressBar = new System.Windows.Forms.ProgressBar();
             this._contextMenuStripLog.SuspendLayout();
             this._menuStrip.SuspendLayout();
             this._panelContent.SuspendLayout();
@@ -83,10 +82,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this._richTextBoxLog.BackColor = System.Drawing.Color.White;
             this._richTextBoxLog.ContextMenuStrip = this._contextMenuStripLog;
-            this._richTextBoxLog.Location = new System.Drawing.Point(0, 209);
+            this._richTextBoxLog.Location = new System.Drawing.Point(0, 184);
             this._richTextBoxLog.Name = "_richTextBoxLog";
             this._richTextBoxLog.ReadOnly = true;
-            this._richTextBoxLog.Size = new System.Drawing.Size(461, 70);
+            this._richTextBoxLog.Size = new System.Drawing.Size(461, 135);
             this._richTextBoxLog.TabIndex = 0;
             this._richTextBoxLog.Text = "";
             this._richTextBoxLog.WordWrap = false;
@@ -117,7 +116,7 @@
             // 
             // _statusStrip
             // 
-            this._statusStrip.Location = new System.Drawing.Point(0, 280);
+            this._statusStrip.Location = new System.Drawing.Point(0, 320);
             this._statusStrip.Name = "_statusStrip";
             this._statusStrip.Size = new System.Drawing.Size(461, 22);
             this._statusStrip.TabIndex = 4;
@@ -232,7 +231,7 @@
             this._panelContent.Controls.Add(this.tableLayoutPanel3);
             this._panelContent.Location = new System.Drawing.Point(0, 27);
             this._panelContent.Name = "_panelContent";
-            this._panelContent.Size = new System.Drawing.Size(461, 182);
+            this._panelContent.Size = new System.Drawing.Size(461, 151);
             this._panelContent.TabIndex = 7;
             // 
             // tableLayoutPanel2
@@ -241,30 +240,32 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tableLayoutPanel2.AutoSize = true;
             this.tableLayoutPanel2.ColumnCount = 2;
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel2.Controls.Add(this._buttonRun, 0, 1);
-            this.tableLayoutPanel2.Controls.Add(this._buttonCancel, 1, 1);
-            this.tableLayoutPanel2.Controls.Add(this._progressBar, 0, 2);
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 24.78261F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 75.21739F));
             this.tableLayoutPanel2.Controls.Add(this._tableLayoutPanelInputPath, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(this._progressBar, 1, 1);
+            this.tableLayoutPanel2.Controls.Add(this._buttonRun, 0, 1);
             this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 65);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-            this.tableLayoutPanel2.RowCount = 3;
+            this.tableLayoutPanel2.RowCount = 2;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(460, 114);
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(460, 84);
             this.tableLayoutPanel2.TabIndex = 0;
             // 
-            // _progressBar
+            // _buttonRun
             // 
-            this.tableLayoutPanel2.SetColumnSpan(this._progressBar, 2);
-            this._progressBar.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._progressBar.Location = new System.Drawing.Point(3, 88);
-            this._progressBar.Name = "_progressBar";
-            this._progressBar.Size = new System.Drawing.Size(454, 23);
-            this._progressBar.Step = 1;
-            this._progressBar.TabIndex = 7;
+            this._buttonRun.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this._buttonRun.BackgroundImage = global::JpegMetaRemover.Properties.Resources.Play;
+            this._buttonRun.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this._buttonRun.Location = new System.Drawing.Point(3, 49);
+            this._buttonRun.Margin = new System.Windows.Forms.Padding(3, 3, 10, 3);
+            this._buttonRun.Name = "_buttonRun";
+            this._buttonRun.Size = new System.Drawing.Size(100, 29);
+            this._buttonRun.TabIndex = 6;
+            this._buttonRun.UseVisualStyleBackColor = true;
+            this._buttonRun.Click += new System.EventHandler(this._buttonRun_Click);
             // 
             // _tableLayoutPanelInputPath
             // 
@@ -299,7 +300,7 @@
             // 
             this._textBoxInputPath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this._textBoxInputPath.Location = new System.Drawing.Point(74, 8);
-            this._textBoxInputPath.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this._textBoxInputPath.Margin = new System.Windows.Forms.Padding(4);
             this._textBoxInputPath.Name = "_textBoxInputPath";
             this._textBoxInputPath.Size = new System.Drawing.Size(333, 20);
             this._textBoxInputPath.TabIndex = 9;
@@ -391,9 +392,9 @@
             this._groupBoxInputParams.Controls.Add(this._tableLayoutPanelPurifyParams);
             this._groupBoxInputParams.Dock = System.Windows.Forms.DockStyle.Fill;
             this._groupBoxInputParams.Location = new System.Drawing.Point(4, 4);
-            this._groupBoxInputParams.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this._groupBoxInputParams.Margin = new System.Windows.Forms.Padding(4);
             this._groupBoxInputParams.Name = "_groupBoxInputParams";
-            this._groupBoxInputParams.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this._groupBoxInputParams.Padding = new System.Windows.Forms.Padding(4);
             this._groupBoxInputParams.Size = new System.Drawing.Size(175, 46);
             this._groupBoxInputParams.TabIndex = 6;
             this._groupBoxInputParams.TabStop = false;
@@ -420,7 +421,7 @@
             this._checkBoxRemoveMetadatas.AccessibleName = "CheckBoxRemoveMetadatas";
             this._checkBoxRemoveMetadatas.AutoSize = true;
             this._checkBoxRemoveMetadatas.Location = new System.Drawing.Point(87, 4);
-            this._checkBoxRemoveMetadatas.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this._checkBoxRemoveMetadatas.Margin = new System.Windows.Forms.Padding(4);
             this._checkBoxRemoveMetadatas.Name = "_checkBoxRemoveMetadatas";
             this._checkBoxRemoveMetadatas.Size = new System.Drawing.Size(76, 17);
             this._checkBoxRemoveMetadatas.TabIndex = 3;
@@ -433,7 +434,7 @@
             this._checkBoxRemoveComments.AccessibleName = "CheckBoxRemoveComments";
             this._checkBoxRemoveComments.AutoSize = true;
             this._checkBoxRemoveComments.Location = new System.Drawing.Point(4, 4);
-            this._checkBoxRemoveComments.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this._checkBoxRemoveComments.Margin = new System.Windows.Forms.Padding(4);
             this._checkBoxRemoveComments.Name = "_checkBoxRemoveComments";
             this._checkBoxRemoveComments.Size = new System.Drawing.Size(75, 17);
             this._checkBoxRemoveComments.TabIndex = 3;
@@ -441,44 +442,28 @@
             this._checkBoxRemoveComments.UseVisualStyleBackColor = true;
             this._checkBoxRemoveComments.CheckedChanged += new System.EventHandler(this._checkBoxRemoveComments_CheckedChanged);
             // 
-            // _buttonRun
+            // _progressBar
             // 
-            this._buttonRun.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this._buttonRun.BackgroundImage = global::JpegMetaRemover.Properties.Resources.Play;
-            this._buttonRun.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this._buttonRun.Location = new System.Drawing.Point(120, 46);
-            this._buttonRun.Margin = new System.Windows.Forms.Padding(3, 3, 10, 3);
-            this._buttonRun.Name = "_buttonRun";
-            this._buttonRun.Size = new System.Drawing.Size(100, 36);
-            this._buttonRun.TabIndex = 6;
-            this._buttonRun.UseVisualStyleBackColor = true;
-            this._buttonRun.Click += new System.EventHandler(this._buttonRun_Click);
-            // 
-            // _buttonCancel
-            // 
-            this._buttonCancel.BackgroundImage = global::JpegMetaRemover.Properties.Resources.Stop;
-            this._buttonCancel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this._buttonCancel.Location = new System.Drawing.Point(240, 46);
-            this._buttonCancel.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
-            this._buttonCancel.Name = "_buttonCancel";
-            this._buttonCancel.Size = new System.Drawing.Size(100, 36);
-            this._buttonCancel.TabIndex = 6;
-            this._buttonCancel.UseVisualStyleBackColor = true;
-            this._buttonCancel.Click += new System.EventHandler(this._buttonCancel_Click);
+            this._progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this._progressBar.Location = new System.Drawing.Point(116, 49);
+            this._progressBar.Name = "_progressBar";
+            this._progressBar.Size = new System.Drawing.Size(341, 29);
+            this._progressBar.Step = 1;
+            this._progressBar.TabIndex = 9;
             // 
             // FormMain
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(461, 302);
+            this.ClientSize = new System.Drawing.Size(461, 342);
             this.Controls.Add(this._panelContent);
             this.Controls.Add(this._richTextBoxLog);
             this.Controls.Add(this._statusStrip);
             this.Controls.Add(this._menuStrip);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this._menuStrip;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FormMain";
             this.Text = "Jpeg Metadatas Remover";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormMain_FormClosed);
@@ -524,12 +509,10 @@
         private System.Windows.Forms.Panel _panelContent;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.Button _buttonRun;
-        private System.Windows.Forms.Button _buttonCancel;
         private System.Windows.Forms.GroupBox _groupBoxOutputParams;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.CheckBox _checkBoxOverride;
         private System.Windows.Forms.CheckBox _checkBoxIncludeSubdirectories;
-        private System.Windows.Forms.ProgressBar _progressBar;
         private System.Windows.Forms.GroupBox _groupBoxInputParams;
         private System.Windows.Forms.TableLayoutPanel _tableLayoutPanelPurifyParams;
         private System.Windows.Forms.CheckBox _checkBoxRemoveMetadatas;
@@ -543,6 +526,7 @@
         private System.Windows.Forms.ContextMenuStrip _contextMenuStripLog;
         private System.Windows.Forms.ToolStripMenuItem clearToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem copyToolStripMenuItem;
+        private System.Windows.Forms.ProgressBar _progressBar;
     }
 }
 

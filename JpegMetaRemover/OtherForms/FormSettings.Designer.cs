@@ -41,6 +41,7 @@
             this._groupBoxClearSavedSettings = new System.Windows.Forms.GroupBox();
             this._checkBoxCleanSavedSettingsOnClose = new System.Windows.Forms.CheckBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this._checkBoxCleanOnDragAndDrop = new System.Windows.Forms.CheckBox();
             this._contextMenuStripMetaTypesToRemove.SuspendLayout();
             this._groupBoxMetadatasToRemove.SuspendLayout();
             this._groupBoxClearSavedSettings.SuspendLayout();
@@ -59,7 +60,7 @@
             this._listViewMetadatasToRemove.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
             this._listViewMetadatasToRemove.Location = new System.Drawing.Point(5, 18);
             this._listViewMetadatasToRemove.Name = "_listViewMetadatasToRemove";
-            this._listViewMetadatasToRemove.Size = new System.Drawing.Size(277, 190);
+            this._listViewMetadatasToRemove.Size = new System.Drawing.Size(277, 172);
             this._listViewMetadatasToRemove.TabIndex = 0;
             this._listViewMetadatasToRemove.UseCompatibleStateImageBehavior = false;
             this._listViewMetadatasToRemove.View = System.Windows.Forms.View.Details;
@@ -101,10 +102,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this._groupBoxMetadatasToRemove.Controls.Add(this._listViewMetadatasToRemove);
             this._groupBoxMetadatasToRemove.Location = new System.Drawing.Point(9, 10);
-            this._groupBoxMetadatasToRemove.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this._groupBoxMetadatasToRemove.Margin = new System.Windows.Forms.Padding(2);
             this._groupBoxMetadatasToRemove.Name = "_groupBoxMetadatasToRemove";
-            this._groupBoxMetadatasToRemove.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this._groupBoxMetadatasToRemove.Size = new System.Drawing.Size(286, 212);
+            this._groupBoxMetadatasToRemove.Padding = new System.Windows.Forms.Padding(2);
+            this._groupBoxMetadatasToRemove.Size = new System.Drawing.Size(286, 195);
             this._groupBoxMetadatasToRemove.TabIndex = 1;
             this._groupBoxMetadatasToRemove.TabStop = false;
             this._groupBoxMetadatasToRemove.Text = "Metadata types to remove";
@@ -142,26 +143,27 @@
             this._groupBoxClearSavedSettings.AccessibleName = "GroupBoxSaveSettings";
             this._groupBoxClearSavedSettings.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this._groupBoxClearSavedSettings.Controls.Add(this._checkBoxCleanOnDragAndDrop);
             this._groupBoxClearSavedSettings.Controls.Add(this._checkBoxCleanSavedSettingsOnClose);
-            this._groupBoxClearSavedSettings.Location = new System.Drawing.Point(9, 227);
-            this._groupBoxClearSavedSettings.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this._groupBoxClearSavedSettings.Location = new System.Drawing.Point(9, 209);
+            this._groupBoxClearSavedSettings.Margin = new System.Windows.Forms.Padding(2);
             this._groupBoxClearSavedSettings.Name = "_groupBoxClearSavedSettings";
-            this._groupBoxClearSavedSettings.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this._groupBoxClearSavedSettings.Size = new System.Drawing.Size(286, 42);
+            this._groupBoxClearSavedSettings.Padding = new System.Windows.Forms.Padding(2);
+            this._groupBoxClearSavedSettings.Size = new System.Drawing.Size(286, 60);
             this._groupBoxClearSavedSettings.TabIndex = 3;
             this._groupBoxClearSavedSettings.TabStop = false;
-            this._groupBoxClearSavedSettings.Text = "Saved settings";
+            this._groupBoxClearSavedSettings.Text = "Misc.";
             // 
             // _checkBoxCleanSavedSettingsOnClose
             // 
             this._checkBoxCleanSavedSettingsOnClose.AccessibleName = "CheckBoxCleanSavedSettings";
             this._checkBoxCleanSavedSettingsOnClose.AutoSize = true;
-            this._checkBoxCleanSavedSettingsOnClose.Location = new System.Drawing.Point(5, 17);
-            this._checkBoxCleanSavedSettingsOnClose.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this._checkBoxCleanSavedSettingsOnClose.Location = new System.Drawing.Point(4, 40);
+            this._checkBoxCleanSavedSettingsOnClose.Margin = new System.Windows.Forms.Padding(2);
             this._checkBoxCleanSavedSettingsOnClose.Name = "_checkBoxCleanSavedSettingsOnClose";
-            this._checkBoxCleanSavedSettingsOnClose.Size = new System.Drawing.Size(167, 17);
+            this._checkBoxCleanSavedSettingsOnClose.Size = new System.Drawing.Size(158, 17);
             this._checkBoxCleanSavedSettingsOnClose.TabIndex = 0;
-            this._checkBoxCleanSavedSettingsOnClose.Text = "Clean saved settings on close";
+            this._checkBoxCleanSavedSettingsOnClose.Text = "Clean saved settings on exit";
             this._checkBoxCleanSavedSettingsOnClose.UseVisualStyleBackColor = true;
             // 
             // tableLayoutPanel1
@@ -173,12 +175,23 @@
             this.tableLayoutPanel1.Controls.Add(this._buttonSaveSettings, 1, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 274);
-            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(2);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(304, 38);
             this.tableLayoutPanel1.TabIndex = 5;
+            // 
+            // _checkBoxCleanOnDragAndDrop
+            // 
+            this._checkBoxCleanOnDragAndDrop.AccessibleName = "CheckBoxCleanOnDragAndDrop";
+            this._checkBoxCleanOnDragAndDrop.AutoSize = true;
+            this._checkBoxCleanOnDragAndDrop.Location = new System.Drawing.Point(5, 18);
+            this._checkBoxCleanOnDragAndDrop.Name = "_checkBoxCleanOnDragAndDrop";
+            this._checkBoxCleanOnDragAndDrop.Size = new System.Drawing.Size(182, 17);
+            this._checkBoxCleanOnDragAndDrop.TabIndex = 6;
+            this._checkBoxCleanOnDragAndDrop.Text = "Clean immediately on drag && drop";
+            this._checkBoxCleanOnDragAndDrop.UseVisualStyleBackColor = true;
             // 
             // FormSettings
             // 
@@ -220,5 +233,6 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.ToolStripMenuItem _selectAllToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem _deselectAllToolStripMenuItem;
+        private System.Windows.Forms.CheckBox _checkBoxCleanOnDragAndDrop;
     }
 }

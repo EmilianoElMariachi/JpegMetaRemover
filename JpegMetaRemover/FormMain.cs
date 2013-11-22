@@ -7,6 +7,7 @@ using System.Reflection;
 using JpegMetaRemover.JpegTools;
 using JpegMetaRemover.Log;
 using JpegMetaRemover.OtherForms;
+using JpegMetaRemover.Properties;
 using JpegMetaRemover.ServicesProvider;
 using System.Threading;
 using System.Globalization;
@@ -23,7 +24,7 @@ namespace JpegMetaRemover
             get { return _localizableControls; }
         }
 
-        
+
         private LocalizableControlWrapperCollection _localizableControls;
 
         private FormSettings _formSettings = new FormSettings();
@@ -191,72 +192,19 @@ namespace JpegMetaRemover
             if (message == null)
             { return; }
 
+            if (_richTextBoxLog.Text.Length == 0 && message.StartsWith(Environment.NewLine))
+            {
+                message = message.TrimStart(Environment.NewLine.ToCharArray());
+            }
 
             _richTextBoxLog.SelectionStart = _richTextBoxLog.Text.Length;
             _richTextBoxLog.SelectionFont = new Font(_richTextBoxLog.Font, fontStyle);
             _richTextBoxLog.SelectionColor = msgColor;
 
-            _richTextBoxLog.AppendText(message + Environment.NewLine);
+            _richTextBoxLog.AppendText(message);
+            _richTextBoxLog.SelectionStart = _richTextBoxLog.Text.Length;
+            _richTextBoxLog.SelectionLength = 0;
             _richTextBoxLog.ScrollToCaret();
-        }
-
-        /// <summary>
-        /// Permet de logguer une info
-        /// </summary>
-        /// <param name="message"></param>
-        private void LogInfo(string message)
-        {
-            this.Log(message, MsgType.INFO);
-        }
-
-        /// <summary>
-        /// Permet de logguer un warning
-        /// </summary>
-        /// <param name="message"></param>
-        private void LogWarning(string message)
-        {
-            this.Log(message, MsgType.WARNING);
-        }
-
-        /// <summary>
-        /// Permet de logguer une erreur
-        /// </summary>
-        /// <param name="message"></param>
-        private void LogError(string message)
-        {
-            this.Log(message, MsgType.ERROR);
-        }
-
-        /// <summary>
-        /// Permet de logguer une Exception
-        /// </summary>
-        /// <param name="ex"></param>
-        private void LogException(Exception ex)
-        {
-            if (ex != null)
-            { this.Log(ex.Message, MsgType.ERROR); }
-            else
-            { this.Log("Can't log null exception", MsgType.ERROR); }
-        }
-
-        /// <summary>
-        /// Permet de logguer qu'une action est sur le point d'être executée
-        /// </summary>
-        /// <param name="actionName"></param>
-        private void LogActionAboutToBeDone(string actionName)
-        {
-            if (actionName == null)
-            { actionName = Services.LocalizationManager.ActiveLocalization.Translate("UNKNOWN ACTION"); }
-
-            this.Log(actionName, MsgType.ACTION_START);
-        }
-
-        /// <summary>
-        /// Permet d'indiquer que l'action s'est déroulée avec succès (sans exception)
-        /// </summary>
-        private void LogActionDoneSuccessfully()
-        {
-            this.Log(Services.LocalizationManager.ActiveLocalization.Translate("Done.") + Environment.NewLine, MsgType.ACTION_END);
         }
 
         private string GetFreeFilePath(string filePath)
@@ -280,10 +228,15 @@ namespace JpegMetaRemover
         {
             if (_backgroundWorkerPurify.IsBusy)
             {
-                LogWarning(Services.LocalizationManager.ActiveLocalization.Translate("Please wait."));
+                if (!_backgroundWorkerPurify.CancellationPending)
+                {
+                    _backgroundWorkerPurify.CancelAsync();
+                }
             }
             else
             {
+                _buttonRun.BackgroundImage = Resources.Stop;
+
                 var inputPath = _textBoxInputPath.Text;
 
                 var jpegMetaTypesToRemove = JpegMetaTypes.NONE;
@@ -320,7 +273,7 @@ namespace JpegMetaRemover
             var overrideInputFile = (bool)args[3];
             var includeSubdirectories = (bool)args[4];
 
-            Log(">>> " + inputPath + " <<<" + Environment.NewLine, Color.Purple, FontStyle.Bold);
+            Log(Environment.NewLine + ">>> " + inputPath + " <<<" + Environment.NewLine, Color.Purple, FontStyle.Bold);
 
             var dateStart = DateTime.Now;
 
@@ -347,7 +300,7 @@ namespace JpegMetaRemover
 
             if (jpegFilesToPurify.Count <= 0)
             {
-                LogWarning(Services.LocalizationManager.ActiveLocalization.Translate("No file to process."));
+                Logger.LogLineWarning(this, Services.LocalizationManager.ActiveLocalization.Translate("No file to process."));
             }
 
 
@@ -364,7 +317,7 @@ namespace JpegMetaRemover
             {
                 if (_backgroundWorkerPurify.CancellationPending)
                 {
-                    LogWarning(Services.LocalizationManager.ActiveLocalization.Translate("Operation Cancelled..."));
+                    Logger.LogLineWarning(this, Services.LocalizationManager.ActiveLocalization.Translate("Operation Cancelled..."));
                     return;
                 }
 
@@ -373,7 +326,8 @@ namespace JpegMetaRemover
                 PurificationResult purificationResult = null;
                 try
                 {
-                    this.LogActionAboutToBeDone(inputJpegFilePath);
+                    Logger.LogLineActionStart(this, inputJpegFilePath);
+
                     jpgExifRemover = new JPGExifRemover(inputJpegFilePath);
 
                     purificationResult = jpgExifRemover.Purify(jpegMetaTypesToRemove, commentsAction);
@@ -382,10 +336,10 @@ namespace JpegMetaRemover
 
                     jpgExifRemover.Dispose();
 
-                    LogInfo(Services.LocalizationManager.ActiveLocalization.Translate("{0} metadata(s) found ({1})", purificationResult.NbMetasFound.ToString(), purificationResult.MetaTypesFound.ToString()));
-                    LogInfo(Services.LocalizationManager.ActiveLocalization.Translate("{0} metadata(s) removed ({1})", purificationResult.NbMetasRemoved.ToString(), purificationResult.MetaTypesRemoved.ToString()));
-                    LogInfo(Services.LocalizationManager.ActiveLocalization.Translate("{0} comment(s) found", purificationResult.NbCommentsFound.ToString()));
-                    LogInfo(Services.LocalizationManager.ActiveLocalization.Translate("{0} comment(s) removed", purificationResult.NbCommentsRemoved.ToString()));
+                    Logger.LogLineInfo(this, Services.LocalizationManager.ActiveLocalization.Translate("{0} metadata(s) found ({1})", purificationResult.NbMetasFound.ToString(), purificationResult.MetaTypesFound.ToString()));
+                    Logger.LogLineInfo(this, Services.LocalizationManager.ActiveLocalization.Translate("{0} metadata(s) removed ({1})", purificationResult.NbMetasRemoved.ToString(), purificationResult.MetaTypesRemoved.ToString()));
+                    Logger.LogLineInfo(this, Services.LocalizationManager.ActiveLocalization.Translate("{0} comment(s) found", purificationResult.NbCommentsFound.ToString()));
+                    Logger.LogLineInfo(this, Services.LocalizationManager.ActiveLocalization.Translate("{0} comment(s) removed", purificationResult.NbCommentsRemoved.ToString()));
 
 
                     if (purificationResult.ResultStreamDiffersFromOriginal)
@@ -394,29 +348,29 @@ namespace JpegMetaRemover
                         {
                             outputFileStream = new FileStream(inputJpegFilePath, FileMode.Create);
                             purificationResult.ResultStream.WriteTo(outputFileStream);
-                            LogInfo(Services.LocalizationManager.ActiveLocalization.Translate("File overriden."));
+                            Logger.LogLineInfo(this, Services.LocalizationManager.ActiveLocalization.Translate("File overriden."));
                         }
                         else
                         {
                             var outputFilePath = GetFreeFilePath(inputJpegFilePath);
                             outputFileStream = new FileStream(outputFilePath, FileMode.Create);
                             purificationResult.ResultStream.WriteTo(outputFileStream);
-                            LogInfo(Services.LocalizationManager.ActiveLocalization.Translate("File saved to \"{0}\".", Path.GetFileName(outputFilePath)));
+                            Logger.LogLineInfo(this, Services.LocalizationManager.ActiveLocalization.Translate("File saved to \"{0}\".", Path.GetFileName(outputFilePath)));
                         }
                     }
                     else
                     {
-                        LogInfo(Services.LocalizationManager.ActiveLocalization.Translate("No file written."));
+                        Logger.LogLineInfo(this, Services.LocalizationManager.ActiveLocalization.Translate("No file written."));
                     }
 
                     updateProgression();
 
-                    LogActionDoneSuccessfully();
+                    Logger.LogLineActionEnd(this, Services.LocalizationManager.ActiveLocalization.Translate("Done."));
 
                 }
                 catch (Exception ex)
                 {
-                    LogException(ex);
+                    Logger.LogLineException(this, ex);
                 }
                 finally
                 {
@@ -431,34 +385,28 @@ namespace JpegMetaRemover
 
             var ellapsedTime = dateEnd - dateStart;
 
-            Log(Services.LocalizationManager.ActiveLocalization.Translate("Total : {0} file(s) in {1} (s)", jpegFilesToPurify.Count.ToString(), ellapsedTime.TotalSeconds.ToString()) + Environment.NewLine, Color.Purple, FontStyle.Bold);
+            Log(Services.LocalizationManager.ActiveLocalization.Translate("Total : {0} file(s) in {1} (s)", jpegFilesToPurify.Count.ToString(), ellapsedTime.TotalSeconds.ToString()), Color.Purple, FontStyle.Bold);
 
         }
 
         private void _backgroundWorkerPurify_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
             if (e.Error != null)
-            { this.LogException(e.Error); }
+            { Logger.LogLineException(this, e.Error); }
 
             _progressBar.Value = _progressBar.Maximum;
 
             Thread.Sleep(300);
 
             _progressBar.Value = _progressBar.Minimum;
+
+            _buttonRun.BackgroundImage = Resources.Play;
         }
 
         private void _backgroundWorkerPurify_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
         {
             _progressBar.Value = e.ProgressPercentage;
 
-        }
-
-        private void _buttonCancel_Click(object sender, EventArgs e)
-        {
-            if (_backgroundWorkerPurify.IsBusy && !_backgroundWorkerPurify.CancellationPending)
-            {
-                _backgroundWorkerPurify.CancelAsync();
-            }
         }
 
         private void OnDragEnter(object sender, DragEventArgs e)
@@ -483,6 +431,10 @@ namespace JpegMetaRemover
                 if (files.Length >= 0)
                 {
                     _textBoxInputPath.Text = files[0];
+                    if (Services.SettingsManager.CleanOnDragAndDrop)
+                    {
+                        PurifyJpegFile();
+                    }
                 }
             }
             catch
