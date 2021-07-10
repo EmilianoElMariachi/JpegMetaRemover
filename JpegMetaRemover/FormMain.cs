@@ -10,7 +10,6 @@ using JpegMetaRemover.OtherForms;
 using JpegMetaRemover.Properties;
 using JpegMetaRemover.ServicesProvider;
 using System.Threading;
-using System.Globalization;
 using JpegMetaRemover.ServicesProvider.LocalizationService;
 using JpegMetaRemover.Tools;
 

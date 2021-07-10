@@ -16,18 +16,15 @@ namespace JpegMetaRemover.OtherForms
             {
                 if (value != JpegMetaTypes.NONE)
                 {
-                    var item = _listViewMetadatasToRemove.Items.Add(value.ToString() + " (APP" + appIndex++.ToString() + ")");
+                    var item = _listViewMetadatasToRemove.Items.Add(value == JpegMetaTypes.JFIF ? 
+                        $"{value} (APP{appIndex++}, recommended to preserve)" :
+                        $"{value} (APP{appIndex++})");
+
                     item.Tag = value;
                 }
             }
 
             _checkBoxCleanOnDragAndDrop.Checked = Services.SettingsManager.CleanOnDragAndDrop;
-        }
-
-        public new DialogResult ShowDialog()
-        {
-            this.UpdateFromSettings();
-            return base.ShowDialog();
         }
 
         public new DialogResult ShowDialog(IWin32Window owner)
