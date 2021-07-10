@@ -12,10 +12,7 @@ namespace JpegMetaRemover.ServicesProvider.LocalizationService
 
         public object WrappedControl
         {
-            get
-            {
-                return _wrappedControl;
-            }
+            get => _wrappedControl;
             set
             {
                 _wrappedControl = value;
@@ -29,9 +26,8 @@ namespace JpegMetaRemover.ServicesProvider.LocalizationService
 
         public string Text
         {
-            get
-            { return (string)this.TextMember.GetValue(this.WrappedControl, null); }
-            set { this.TextMember.SetValue(this.WrappedControl, value, null); }
+            get => (string)this.TextMember.GetValue(this.WrappedControl, null);
+            set => this.TextMember.SetValue(this.WrappedControl, value, null);
         }
 
 

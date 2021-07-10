@@ -61,7 +61,7 @@ namespace JpegMetaRemover.OtherForms
             {
                 if (item.Checked)
                 {
-                    jpegMetaTypesToRemove = jpegMetaTypesToRemove | (JpegMetaTypes)item.Tag;
+                    jpegMetaTypesToRemove |= (JpegMetaTypes)item.Tag;
                 }
             }
 

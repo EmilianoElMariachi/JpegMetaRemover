@@ -17,8 +17,8 @@ namespace JpegMetaRemover.ServicesProvider.LocalizationService
 
         public void UpdateListFromForm(Form form)
         {
-            this.AddIfLocalizable(new LocalizableControlWrapper()
-                {
+            this.AddIfLocalizable(new LocalizableControlWrapper
+            {
                     AccessibleName = form.AccessibleName,
                     WrappedControl = form,
                 });
@@ -29,43 +29,38 @@ namespace JpegMetaRemover.ServicesProvider.LocalizationService
         {
             foreach (var rawControl in controls)
             {
-                if (rawControl is MenuStrip)
+                if (rawControl is MenuStrip menuStrip)
                 {
-                    var control = (MenuStrip)rawControl;
-                    this.AddIfLocalizable(new LocalizableControlWrapper()
+                    this.AddIfLocalizable(new LocalizableControlWrapper
                     {
-                        AccessibleName = control.AccessibleName,
-                        WrappedControl = control
+                        AccessibleName = menuStrip.AccessibleName,
+                        WrappedControl = menuStrip
                     });
-                    UpdateFromControls(control.Items);
+                    UpdateFromControls(menuStrip.Items);
                 }
-                else if (rawControl is Control)
+                else if (rawControl is Control wrappedControl)
                 {
-                    var control = (Control)rawControl;
-
-                    this.AddIfLocalizable(new LocalizableControlWrapper()
+                    this.AddIfLocalizable(new LocalizableControlWrapper
                     {
-                        AccessibleName = control.AccessibleName,
-                        WrappedControl = control
+                        AccessibleName = wrappedControl.AccessibleName,
+                        WrappedControl = wrappedControl
                     });
-                    UpdateFromControls(control.Controls);
+                    UpdateFromControls(wrappedControl.Controls);
 
-                    if (control.ContextMenuStrip != null)
+                    if (wrappedControl.ContextMenuStrip != null)
                     {
-                        UpdateFromControls(control.ContextMenuStrip.Items);
+                        UpdateFromControls(wrappedControl.ContextMenuStrip.Items);
                     }
                 }
-                else if (rawControl is ToolStripItem)
+                else if (rawControl is ToolStripItem toolStripItem)
                 {
-                    var control = (ToolStripItem)rawControl;
-                    this.AddIfLocalizable(new LocalizableControlWrapper()
+                    this.AddIfLocalizable(new LocalizableControlWrapper
                     {
-                        AccessibleName = control.AccessibleName,
-                        WrappedControl = control
+                        AccessibleName = toolStripItem.AccessibleName,
+                        WrappedControl = toolStripItem
                     });
 
-                    var dropDown = control as ToolStripDropDownItem;
-                    if (dropDown != null)
+                    if (toolStripItem is ToolStripDropDownItem dropDown)
                     {
                         UpdateFromControls(dropDown.DropDownItems);
                     }

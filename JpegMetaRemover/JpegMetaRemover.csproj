@@ -85,6 +85,8 @@
     <Compile Include="FormMain.Designer.cs">
       <DependentUpon>FormMain.cs</DependentUpon>
     </Compile>
+    <Compile Include="JpegTools\CommentsActionType.cs" />
+    <Compile Include="JpegTools\JpegMetaTypes.cs" />
     <Compile Include="OtherForms\FormSettings.cs">
       <SubType>Form</SubType>
     </Compile>

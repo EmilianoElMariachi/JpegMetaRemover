@@ -18,17 +18,12 @@ namespace JpegMetaRemover
     public partial class FormMain : Form
     {
 
-        private LocalizableControlWrapperCollection LocalizableControls
-        {
-            get { return _localizableControls; }
-        }
+        private LocalizableControlWrapperCollection LocalizableControls { get; }
 
 
-        private LocalizableControlWrapperCollection _localizableControls;
+        private readonly FormSettings _formSettings = new FormSettings();
 
-        private FormSettings _formSettings = new FormSettings();
-
-        private FormAbout _formAbout = new FormAbout();
+        private readonly FormAbout _formAbout = new FormAbout();
 
         public FormMain()
         {
@@ -37,7 +32,7 @@ namespace JpegMetaRemover
 
             Logger.OnLog += (sender, message, type) => { this.Log(message, type); };
 
-            _localizableControls = new LocalizableControlWrapperCollection();
+            LocalizableControls = new LocalizableControlWrapperCollection();
 
             InitializeLanguages();
 
@@ -295,7 +290,7 @@ namespace JpegMetaRemover
             }
 
             if (_backgroundWorkerPurify.CancellationPending)
-            { return; }
+                return;
 
             if (jpegFilesToPurify.Count <= 0)
             {
@@ -306,10 +301,10 @@ namespace JpegMetaRemover
             var maxProgression = jpegFilesToPurify.Count * 2;
             var currentProgression = 0.0;
 
-            var updateProgression = new Action(delegate()
+            var updateProgression = new Action(delegate
             {
-                var pourcentageValue = (int)Math.Round(++currentProgression / maxProgression * 100.0);
-                _backgroundWorkerPurify.ReportProgress(pourcentageValue);
+                var percentProgress = (int)Math.Round(++currentProgression / maxProgression * 100.0);
+                _backgroundWorkerPurify.ReportProgress(percentProgress);
             });
 
             foreach (var inputJpegFilePath in jpegFilesToPurify)
@@ -419,6 +414,7 @@ namespace JpegMetaRemover
             }
             catch
             {
+                // ignored
             }
         }
 
@@ -437,7 +433,9 @@ namespace JpegMetaRemover
                 }
             }
             catch
-            { }
+            {
+                // ignored
+            }
         }
 
         private void _selectFileToolStripMenuItem_Click(object sender, EventArgs e)
@@ -462,7 +460,7 @@ namespace JpegMetaRemover
             }
             catch
             {
-
+                // ignored
             }
         }
 
@@ -483,6 +481,7 @@ namespace JpegMetaRemover
             }
             catch
             {
+                // ignored
             }
         }
 

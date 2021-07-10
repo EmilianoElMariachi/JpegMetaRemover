@@ -6,7 +6,7 @@ namespace JpegMetaRemover.ServicesProvider.LocalizationService
 {
     internal class Localization
     {
-        public LocalizationManager LocalizationManager { get; private set; }
+        public LocalizationManager LocalizationManager { get; }
 
         public Localization(LocalizationManager localizationManager)
         {

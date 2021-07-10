@@ -11,10 +11,7 @@ namespace JpegMetaRemover.Log
 
         public static void Log(object sender, string message, MsgType msgType)
         {
-            if (OnLog != null)
-            {
-                OnLog(sender, message, msgType);
-            }
+            OnLog?.Invoke(sender, message, msgType);
         }
 
         public static void LogLine(object sender, string message, MsgType msgType)

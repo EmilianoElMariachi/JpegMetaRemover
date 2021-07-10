@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace JpegMetaRemover.Tools
 {
@@ -11,12 +8,12 @@ namespace JpegMetaRemover.Tools
         {
             try
             {
-                if (disposable != null)
-                { disposable.Dispose(); }
+                disposable?.Dispose();
             }
             catch
-            { }
-
+            {
+                // ignored
+            }
         }
     }
 }

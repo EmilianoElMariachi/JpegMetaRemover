@@ -6,22 +6,15 @@ namespace JpegMetaRemover.ServicesProvider.LocalizationService
 {
     internal class LocalizationManager 
     {
-        private Localization _activeLocalization;
-
-
         /// <summary>
         /// La liste de localizations chargées
         /// </summary>
-        public LocalizationCollection LoadedLocalizations { get; private set; }
+        public LocalizationCollection LoadedLocalizations { get; }
 
         /// <summary>
         /// La localization active
         /// </summary>
-        public Localization ActiveLocalization
-        {
-            get { return _activeLocalization; }
-            internal set { _activeLocalization = value; }
-        }
+        public Localization ActiveLocalization { get; internal set; }
 
         /// <summary>
         /// Constructeur
@@ -114,7 +107,7 @@ namespace JpegMetaRemover.ServicesProvider.LocalizationService
         /// </summary>
         /// <param name="languageFiles"></param>
         /// <returns></returns>
-        public List<Localization> LoadLocalizationsFromFiles(string[] languageFiles)
+        public List<Localization> LoadLocalizationsFromFiles(IEnumerable<string> languageFiles)
         {
             var localizations = new List<Localization>();
 

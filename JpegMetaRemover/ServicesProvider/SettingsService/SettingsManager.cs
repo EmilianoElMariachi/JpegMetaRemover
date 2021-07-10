@@ -27,7 +27,7 @@ namespace JpegMetaRemover.ServicesProvider.SettingsService
 
         public JpegMetaTypes MetaTypesToRemove
         {
-            get { return _metaTypesToRemove; }
+            get => _metaTypesToRemove;
             set
             {
                 _metaTypesToRemove = value;
@@ -50,7 +50,7 @@ namespace JpegMetaRemover.ServicesProvider.SettingsService
 
         public bool IncludeSubdirectories
         {
-            get { return _includeSubdirectories; }
+            get => _includeSubdirectories;
             set
             {
                 _includeSubdirectories = value;
@@ -62,7 +62,7 @@ namespace JpegMetaRemover.ServicesProvider.SettingsService
 
         public bool OverrideOriginalFile
         {
-            get { return _overrideOriginalFile; }
+            get => _overrideOriginalFile;
             set
             {
                 _overrideOriginalFile = value;
@@ -74,7 +74,7 @@ namespace JpegMetaRemover.ServicesProvider.SettingsService
 
         public bool RemoveMetadatas
         {
-            get { return _removeMetadatas; }
+            get => _removeMetadatas;
             set
             {
                 _removeMetadatas = value;
@@ -86,7 +86,7 @@ namespace JpegMetaRemover.ServicesProvider.SettingsService
 
         public bool RemoveComments
         {
-            get { return _removeComments; }
+            get => _removeComments;
             set
             {
                 _removeComments = value;
@@ -99,7 +99,7 @@ namespace JpegMetaRemover.ServicesProvider.SettingsService
 
         public string LastInputPath
         {
-            get { return _lastInputPath; }
+            get => _lastInputPath;
             set
             {
                 _lastInputPath = value;
@@ -114,7 +114,7 @@ namespace JpegMetaRemover.ServicesProvider.SettingsService
         /// </summary>
         public bool CleanOnDragAndDrop
         {
-            get { return _cleanOnDragAndDrop; }
+            get => _cleanOnDragAndDrop;
             set
             {
                 TrySaveToRegistry(REG_VAL_CLEAN_ON_DRAG_AND_DROP, value);
@@ -157,8 +157,8 @@ namespace JpegMetaRemover.ServicesProvider.SettingsService
 
         private void CurrentDomain_ProcessExit(object sender, EventArgs e)
         {
-            if (CleanUpSavedSettingsOnClose)
-            { CleanRegistry(); }
+            if (CleanUpSavedSettingsOnClose) 
+                CleanRegistry();
         }
 
         private static JpegMetaTypes GetDefaultMetaTypesToRemove()
@@ -181,12 +181,16 @@ namespace JpegMetaRemover.ServicesProvider.SettingsService
             {
                 regKeyApp = Registry.CurrentUser.OpenSubKey(REG_KEY_APP);
                 if (regKeyApp != null)
-                { value = (TRegValType)regKeyApp.GetValue(valueName); }
+                    value = (TRegValType) regKeyApp.GetValue(valueName);
             }
             catch
-            { }
+            {
+                // ignored
+            }
             finally
-            { MemHelper.DisposeSecure(regKeyApp); }
+            {
+                MemHelper.DisposeSecure(regKeyApp);
+            }
 
             return value;
         }
@@ -198,23 +202,28 @@ namespace JpegMetaRemover.ServicesProvider.SettingsService
             try
             {
                 regKeyApp = Registry.CurrentUser.CreateSubKey(REG_KEY_APP);
-                if (regKeyApp != null)
-                {
-                    regKeyApp.SetValue(valueName, value);
-                }
+                regKeyApp?.SetValue(valueName, value);
             }
             catch
-            { }
+            {
+
+            }
             finally
-            { MemHelper.DisposeSecure(regKeyApp); }
+            {
+                MemHelper.DisposeSecure(regKeyApp);
+            }
         }
 
         public static void CleanRegistry()
         {
             try
-            { Registry.CurrentUser.DeleteSubKeyTree(REG_KEY_APP); }
+            {
+                Registry.CurrentUser.DeleteSubKeyTree(REG_KEY_APP);
+            }
             catch
-            { }
+            {
+                // ignored
+            }
         }
     }
 }
