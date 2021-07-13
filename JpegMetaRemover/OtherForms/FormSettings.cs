@@ -16,7 +16,7 @@ namespace JpegMetaRemover.OtherForms
             {
                 if (value != JpegMetaTypes.NONE)
                 {
-                    var item = _listViewMetadatasToRemove.Items.Add(value == JpegMetaTypes.JFIF ? 
+                    var item = _listViewMetadatasToRemove.Items.Add(value == JpegMetaTypes.APP0 ? 
                         $"{value} (APP{appIndex++}, recommended to preserve)" :
                         $"{value} (APP{appIndex++})");
 

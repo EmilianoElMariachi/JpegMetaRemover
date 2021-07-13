@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using JpegMetaRemover.JpegTools;
 using JpegMetaRemover.Log;
@@ -11,7 +12,6 @@ using JpegMetaRemover.Properties;
 using JpegMetaRemover.ServicesProvider;
 using System.Threading;
 using JpegMetaRemover.ServicesProvider.LocalizationService;
-using JpegMetaRemover.Tools;
 
 namespace JpegMetaRemover
 {
@@ -239,11 +239,11 @@ namespace JpegMetaRemover
                     jpegMetaTypesToRemove = Services.SettingsManager.MetaTypesToRemove;
                 }
 
-                var commentsAction = _checkBoxRemoveComments.Checked ? CommentsActionType.REMOVE : CommentsActionType.KEEP;
+                var removeComments = _checkBoxRemoveComments.Checked;
                 var overrideInputFile = _checkBoxOverride.Checked;
                 var includeSubDirectories = _checkBoxIncludeSubdirectories.Checked;
 
-                _backgroundWorkerPurify.RunWorkerAsync(new object[] { inputPath, jpegMetaTypesToRemove, commentsAction, overrideInputFile, includeSubDirectories });
+                _backgroundWorkerPurify.RunWorkerAsync(new object[] { inputPath, jpegMetaTypesToRemove, removeComments, overrideInputFile, includeSubDirectories });
             }
         }
 
@@ -263,7 +263,7 @@ namespace JpegMetaRemover
 
             var inputPath = args[0] as string;
             var jpegMetaTypesToRemove = (JpegMetaTypes)args[1];
-            var commentsAction = (CommentsActionType)args[2];
+            var removeComments = (bool)args[2];
             var overrideInputFile = (bool)args[3];
             var includeSubdirectories = (bool)args[4];
 
@@ -315,20 +315,20 @@ namespace JpegMetaRemover
                     return;
                 }
 
-                JPGExifRemover jpgExifRemover = null;
                 FileStream outputFileStream = null;
                 PurificationResult purificationResult = null;
                 try
                 {
                     Logger.LogLineActionStart(this, inputJpegFilePath);
 
-                    jpgExifRemover = new JPGExifRemover(inputJpegFilePath);
 
-                    purificationResult = jpgExifRemover.Purify(jpegMetaTypesToRemove, commentsAction);
+                    using var fileStream = File.OpenRead(inputJpegFilePath);
+
+                    using var outputStream = new MemoryStream();
+                    JpegMetadataRemover.Remove(fileStream, outputStream, jpegMetaTypesToRemove, removeComments);
 
                     updateProgression();
 
-                    jpgExifRemover.Dispose();
 
                     Logger.LogLineInfo(this, Services.LocalizationManager.ActiveLocalization.Translate("{0} metadata(s) found ({1})", purificationResult.NbMetasFound.ToString(), purificationResult.MetaTypesFound.ToString()));
                     Logger.LogLineInfo(this, Services.LocalizationManager.ActiveLocalization.Translate("{0} metadata(s) removed ({1})", purificationResult.NbMetasRemoved.ToString(), purificationResult.MetaTypesRemoved.ToString()));
@@ -366,13 +366,7 @@ namespace JpegMetaRemover
                 {
                     Logger.LogLineException(this, ex);
                 }
-                finally
-                {
-                    MemHelper.DisposeSecure(jpgExifRemover);
-                    if (purificationResult != null)
-                    { MemHelper.DisposeSecure(purificationResult.ResultStream); }
-                    MemHelper.DisposeSecure(outputFileStream);
-                }
+
             }//End for each file
 
             var dateEnd = DateTime.Now;

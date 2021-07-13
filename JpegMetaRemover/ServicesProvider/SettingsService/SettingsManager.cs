@@ -1,6 +1,5 @@
 ﻿using System;
 using JpegMetaRemover.JpegTools;
-using JpegMetaRemover.Tools;
 using Microsoft.Win32;
 
 namespace JpegMetaRemover.ServicesProvider.SettingsService
@@ -176,10 +175,10 @@ namespace JpegMetaRemover.ServicesProvider.SettingsService
             TRegValType value = defaultValue;
 
             //Charge la localization depuis la base de registre si elle existe
-            RegistryKey regKeyApp = null;
+            
             try
             {
-                regKeyApp = Registry.CurrentUser.OpenSubKey(REG_KEY_APP);
+                using var regKeyApp = Registry.CurrentUser.OpenSubKey(REG_KEY_APP);
                 if (regKeyApp != null)
                     value = (TRegValType) regKeyApp.GetValue(valueName);
             }
@@ -187,30 +186,20 @@ namespace JpegMetaRemover.ServicesProvider.SettingsService
             {
                 // ignored
             }
-            finally
-            {
-                MemHelper.DisposeSecure(regKeyApp);
-            }
-
             return value;
         }
 
         private static void TrySaveToRegistry(string valueName, object value)
         {
             //Charge la localization depuis la base de registre si elle existe
-            RegistryKey regKeyApp = null;
             try
             {
-                regKeyApp = Registry.CurrentUser.CreateSubKey(REG_KEY_APP);
+                using var regKeyApp = Registry.CurrentUser.CreateSubKey(REG_KEY_APP);
                 regKeyApp?.SetValue(valueName, value);
             }
             catch
             {
 
-            }
-            finally
-            {
-                MemHelper.DisposeSecure(regKeyApp);
             }
         }
 

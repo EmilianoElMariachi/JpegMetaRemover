@@ -38,6 +38,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -47,6 +48,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup />
   <PropertyGroup />
@@ -61,10 +63,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <PlatformTarget>AnyCPU</PlatformTarget>
     <OutputPath>bin\Debug\</OutputPath>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <PlatformTarget>AnyCPU</PlatformTarget>
     <OutputPath>bin\Release\</OutputPath>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -85,15 +89,17 @@
     <Compile Include="FormMain.Designer.cs">
       <DependentUpon>FormMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="JpegTools\CommentsActionType.cs" />
+    <Compile Include="JpegTools\JpegMetadataRemover.cs" />
+    <Compile Include="JpegTools\BadImageException.cs" />
     <Compile Include="JpegTools\JpegMetaTypes.cs" />
+    <Compile Include="JpegTools\JpegMarkerSectionsReader.cs" />
+    <Compile Include="JpegTools\MarkerSection.cs" />
     <Compile Include="OtherForms\FormSettings.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="OtherForms\FormSettings.Designer.cs">
       <DependentUpon>FormSettings.cs</DependentUpon>
     </Compile>
-    <Compile Include="JpegTools\JPGExifRemover.cs" />
     <Compile Include="Log\Logger.cs" />
     <Compile Include="Log\MsgType.cs" />
     <Compile Include="OtherForms\FormAbout.cs">
@@ -110,7 +116,6 @@
     </Compile>
     <Compile Include="ServicesProvider\Services.cs" />
     <Compile Include="ServicesProvider\SettingsService\SettingsManager.cs" />
-    <Compile Include="Tools\MemHelper.cs" />
     <Compile Include="ServicesProvider\LocalizationService\LocalizableControlCollection.cs" />
     <Compile Include="ServicesProvider\LocalizationService\LocalizableControlWrapper.cs" />
     <Compile Include="ServicesProvider\LocalizationService\Localization.cs" />
@@ -182,7 +187,9 @@
   <ItemGroup>
     <None Include="Resources\Stop.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Tools\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="JpegMetaRevmoverIcon.ico" />
     <Content Include="Resources\JpegMetaRevmoverIcon.ico" />

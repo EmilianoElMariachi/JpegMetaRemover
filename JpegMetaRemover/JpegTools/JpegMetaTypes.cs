@@ -2,26 +2,109 @@
 
 namespace JpegMetaRemover.JpegTools
 {
+    /// <summary>
+    /// https://exiftool.org/TagNames/JPEG.html
+    /// </summary>
     [Flags]
     public enum JpegMetaTypes
     {
-        NONE = 0,                   
+        NONE=0,
 
-        JFIF = 1,                   //APP 0
-        EXIF = 2,                   //APP 1
-        ICC_PROFILE = 4,            //APP 2
-        META = 8,                   //APP 3
-        SCALADO = 16,               //APP 4
-        RMETA = 32,                 //APP 5
-        EPPIM = 64,                 //APP 6
-        QUALCOMM = 128,             //APP 7
-        SPIFF = 256,                //APP 8
-        UNKNOWN_1 = 512,            //APP 9
-        PHOTOSTUDIO = 1024,         //APP10
-        UNKNOWN_2 = 2048,           //APP11
-        PICTURE_INFO = 8192,        //APP12
-        PHOTOSHOP = 16384,          //APP13
-        ADOBE = 32768,              //APP14
-        GRAPHICCONVERTER = 65536,   //APP15
+        /// <summary>
+        /// JFIF
+        /// JFXX
+        /// CIFF
+        /// AVI1
+        /// Ocad
+        /// </summary>
+        APP0,
+
+        /// <summary>
+        /// EXIF
+        /// ExtendedXMP
+        /// XMP
+        /// QVCI
+        /// FLIR
+        /// RawThermalImage
+        /// </summary>
+        APP1,
+        /// <summary>
+        /// ICC_Profile
+        /// FPXR
+        /// MPF
+        /// PreviewImage
+        /// </summary>
+        APP2,
+        /// <summary>
+        /// Meta
+        /// Stim
+        /// JPS
+        /// ThermalData
+        /// PreviewImage
+        /// </summary>
+        APP3,
+        /// <summary>
+        /// Scalado
+        /// FPXR
+        /// ThermalParams
+        /// PreviewImage
+        /// </summary>
+        APP4,
+        /// <summary>
+        /// RMETA
+        /// SamsungUniqueID
+        /// ThermalCalibration
+        /// PreviewImage
+        /// </summary>
+        APP5,
+        /// <summary>
+        /// EPPIM
+        /// NITF
+        /// HP_TDHD
+        /// GoPro
+        /// DJI_DTAT
+        /// </summary>
+        APP6,
+        /// <summary>
+        /// Pentax
+        /// Huawei
+        /// Qualcomm
+        /// </summary>
+        APP7,
+        /// <summary>
+        /// SPIFF
+        /// </summary>
+        APP8,
+        /// <summary>
+        /// MediaJukebox
+        /// </summary>
+        APP9,
+        /// <summary>
+        /// Comment
+        /// </summary>
+        APP10,
+        /// <summary>
+        /// JPEG-HDR
+        /// JUMBF
+        /// </summary>
+        APP11,
+        /// <summary>
+        /// PictureInfo
+        /// Ducky
+        /// </summary>
+        APP12,
+        /// <summary>
+        /// Photoshop
+        /// Adobe_CM
+        /// </summary>
+        APP13,
+        /// <summary>
+        /// Adobe
+        /// </summary>
+        APP14,
+        /// <summary>
+        /// GraphicConverter
+        /// </summary>
+        APP15,
     }
 }
