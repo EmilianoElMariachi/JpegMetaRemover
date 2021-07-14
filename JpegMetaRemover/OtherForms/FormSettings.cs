@@ -33,12 +33,12 @@ namespace JpegMetaRemover.OtherForms
             return base.ShowDialog(owner);
         }
 
-        public void UpdateFromSettings()
+        private void UpdateFromSettings()
         {
             foreach (ListViewItem item in _listViewMetadatasToRemove.Items)
             {
                 var itemMeta = (JpegMetaTypes) item.Tag;
-                item.Checked = (Services.SettingsManager.MetaTypesToRemove & itemMeta) == itemMeta;
+                item.Checked = Services.SettingsManager.MetaTypesToRemove.HasFlag(itemMeta);
             }
 
             _checkBoxCleanSavedSettingsOnClose.Checked = Services.SettingsManager.CleanUpSavedSettingsOnClose;            
@@ -55,17 +55,15 @@ namespace JpegMetaRemover.OtherForms
 
         private JpegMetaTypes GetJpegMetaTypesToRemove()
         {
-            var jpegMetaTypesToRemove = JpegMetaTypes.NONE;
+            var metasToRemove = JpegMetaTypes.NONE;
 
             foreach (ListViewItem item in _listViewMetadatasToRemove.Items)
             {
-                if (item.Checked)
-                {
-                    jpegMetaTypesToRemove |= (JpegMetaTypes)item.Tag;
-                }
+                if (item.Checked) 
+                    metasToRemove |= (JpegMetaTypes) item.Tag;
             }
 
-            return jpegMetaTypesToRemove;
+            return metasToRemove;
         }
 
         private void FormSettings_FormClosing(object sender, FormClosingEventArgs e)

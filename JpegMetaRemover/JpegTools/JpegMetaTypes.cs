@@ -8,8 +8,10 @@ namespace JpegMetaRemover.JpegTools
     [Flags]
     public enum JpegMetaTypes
     {
-        NONE=0,
-
+        /// <summary>
+        /// Aucun flag
+        /// </summary>
+        NONE = 0x00,
         /// <summary>
         /// JFIF
         /// JFXX
@@ -17,8 +19,7 @@ namespace JpegMetaRemover.JpegTools
         /// AVI1
         /// Ocad
         /// </summary>
-        APP0,
-
+        APP0 = 0x01,
         /// <summary>
         /// EXIF
         /// ExtendedXMP
@@ -27,14 +28,14 @@ namespace JpegMetaRemover.JpegTools
         /// FLIR
         /// RawThermalImage
         /// </summary>
-        APP1,
+        APP1 = 0x02,
         /// <summary>
         /// ICC_Profile
         /// FPXR
         /// MPF
         /// PreviewImage
         /// </summary>
-        APP2,
+        APP2 = 0x04,
         /// <summary>
         /// Meta
         /// Stim
@@ -42,21 +43,21 @@ namespace JpegMetaRemover.JpegTools
         /// ThermalData
         /// PreviewImage
         /// </summary>
-        APP3,
+        APP3 = 0x08,
         /// <summary>
         /// Scalado
         /// FPXR
         /// ThermalParams
         /// PreviewImage
         /// </summary>
-        APP4,
+        APP4 = 0x10,
         /// <summary>
         /// RMETA
         /// SamsungUniqueID
         /// ThermalCalibration
         /// PreviewImage
         /// </summary>
-        APP5,
+        APP5 = 0x20,
         /// <summary>
         /// EPPIM
         /// NITF
@@ -64,47 +65,47 @@ namespace JpegMetaRemover.JpegTools
         /// GoPro
         /// DJI_DTAT
         /// </summary>
-        APP6,
+        APP6 = 0x40,
         /// <summary>
         /// Pentax
         /// Huawei
         /// Qualcomm
         /// </summary>
-        APP7,
+        APP7 = 0x80,
         /// <summary>
         /// SPIFF
         /// </summary>
-        APP8,
+        APP8 = 0x100,
         /// <summary>
         /// MediaJukebox
         /// </summary>
-        APP9,
+        APP9 = 0x200,
         /// <summary>
         /// Comment
         /// </summary>
-        APP10,
+        APP10 = 0x400,
         /// <summary>
         /// JPEG-HDR
         /// JUMBF
         /// </summary>
-        APP11,
+        APP11 = 0x800,
         /// <summary>
         /// PictureInfo
         /// Ducky
         /// </summary>
-        APP12,
+        APP12 = 0x1000,
         /// <summary>
         /// Photoshop
         /// Adobe_CM
         /// </summary>
-        APP13,
+        APP13 = 0x2000,
         /// <summary>
         /// Adobe
         /// </summary>
-        APP14,
+        APP14 = 0x4000,
         /// <summary>
         /// GraphicConverter
         /// </summary>
-        APP15,
+        APP15 = 0x8000,
     }
 }
