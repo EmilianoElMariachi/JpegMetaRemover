@@ -155,19 +155,19 @@ namespace JpegMetaRemover.JpegTools
             var data = new List<byte>();
             while (true)
             {
-                byte b;
+                byte byteTemp;
                 try
                 {
-                    b = binaryReader.ReadByte();
+                    byteTemp = binaryReader.ReadByte();
                 }
                 catch (EndOfStreamException)
                 {
                     throw new BadImageException("Failed to read entropy coded data, end of stream reached.");
                 }
 
-                if (b != 0xFF)
+                if (byteTemp != 0xFF)
                 {
-                    data.Add(b);
+                    data.Add(byteTemp);
                     continue;
                 }
 
@@ -186,7 +186,8 @@ namespace JpegMetaRemover.JpegTools
                 if (stuffByte == 0)
                 {
                     // Ici, pas de marqueur, car échappé par l'octet 0x00 (stuff byte)
-                    data.Add(b);
+                    data.Add(byteTemp);
+                    data.Add(stuffByte);
                     continue;
                 }
 

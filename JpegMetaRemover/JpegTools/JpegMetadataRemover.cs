@@ -6,28 +6,65 @@ namespace JpegMetaRemover
 {
     internal class JpegMetadataRemover
     {
-        public static void Remove(FileStream inputStream, MemoryStream outputStream, JpegMetaTypes jpegMetaTypesToRemove, bool removeComments)
+        public static PurificationResult Remove(FileStream inputStream, MemoryStream outputStream, JpegMetaTypes jpegMetaTypesToRemove, bool removeComments)
         {
+            var result = new PurificationResult
+            {
+                NbMetasFound = 0,
+                MetaTypesFound = JpegMetaTypes.NONE,
+                MetaTypesRemoved = JpegMetaTypes.NONE,
+                MetaTypesToRemove = jpegMetaTypesToRemove,
+                NbCommentsFound = 0,
+                NbCommentsRemoved = 0,
+                NbMetasRemoved = 0,
+                ResultStreamDiffersFromOriginal = false,
+            };
+
+
             var markerSections = JpegMarkerSectionsReader.Read(inputStream);
             foreach (var markerSection in markerSections)
-            {   
+            {
+                var recopySection = true;
                 switch (markerSection.Type)
                 {
-                    case MarkerType.COM when removeComments:
-                        continue;
+                    case MarkerType.COM:
+                        result.NbCommentsFound++;
+
+                        if (removeComments)
+                        {
+                            result.NbCommentsRemoved++;
+                            recopySection = false;
+                        }
+
+                        break;
                     case MarkerType.APP_N:
-                    {
+                        result.NbMetasFound++;
+
                         var jpegMetaType = AppNToMetaType(markerSection.MarkerValue);
+                        result.MetaTypesFound |= jpegMetaType;
 
                         if (jpegMetaTypesToRemove.HasFlag(jpegMetaType))
-                            continue;
+                        {
+                            result.MetaTypesRemoved |= jpegMetaType;
+                            result.NbMetasRemoved++;
+                            recopySection = false;
+                        }
+
                         break;
-                    }
                 }
 
-                //Recopie la section dans le flux de sortie
-                outputStream.Write(markerSection.RawData, 0, markerSection.RawData.Length);
+                if (recopySection)
+                {
+                    //Recopie la section dans le flux de sortie
+                    outputStream.Write(markerSection.RawData, 0, markerSection.RawData.Length);
+                }
+                else
+                {
+                    result.ResultStreamDiffersFromOriginal = true;
+                }
             }
+
+            return result;
         }
 
         private static JpegMetaTypes AppNToMetaType(byte markerValue)

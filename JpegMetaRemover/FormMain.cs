@@ -315,7 +315,6 @@ namespace JpegMetaRemover
                     return;
                 }
 
-                FileStream outputFileStream = null;
                 PurificationResult purificationResult = null;
                 try
                 {
@@ -325,7 +324,7 @@ namespace JpegMetaRemover
                     using var fileStream = File.OpenRead(inputJpegFilePath);
 
                     using var outputStream = new MemoryStream();
-                    JpegMetadataRemover.Remove(fileStream, outputStream, jpegMetaTypesToRemove, removeComments);
+                    purificationResult = JpegMetadataRemover.Remove(fileStream, outputStream, jpegMetaTypesToRemove, removeComments);
 
                     updateProgression();
 
@@ -338,19 +337,26 @@ namespace JpegMetaRemover
 
                     if (purificationResult.ResultStreamDiffersFromOriginal)
                     {
+
+                        string outputFilePath;
+                        string logMessage;
                         if (overrideInputFile)
                         {
-                            outputFileStream = new FileStream(inputJpegFilePath, FileMode.Create);
-                            purificationResult.ResultStream.WriteTo(outputFileStream);
-                            Logger.LogLineInfo(this, Services.LocalizationManager.ActiveLocalization.Translate("File overriden."));
+                            outputFilePath = inputJpegFilePath;
+                            logMessage = Services.LocalizationManager.ActiveLocalization.Translate("File overriden.");
                         }
                         else
                         {
-                            var outputFilePath = GetFreeFilePath(inputJpegFilePath);
-                            outputFileStream = new FileStream(outputFilePath, FileMode.Create);
-                            purificationResult.ResultStream.WriteTo(outputFileStream);
-                            Logger.LogLineInfo(this, Services.LocalizationManager.ActiveLocalization.Translate("File saved to \"{0}\".", Path.GetFileName(outputFilePath)));
+                            outputFilePath = GetFreeFilePath(inputJpegFilePath);
+                            logMessage = Services.LocalizationManager.ActiveLocalization.Translate("File saved to \"{0}\".", Path.GetFileName(outputFilePath));
                         }
+
+                        using var outputFileStream = File.Create(outputFilePath);
+                        outputStream.Position = 0;
+                        outputStream.WriteTo(outputFileStream);
+
+                        Logger.LogLineInfo(this, logMessage);
+
                     }
                     else
                     {
