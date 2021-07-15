@@ -2,65 +2,107 @@
 using System.Windows.Forms;
 using JpegMetaRemover.JpegTools;
 using JpegMetaRemover.ServicesProvider;
+using JpegMetaRemover.ServicesProvider.SettingsService;
 
 namespace JpegMetaRemover.OtherForms
 {
     public partial class FormSettings : Form
     {
+
+        private class Metadata
+        {
+            public JpegMetaTypes Meta { get; set; }
+
+            public string Text { get; set; }
+
+            public override string ToString()
+            {
+                return Text;
+            }
+        }
+
+
+        private static string AppNToAppNames(JpegMetaTypes metaTypes)
+        {
+            return metaTypes switch
+            {
+                JpegMetaTypes.APP0 => "JFIF JFXX CIFF AVI1 Ocad",
+                JpegMetaTypes.APP1 => "EXIF ExtendedXMP XMP QVCI FLIR RawThermalImage",
+                JpegMetaTypes.APP2 => "ICC_Profile FPXR MPF PreviewImage",
+                JpegMetaTypes.APP3 => "Meta Stim JPS ThermalData PreviewImage",
+                JpegMetaTypes.APP4 => "Scalado FPXR ThermalParams PreviewImage",
+                JpegMetaTypes.APP5 => "RMETA SamsungUniqueID ThermalCalibration PreviewImage",
+                JpegMetaTypes.APP6 => "EPPIM NITF HP_TDHD GoPro DJI_DTAT",
+                JpegMetaTypes.APP7 => "Pentax Huawei Qualcomm",
+                JpegMetaTypes.APP8 => "SPIFF",
+                JpegMetaTypes.APP9 => "MediaJukebox",
+                JpegMetaTypes.APP10 => "Comment",
+                JpegMetaTypes.APP11 => "JPEG-HDR JUMBF",
+                JpegMetaTypes.APP12 => "PictureInfo Ducky",
+                JpegMetaTypes.APP13 => "Photoshop Adobe_CM",
+                JpegMetaTypes.APP14 => "Adobe",
+                JpegMetaTypes.APP15 => "GraphicConverter",
+                _ => throw new ArgumentOutOfRangeException(nameof(metaTypes), metaTypes, null)
+            };
+        }
+
         public FormSettings()
         {
             InitializeComponent();
 
-            var appIndex = 0;
             foreach (JpegMetaTypes value in Enum.GetValues(typeof(JpegMetaTypes)))
             {
-                if (value != JpegMetaTypes.NONE)
-                {
-                    var item = _listViewMetadatasToRemove.Items.Add(value == JpegMetaTypes.APP0 ? 
-                        $"{value} (APP{appIndex++}, recommended to preserve)" :
-                        $"{value} (APP{appIndex++})");
+                if (value == JpegMetaTypes.NONE)
+                    continue;
 
-                    item.Tag = value;
-                }
+                var appNames = AppNToAppNames(value);
+                CheckedListBoxMetadataToRemove.Items.Add(new Metadata
+                {
+                    Text = $"{value} ({appNames})",
+                    Meta = value
+                });
             }
 
-            _checkBoxCleanOnDragAndDrop.Checked = Services.SettingsManager.CleanOnDragAndDrop;
         }
 
         public new DialogResult ShowDialog(IWin32Window owner)
         {
-            this.UpdateFromSettings();
+            this.InitializeFromSettings();
             return base.ShowDialog(owner);
         }
 
-        private void UpdateFromSettings()
+        private void InitializeFromSettings()
         {
-            foreach (ListViewItem item in _listViewMetadatasToRemove.Items)
+            for (var i = 0; i < CheckedListBoxMetadataToRemove.Items.Count; i++)
             {
-                var itemMeta = (JpegMetaTypes) item.Tag;
-                item.Checked = Services.SettingsManager.MetaTypesToRemove.HasFlag(itemMeta);
+                var metadata = (Metadata)CheckedListBoxMetadataToRemove.Items[i];
+                var metaToRemove = Services.SettingsManager.MetaTypesToRemove.HasFlag(metadata.Meta);
+
+                CheckedListBoxMetadataToRemove.SetItemChecked(i, metaToRemove);
             }
 
-            _checkBoxCleanSavedSettingsOnClose.Checked = Services.SettingsManager.CleanUpSavedSettingsOnClose;            
+            CheckBoxCleanOnDragAndDrop.Checked = Services.SettingsManager.CleanOnDragAndDrop;
         }
 
-        private void _buttonSaveSettings_Click(object sender, EventArgs e)
+        private void ButtonSaveSettings_Click(object sender, EventArgs e)
         {
             this.DialogResult = DialogResult.OK;
 
             Services.SettingsManager.MetaTypesToRemove = this.GetJpegMetaTypesToRemove();
-            Services.SettingsManager.CleanUpSavedSettingsOnClose = _checkBoxCleanSavedSettingsOnClose.Checked;
-            Services.SettingsManager.CleanOnDragAndDrop = _checkBoxCleanOnDragAndDrop.Checked;
+            Services.SettingsManager.CleanOnDragAndDrop = CheckBoxCleanOnDragAndDrop.Checked;
         }
 
         private JpegMetaTypes GetJpegMetaTypesToRemove()
         {
             var metasToRemove = JpegMetaTypes.NONE;
 
-            foreach (ListViewItem item in _listViewMetadatasToRemove.Items)
+            for (var i = 0; i < CheckedListBoxMetadataToRemove.Items.Count; i++)
             {
-                if (item.Checked) 
-                    metasToRemove |= (JpegMetaTypes) item.Tag;
+                if (!CheckedListBoxMetadataToRemove.GetItemChecked(i)) 
+                    continue;
+
+                var metadata = (Metadata)CheckedListBoxMetadataToRemove.Items[i];
+                metasToRemove |= metadata.Meta;
             }
 
             return metasToRemove;
@@ -75,23 +117,29 @@ namespace JpegMetaRemover.OtherForms
             }
         }
 
-        private void _selectAllToolStripMenuItem_Click(object sender, EventArgs e)
+        private void SelectAllToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SetAllMetaTypesToGivenCheckedState(true);
         }
 
-        private void _deselectAllToolStripMenuItem_Click(object sender, EventArgs e)
+        private void DeselectAllToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SetAllMetaTypesToGivenCheckedState(false);
         }
 
         private void SetAllMetaTypesToGivenCheckedState(bool isChecked)
         {
-            foreach (ListViewItem item in _listViewMetadatasToRemove.Items)
+            for (var i = 0; i < CheckedListBoxMetadataToRemove.Items.Count; i++)
             {
-                item.Checked = isChecked;
+                CheckedListBoxMetadataToRemove.SetItemChecked(i, isChecked);
             }
         }
 
+        private void ButtonResetSettings_Click(object sender, EventArgs e)
+        {
+            Services.SettingsManager.CleanRegistry();
+            Services.SettingsManager.InitializeFromRegistry();
+            InitializeFromSettings();
+        }
     }
 }

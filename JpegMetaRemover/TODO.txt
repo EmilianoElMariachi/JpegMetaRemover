@@ -1,12 +1,8 @@
 _ Faire une barre de progression Custom
 
-_ Faire la fenêtre "A propos"
-
 _ Inverser les messages dans le log.
 
 _ Trouver un moyen de mettre en surbrillance les modifications
-
-_ Faire une icône
 
 _ Voir comment inclure les localizations dans la classe de settings
 

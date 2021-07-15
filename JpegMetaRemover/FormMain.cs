@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using JpegMetaRemover.JpegTools;
 using JpegMetaRemover.Log;
@@ -40,7 +39,7 @@ namespace JpegMetaRemover
 
             _checkBoxOverride.Checked = Services.SettingsManager.OverrideOriginalFile;
 
-            _checkBoxRemoveMetadatas.Checked = Services.SettingsManager.RemoveMetadatas;
+            _checkBoxRemoveMetadata.Checked = Services.SettingsManager.RemoveMetadata;
 
             _checkBoxRemoveComments.Checked = Services.SettingsManager.RemoveComments;
 
@@ -70,7 +69,7 @@ namespace JpegMetaRemover
                 var item = _languageToolStripMenuItem.DropDownItems.Add(localization.LanguageName);
 
                 item.Tag = localization;
-                item.Click += item_Click;
+                item.Click += Item_Click;
             }
 
 
@@ -87,8 +86,8 @@ namespace JpegMetaRemover
             //Charge la localization depuis la culture du PC si elle existe
             if (localizationToApply == null)
             {
-                var currentPCTowLetterLang = Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName;
-                var localizationFound = Services.LocalizationManager.LoadedLocalizations.FindLocalizationByTwoLetterLanguageName(currentPCTowLetterLang);
+                var currentComputerTowLetterLang = Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName;
+                var localizationFound = Services.LocalizationManager.LoadedLocalizations.FindLocalizationByTwoLetterLanguageName(currentComputerTowLetterLang);
                 if (localizationFound != null)
                 { localizationToApply = localizationFound; }
             }
@@ -117,10 +116,9 @@ namespace JpegMetaRemover
             }
         }
 
-        private void item_Click(object sender, EventArgs e)
+        private void Item_Click(object sender, EventArgs e)
         {
-            var clickedMenuItem = sender as ToolStripMenuItem;
-            if (clickedMenuItem != null)
+            if (sender is ToolStripMenuItem clickedMenuItem)
             {
                 ApplyLocalization(clickedMenuItem.Tag as Localization);
             }
@@ -201,7 +199,7 @@ namespace JpegMetaRemover
             _richTextBoxLog.ScrollToCaret();
         }
 
-        private string GetFreeFilePath(string filePath)
+        private static string GetFreeFilePath(string filePath)
         {
             var fileDir = Path.GetDirectoryName(filePath);
             var fileExt = Path.GetExtension(filePath);
@@ -233,11 +231,7 @@ namespace JpegMetaRemover
 
                 var inputPath = _textBoxInputPath.Text;
 
-                var jpegMetaTypesToRemove = JpegMetaTypes.NONE;
-                if (_checkBoxRemoveMetadatas.Checked)
-                {
-                    jpegMetaTypesToRemove = Services.SettingsManager.MetaTypesToRemove;
-                }
+                var jpegMetaTypesToRemove = _checkBoxRemoveMetadata.Checked ? Services.SettingsManager.MetaTypesToRemove : JpegMetaTypes.NONE;
 
                 var removeComments = _checkBoxRemoveComments.Checked;
                 var overrideInputFile = _checkBoxOverride.Checked;
@@ -247,17 +241,17 @@ namespace JpegMetaRemover
             }
         }
 
-        private void _runToolStripMenuItem_Click(object sender, EventArgs e)
+        private void RunToolStripMenuItem_Click(object sender, EventArgs e)
         {
             PurifyJpegFile();
         }
 
-        private void _buttonRun_Click(object sender, EventArgs e)
+        private void ButtonRun_Click(object sender, EventArgs e)
         {
             PurifyJpegFile();
         }
 
-        private void _backgroundWorkerPurify_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        private void BackgroundWorkerPurify_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
             var args = e.Argument as object[];
 
@@ -315,7 +309,6 @@ namespace JpegMetaRemover
                     return;
                 }
 
-                PurificationResult purificationResult = null;
                 try
                 {
                     Logger.LogLineActionStart(this, inputJpegFilePath);
@@ -324,7 +317,7 @@ namespace JpegMetaRemover
                     using var fileStream = File.OpenRead(inputJpegFilePath);
 
                     using var outputStream = new MemoryStream();
-                    purificationResult = JpegMetadataRemover.Remove(fileStream, outputStream, jpegMetaTypesToRemove, removeComments);
+                    var purificationResult = JpegMetadataRemover.Remove(fileStream, outputStream, jpegMetaTypesToRemove, removeComments);
 
                     updateProgression();
 
@@ -383,7 +376,7 @@ namespace JpegMetaRemover
 
         }
 
-        private void _backgroundWorkerPurify_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        private void BackgroundWorkerPurify_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
             if (e.Error != null)
             { Logger.LogLineException(this, e.Error); }
@@ -397,7 +390,7 @@ namespace JpegMetaRemover
             _buttonRun.BackgroundImage = Resources.Play;
         }
 
-        private void _backgroundWorkerPurify_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
+        private void BackgroundWorkerPurify_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
         {
             _progressBar.Value = e.ProgressPercentage;
 
@@ -438,7 +431,7 @@ namespace JpegMetaRemover
             }
         }
 
-        private void _selectFileToolStripMenuItem_Click(object sender, EventArgs e)
+        private void SelectFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
             BrowseImageFile();
         }
@@ -464,7 +457,7 @@ namespace JpegMetaRemover
             }
         }
 
-        private void _selectDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
+        private void SelectDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
         {
             BrowseDirectory();
         }
@@ -485,42 +478,42 @@ namespace JpegMetaRemover
             }
         }
 
-        private void _buttonBrowseImageFile_Click(object sender, EventArgs e)
+        private void ButtonBrowseImageFile_Click(object sender, EventArgs e)
         {
             BrowseImageFile();
         }
 
-        private void _settingsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void SettingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _formSettings.ShowDialog(this);
         }
 
-        private void _checkBoxIncludeSubdirectories_CheckedChanged(object sender, EventArgs e)
+        private void CheckBoxIncludeSubdirectories_CheckedChanged(object sender, EventArgs e)
         {
             Services.SettingsManager.IncludeSubdirectories = _checkBoxIncludeSubdirectories.Checked;
         }
 
-        private void _checkBoxOverride_CheckedChanged(object sender, EventArgs e)
+        private void CheckBoxOverride_CheckedChanged(object sender, EventArgs e)
         {
             Services.SettingsManager.OverrideOriginalFile = _checkBoxOverride.Checked;
         }
 
-        private void _checkBoxRemoveMetadatas_CheckedChanged(object sender, EventArgs e)
+        private void CheckBoxRemoveMetadata_CheckedChanged(object sender, EventArgs e)
         {
-            Services.SettingsManager.RemoveMetadatas = _checkBoxRemoveMetadatas.Checked;
+            Services.SettingsManager.RemoveMetadata = _checkBoxRemoveMetadata.Checked;
         }
 
-        private void _checkBoxRemoveComments_CheckedChanged(object sender, EventArgs e)
+        private void CheckBoxRemoveComments_CheckedChanged(object sender, EventArgs e)
         {
             Services.SettingsManager.RemoveComments = _checkBoxRemoveComments.Checked;
         }
 
-        private void clearToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ClearToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _richTextBoxLog.Clear();
         }
 
-        private void copyToolStripMenuItem_Click(object sender, EventArgs e)
+        private void CopyToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _richTextBoxLog.Copy();
         }
@@ -530,7 +523,7 @@ namespace JpegMetaRemover
             Services.SettingsManager.LastInputPath = _textBoxInputPath.Text;
         }
 
-        private void _aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        private void AboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _formAbout.ShowDialog(this);
         }

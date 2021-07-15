@@ -17,7 +17,7 @@ namespace JpegMetaRemover.ServicesProvider.SettingsService
         internal const string REG_VAL_OVERRIDE_ORIGINAL_FILE = "OverrideOriginalFile";
         internal const string REG_VAL_CLEAN_ON_DRAG_AND_DROP = "CleanOnDragAndDrop";
 
-        internal const string REG_VAL_REMOVE_METADATAS = "RemoveMetaDatas";
+        internal const string REG_VAL_REMOVE_METADATA = "RemoveMetadata";
         internal const string REG_VAL_REMOVE_COMMENTS = "RemoveComments";
         internal const string REG_VAL_LAST_INPUT_PATH = "LastInputPath";
 
@@ -37,7 +37,7 @@ namespace JpegMetaRemover.ServicesProvider.SettingsService
 
         public string TwoLetterISOLanguageName
         {
-            get { return _twoLetterISOLanguageName; }
+            get => _twoLetterISOLanguageName;
             set
             {
                 _twoLetterISOLanguageName = value;
@@ -69,15 +69,15 @@ namespace JpegMetaRemover.ServicesProvider.SettingsService
             }
         }
 
-        private bool _removeMetadatas;
+        private bool _removeMetadata;
 
-        public bool RemoveMetadatas
+        public bool RemoveMetadata
         {
-            get => _removeMetadatas;
+            get => _removeMetadata;
             set
             {
-                _removeMetadatas = value;
-                TrySaveToRegistry(REG_VAL_REMOVE_METADATAS, value.ToString());
+                _removeMetadata = value;
+                TrySaveToRegistry(REG_VAL_REMOVE_METADATA, value.ToString());
             }
         }
 
@@ -106,8 +106,6 @@ namespace JpegMetaRemover.ServicesProvider.SettingsService
             }
         }
 
-        public bool CleanUpSavedSettingsOnClose { get; set; }
-
         /// <summary>
         /// Indique si l'image doit être nettoyée au moment d'un drag & drop
         /// </summary>
@@ -123,41 +121,33 @@ namespace JpegMetaRemover.ServicesProvider.SettingsService
 
         internal SettingsManager()
         {
-            _twoLetterISOLanguageName = TryReadFromRegistry<string>(REG_VAL_LANGUAGE, null);
-
-
-            _metaTypesToRemove = GetDefaultMetaTypesToRemove();
-            var metaTypesToRemoveAsString = TryReadFromRegistry<string>(REG_VAL_META_TYPES_TO_REMOVE, null);
-            if (metaTypesToRemoveAsString != null)
-            { Enum.TryParse(metaTypesToRemoveAsString, out _metaTypesToRemove); }
-
-
-            _includeSubdirectories = false;
-            bool.TryParse(TryReadFromRegistry<string>(REG_VAL_INCLUDE_SUB_DIRECTORIES, null), out _includeSubdirectories);
-
-            _overrideOriginalFile = false;
-            bool.TryParse(TryReadFromRegistry<string>(REG_VAL_OVERRIDE_ORIGINAL_FILE, null), out _overrideOriginalFile);
-
-            _removeMetadatas = true;
-            bool.TryParse(TryReadFromRegistry<string>(REG_VAL_REMOVE_METADATAS, null), out _removeMetadatas);
-
-            _removeComments = true;
-            bool.TryParse(TryReadFromRegistry<string>(REG_VAL_REMOVE_COMMENTS, null), out _removeComments);
-
-            _cleanOnDragAndDrop = false;
-            bool.TryParse(TryReadFromRegistry<string>(REG_VAL_CLEAN_ON_DRAG_AND_DROP, null), out _cleanOnDragAndDrop);
-
-            LastInputPath = TryReadFromRegistry<string>(REG_VAL_LAST_INPUT_PATH, "");
-
-            CleanUpSavedSettingsOnClose = false;
-
-            AppDomain.CurrentDomain.ProcessExit += new EventHandler(CurrentDomain_ProcessExit);
+            InitializeFromRegistry();
         }
 
-        private void CurrentDomain_ProcessExit(object sender, EventArgs e)
+        public void InitializeFromRegistry()
         {
-            if (CleanUpSavedSettingsOnClose) 
-                CleanRegistry();
+            _twoLetterISOLanguageName = TryReadFromRegistry<string>(REG_VAL_LANGUAGE, null);
+
+            var metaTypesToRemoveAsString = TryReadFromRegistry<string>(REG_VAL_META_TYPES_TO_REMOVE, null);
+            if (metaTypesToRemoveAsString == null || !Enum.TryParse(metaTypesToRemoveAsString, out _metaTypesToRemove))
+                _metaTypesToRemove = GetDefaultMetaTypesToRemove();
+
+            if (!bool.TryParse(TryReadFromRegistry<string>(REG_VAL_INCLUDE_SUB_DIRECTORIES, null), out _includeSubdirectories))
+                _includeSubdirectories = false;
+
+            if (!bool.TryParse(TryReadFromRegistry<string>(REG_VAL_OVERRIDE_ORIGINAL_FILE, null), out _overrideOriginalFile))
+                _overrideOriginalFile = true;
+
+            if (!bool.TryParse(TryReadFromRegistry<string>(REG_VAL_REMOVE_METADATA, null), out _removeMetadata))
+                _removeMetadata = true;
+
+            if (!bool.TryParse(TryReadFromRegistry<string>(REG_VAL_REMOVE_COMMENTS, null), out _removeComments))
+                _removeComments = true;
+
+            if(!bool.TryParse(TryReadFromRegistry<string>(REG_VAL_CLEAN_ON_DRAG_AND_DROP, null), out _cleanOnDragAndDrop))
+                _cleanOnDragAndDrop = true;
+
+            LastInputPath = TryReadFromRegistry<string>(REG_VAL_LAST_INPUT_PATH, "");
         }
 
         private static JpegMetaTypes GetDefaultMetaTypesToRemove()
@@ -165,7 +155,8 @@ namespace JpegMetaRemover.ServicesProvider.SettingsService
             var defaultMetaTypes = JpegMetaTypes.NONE;
             foreach (JpegMetaTypes metaType in Enum.GetValues(typeof(JpegMetaTypes)))
             {
-                defaultMetaTypes = defaultMetaTypes | metaType;
+                if (metaType != JpegMetaTypes.APP0)
+                    defaultMetaTypes |= metaType;
             }
             return defaultMetaTypes;
         }
@@ -175,12 +166,12 @@ namespace JpegMetaRemover.ServicesProvider.SettingsService
             TRegValType value = defaultValue;
 
             //Charge la localization depuis la base de registre si elle existe
-            
+
             try
             {
                 using var regKeyApp = Registry.CurrentUser.OpenSubKey(REG_KEY_APP);
                 if (regKeyApp != null)
-                    value = (TRegValType) regKeyApp.GetValue(valueName);
+                    value = (TRegValType)regKeyApp.GetValue(valueName);
             }
             catch
             {
@@ -203,7 +194,7 @@ namespace JpegMetaRemover.ServicesProvider.SettingsService
             }
         }
 
-        public static void CleanRegistry()
+        public void CleanRegistry()
         {
             try
             {
