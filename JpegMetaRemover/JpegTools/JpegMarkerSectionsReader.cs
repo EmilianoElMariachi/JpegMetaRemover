@@ -46,7 +46,7 @@ namespace JpegMetaRemover.JpegTools
                         yield return ReadMarkerSection(binaryReader, markerType, markerBytes, hasContent: true, hasEntropyCodedData: true);
                         break;
                     case MarkerType.RST_N:
-                        yield return ReadMarkerSection(binaryReader, markerType, markerBytes, hasContent: false, hasEntropyCodedData: false);
+                        yield return ReadMarkerSection(binaryReader, markerType, markerBytes, hasContent: false, hasEntropyCodedData: true);
                         break;
                     case MarkerType.APP_N:
                         yield return ReadMarkerSection(binaryReader, markerType, markerBytes, hasContent: true, hasEntropyCodedData: false);

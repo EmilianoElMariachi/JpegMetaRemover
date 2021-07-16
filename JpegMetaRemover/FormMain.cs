@@ -314,19 +314,20 @@ namespace JpegMetaRemover
                     Logger.LogLineActionStart(this, inputJpegFilePath);
 
 
-                    using var fileStream = File.OpenRead(inputJpegFilePath);
-
                     using var outputStream = new MemoryStream();
-                    var purificationResult = JpegMetadataRemover.Remove(fileStream, outputStream, jpegMetaTypesToRemove, removeComments);
 
-                    updateProgression();
-
+                    PurificationResult purificationResult;
+                    using (var fileStream = File.OpenRead(inputJpegFilePath))
+                    {
+                        purificationResult = JpegMetadataRemover.Remove(fileStream, outputStream, jpegMetaTypesToRemove, removeComments);
+                    }
 
                     Logger.LogLineInfo(this, Services.LocalizationManager.ActiveLocalization.Translate("{0} metadata(s) found ({1})", purificationResult.NbMetasFound.ToString(), purificationResult.MetaTypesFound.ToString()));
                     Logger.LogLineInfo(this, Services.LocalizationManager.ActiveLocalization.Translate("{0} metadata(s) removed ({1})", purificationResult.NbMetasRemoved.ToString(), purificationResult.MetaTypesRemoved.ToString()));
                     Logger.LogLineInfo(this, Services.LocalizationManager.ActiveLocalization.Translate("{0} comment(s) found", purificationResult.NbCommentsFound.ToString()));
                     Logger.LogLineInfo(this, Services.LocalizationManager.ActiveLocalization.Translate("{0} comment(s) removed", purificationResult.NbCommentsRemoved.ToString()));
 
+                    updateProgression();
 
                     if (purificationResult.ResultStreamDiffersFromOriginal)
                     {
@@ -349,7 +350,6 @@ namespace JpegMetaRemover
                         outputStream.WriteTo(outputFileStream);
 
                         Logger.LogLineInfo(this, logMessage);
-
                     }
                     else
                     {

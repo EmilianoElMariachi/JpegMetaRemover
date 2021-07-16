@@ -52,8 +52,6 @@
     <element id="No file to process.">Aucun fichier à traiter</element>
     <element id="Operation Cancelled...">Traitement interrompu...</element>
     <element id="Total : {0} file(s) in {1} (s)">Total : {0} fichier(s) en {1} (s)</element>
-    
-
 
   </language>
 

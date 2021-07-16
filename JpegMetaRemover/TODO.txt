@@ -1,9 +1,1 @@
-_ Faire une barre de progression Custom
-
-_ Inverser les messages dans le log.
-
-_ Trouver un moyen de mettre en surbrillance les modifications
-
-_ Voir comment inclure les localizations dans la classe de settings
-
 _ Ne serait-il pas mieux d'utiliser la localization par défaut à l'aide d'un dictionnaire embarqué dans les resources?
