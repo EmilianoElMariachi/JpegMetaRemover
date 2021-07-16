@@ -1,8 +1,7 @@
 ﻿using System;
 using System.IO;
-using JpegMetaRemover.JpegTools;
 
-namespace JpegMetaRemover
+namespace JpegMetaRemover.JpegTools
 {
     internal class JpegMetadataRemover
     {

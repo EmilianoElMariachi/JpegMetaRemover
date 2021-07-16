@@ -48,11 +48,12 @@
             this._backgroundWorkerPurify = new System.ComponentModel.BackgroundWorker();
             this._panelContent = new System.Windows.Forms.Panel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-            this._buttonRun = new System.Windows.Forms.Button();
             this._tableLayoutPanelInputPath = new System.Windows.Forms.TableLayoutPanel();
             this._labelInputPath = new System.Windows.Forms.Label();
             this._textBoxInputPath = new System.Windows.Forms.TextBox();
             this._buttonBrowseImageFile = new System.Windows.Forms.Button();
+            this._progressBar = new System.Windows.Forms.ProgressBar();
+            this._buttonRun = new System.Windows.Forms.Button();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this._groupBoxOutputParams = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
@@ -62,7 +63,6 @@
             this._tableLayoutPanelPurifyParams = new System.Windows.Forms.TableLayoutPanel();
             this._checkBoxRemoveMetadata = new System.Windows.Forms.CheckBox();
             this._checkBoxRemoveComments = new System.Windows.Forms.CheckBox();
-            this._progressBar = new System.Windows.Forms.ProgressBar();
             this._contextMenuStripLog.SuspendLayout();
             this._menuStrip.SuspendLayout();
             this._panelContent.SuspendLayout();
@@ -96,13 +96,13 @@
             this.clearToolStripMenuItem,
             this.copyToolStripMenuItem});
             this._contextMenuStripLog.Name = "_contextMenuStripLog";
-            this._contextMenuStripLog.Size = new System.Drawing.Size(102, 48);
+            this._contextMenuStripLog.Size = new System.Drawing.Size(103, 48);
             // 
             // clearToolStripMenuItem
             // 
             this.clearToolStripMenuItem.AccessibleName = "ClearLog";
             this.clearToolStripMenuItem.Name = "clearToolStripMenuItem";
-            this.clearToolStripMenuItem.Size = new System.Drawing.Size(101, 22);
+            this.clearToolStripMenuItem.Size = new System.Drawing.Size(102, 22);
             this.clearToolStripMenuItem.Text = "Clear";
             this.clearToolStripMenuItem.Click += new System.EventHandler(this.ClearToolStripMenuItem_Click);
             // 
@@ -110,7 +110,7 @@
             // 
             this.copyToolStripMenuItem.AccessibleName = "CopyLog";
             this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
-            this.copyToolStripMenuItem.Size = new System.Drawing.Size(101, 22);
+            this.copyToolStripMenuItem.Size = new System.Drawing.Size(102, 22);
             this.copyToolStripMenuItem.Text = "Copy";
             this.copyToolStripMenuItem.Click += new System.EventHandler(this.CopyToolStripMenuItem_Click);
             // 
@@ -141,7 +141,7 @@
             this._selectDirectoryToolStripMenuItem,
             this._exitToolStripMenuItem});
             this.MenuItemFile.Name = "MenuItemFile";
-            this.MenuItemFile.Size = new System.Drawing.Size(36, 20);
+            this.MenuItemFile.Size = new System.Drawing.Size(37, 20);
             this.MenuItemFile.Text = "File";
             // 
             // _selectFileToolStripMenuItem
@@ -149,7 +149,7 @@
             this._selectFileToolStripMenuItem.AccessibleName = "MenuItemSelectImage";
             this._selectFileToolStripMenuItem.Name = "_selectFileToolStripMenuItem";
             this._selectFileToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this._selectFileToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this._selectFileToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
             this._selectFileToolStripMenuItem.Text = "Select image ...";
             this._selectFileToolStripMenuItem.Click += new System.EventHandler(this.SelectFileToolStripMenuItem_Click);
             // 
@@ -159,7 +159,7 @@
             this._selectDirectoryToolStripMenuItem.Name = "_selectDirectoryToolStripMenuItem";
             this._selectDirectoryToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.O)));
-            this._selectDirectoryToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this._selectDirectoryToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
             this._selectDirectoryToolStripMenuItem.Text = "Select folder ...";
             this._selectDirectoryToolStripMenuItem.Click += new System.EventHandler(this.SelectDirectoryToolStripMenuItem_Click);
             // 
@@ -168,7 +168,7 @@
             this._exitToolStripMenuItem.AccessibleName = "MenuItemExitApp";
             this._exitToolStripMenuItem.Name = "_exitToolStripMenuItem";
             this._exitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
-            this._exitToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this._exitToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
             this._exitToolStripMenuItem.Text = "Exit";
             // 
             // _editToolStripMenuItem
@@ -179,7 +179,7 @@
             this._settingsToolStripMenuItem,
             this._languageToolStripMenuItem});
             this._editToolStripMenuItem.Name = "_editToolStripMenuItem";
-            this._editToolStripMenuItem.Size = new System.Drawing.Size(40, 20);
+            this._editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
             this._editToolStripMenuItem.Text = "Edit";
             // 
             // _runToolStripMenuItem
@@ -187,7 +187,7 @@
             this._runToolStripMenuItem.AccessibleName = "MenuItemRun";
             this._runToolStripMenuItem.Name = "_runToolStripMenuItem";
             this._runToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
-            this._runToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this._runToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
             this._runToolStripMenuItem.Text = "Run";
             this._runToolStripMenuItem.Click += new System.EventHandler(this.RunToolStripMenuItem_Click);
             // 
@@ -196,7 +196,7 @@
             this._settingsToolStripMenuItem.AccessibleName = "MenuItemSettings";
             this._settingsToolStripMenuItem.Name = "_settingsToolStripMenuItem";
             this._settingsToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F10;
-            this._settingsToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this._settingsToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
             this._settingsToolStripMenuItem.Text = "Settings ...";
             this._settingsToolStripMenuItem.Click += new System.EventHandler(this.SettingsToolStripMenuItem_Click);
             // 
@@ -204,13 +204,13 @@
             // 
             this._languageToolStripMenuItem.AccessibleName = "MenuItemLanguage";
             this._languageToolStripMenuItem.Name = "_languageToolStripMenuItem";
-            this._languageToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this._languageToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
             this._languageToolStripMenuItem.Text = "Language";
             // 
             // _aboutToolStripMenuItem
             // 
             this._aboutToolStripMenuItem.Name = "_aboutToolStripMenuItem";
-            this._aboutToolStripMenuItem.Size = new System.Drawing.Size(25, 20);
+            this._aboutToolStripMenuItem.Size = new System.Drawing.Size(24, 20);
             this._aboutToolStripMenuItem.Text = "?";
             this._aboutToolStripMenuItem.Click += new System.EventHandler(this.AboutToolStripMenuItem_Click);
             // 
@@ -253,19 +253,6 @@
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel2.Size = new System.Drawing.Size(460, 84);
             this.tableLayoutPanel2.TabIndex = 0;
-            // 
-            // _buttonRun
-            // 
-            this._buttonRun.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this._buttonRun.BackgroundImage = global::JpegMetaRemover.Properties.Resources.Play;
-            this._buttonRun.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this._buttonRun.Location = new System.Drawing.Point(3, 49);
-            this._buttonRun.Margin = new System.Windows.Forms.Padding(3, 3, 10, 3);
-            this._buttonRun.Name = "_buttonRun";
-            this._buttonRun.Size = new System.Drawing.Size(100, 29);
-            this._buttonRun.TabIndex = 6;
-            this._buttonRun.UseVisualStyleBackColor = true;
-            this._buttonRun.Click += new System.EventHandler(this.ButtonRun_Click);
             // 
             // _tableLayoutPanelInputPath
             // 
@@ -316,6 +303,28 @@
             this._buttonBrowseImageFile.Text = "...";
             this._buttonBrowseImageFile.UseVisualStyleBackColor = true;
             this._buttonBrowseImageFile.Click += new System.EventHandler(this.ButtonBrowseImageFile_Click);
+            // 
+            // _progressBar
+            // 
+            this._progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this._progressBar.Location = new System.Drawing.Point(117, 49);
+            this._progressBar.Name = "_progressBar";
+            this._progressBar.Size = new System.Drawing.Size(340, 29);
+            this._progressBar.Step = 1;
+            this._progressBar.TabIndex = 9;
+            // 
+            // _buttonRun
+            // 
+            this._buttonRun.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this._buttonRun.BackgroundImage = global::JpegMetaRemover.Properties.Resources.Play;
+            this._buttonRun.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this._buttonRun.Location = new System.Drawing.Point(3, 49);
+            this._buttonRun.Margin = new System.Windows.Forms.Padding(3, 3, 10, 3);
+            this._buttonRun.Name = "_buttonRun";
+            this._buttonRun.Size = new System.Drawing.Size(101, 29);
+            this._buttonRun.TabIndex = 6;
+            this._buttonRun.UseVisualStyleBackColor = true;
+            this._buttonRun.Click += new System.EventHandler(this.ButtonRun_Click);
             // 
             // tableLayoutPanel3
             // 
@@ -416,7 +425,7 @@
             this._tableLayoutPanelPurifyParams.Size = new System.Drawing.Size(167, 25);
             this._tableLayoutPanelPurifyParams.TabIndex = 1;
             // 
-            // _checkBoxRemoveMetadatas
+            // _checkBoxRemoveMetadata
             // 
             this._checkBoxRemoveMetadata.AccessibleName = "CheckBoxRemoveMetadatas";
             this._checkBoxRemoveMetadata.AutoSize = true;
@@ -442,15 +451,6 @@
             this._checkBoxRemoveComments.UseVisualStyleBackColor = true;
             this._checkBoxRemoveComments.CheckedChanged += new System.EventHandler(this.CheckBoxRemoveComments_CheckedChanged);
             // 
-            // _progressBar
-            // 
-            this._progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this._progressBar.Location = new System.Drawing.Point(116, 49);
-            this._progressBar.Name = "_progressBar";
-            this._progressBar.Size = new System.Drawing.Size(341, 29);
-            this._progressBar.Step = 1;
-            this._progressBar.TabIndex = 9;
-            // 
             // FormMain
             // 
             this.AllowDrop = true;
@@ -465,7 +465,7 @@
             this.MainMenuStrip = this._menuStrip;
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FormMain";
-            this.Text = "Jpeg Metadatas Remover";
+            this.Text = "Jpeg Meta Remover";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormMain_FormClosed);
             this.DragDrop += new System.Windows.Forms.DragEventHandler(this.FormMain_DragDrop);
             this.DragEnter += new System.Windows.Forms.DragEventHandler(this.OnDragEnter);

@@ -26,8 +26,9 @@ namespace JpegMetaRemover
 
         public FormMain()
         {
-
             InitializeComponent();
+
+            this.Text = $"{AppInfo.AssemblyProduct} {AppInfo.AssemblyVersion}";
 
             Logger.OnLog += (sender, message, type) => { this.Log(message, type); };
 

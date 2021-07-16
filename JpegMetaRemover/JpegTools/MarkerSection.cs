@@ -1,5 +1,8 @@
 ﻿namespace JpegMetaRemover.JpegTools
 {
+    /// <summary>
+    /// Représente une section complète d'un marqueur
+    /// </summary>
     public class MarkerSection
     {
         /// <summary>

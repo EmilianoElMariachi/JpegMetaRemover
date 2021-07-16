@@ -144,7 +144,7 @@ namespace JpegMetaRemover.ServicesProvider.SettingsService
             if (!bool.TryParse(TryReadFromRegistry<string>(REG_VAL_REMOVE_COMMENTS, null), out _removeComments))
                 _removeComments = true;
 
-            if(!bool.TryParse(TryReadFromRegistry<string>(REG_VAL_CLEAN_ON_DRAG_AND_DROP, null), out _cleanOnDragAndDrop))
+            if (!bool.TryParse(TryReadFromRegistry<string>(REG_VAL_CLEAN_ON_DRAG_AND_DROP, null), out _cleanOnDragAndDrop))
                 _cleanOnDragAndDrop = true;
 
             LastInputPath = TryReadFromRegistry<string>(REG_VAL_LAST_INPUT_PATH, "");
@@ -155,8 +155,7 @@ namespace JpegMetaRemover.ServicesProvider.SettingsService
             var defaultMetaTypes = JpegMetaTypes.NONE;
             foreach (JpegMetaTypes metaType in Enum.GetValues(typeof(JpegMetaTypes)))
             {
-                if (metaType != JpegMetaTypes.APP0)
-                    defaultMetaTypes |= metaType;
+                defaultMetaTypes |= metaType;
             }
             return defaultMetaTypes;
         }

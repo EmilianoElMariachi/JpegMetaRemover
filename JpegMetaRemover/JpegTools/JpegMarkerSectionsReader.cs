@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace JpegMetaRemover.JpegTools
 {
-    public class JpegMarkerSectionsReader
+    public static class JpegMarkerSectionsReader
     {
 
         public static IEnumerable<MarkerSection> Read(Stream stream)
